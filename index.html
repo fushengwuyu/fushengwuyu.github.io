@@ -71,6 +71,484 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-restful文档" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/20/restful%E6%96%87%E6%A1%A3/" class="article-date">
+  <time class="dt-published" datetime="2021-07-20T01:06:19.898Z" itemprop="datePublished">2021-07-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/20/restful%E6%96%87%E6%A1%A3/">python web 异常框架</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h4 id="一，URL路径"><a href="#一，URL路径" class="headerlink" title="一，URL路径"></a>一，URL路径</h4><ul>
+<li><p>前缀</p>
+<p>路由地址以api开头，后跟微服务名、版本及模块名或资源地址，实例：</p>
+<blockquote>
+<p><a href="https://host:port/api/pdi_metadata/v1/dep">https://host:port/api/pdi_metadata/v1/dep</a></p>
+</blockquote>
+<p>pdi_metadata表示消息微服务。</p>
+<p>v1表示版本，以字母v开头，后跟数字。dep表示微服务内部的一个模块或者资源地址。</p>
+</li>
+<li><p>资源地址</p>
+<p>在路径设计中需要遵守下列约定：</p>
+<ul>
+<li>资源命名全部小写且易读，可使用连字符（-）或下划线（_）进行分隔</li>
+<li>资源的命名需要符合RESTful风格，只有算法资源中可以存在动词，否则只能使用名词</li>
+<li>路径部分使用斜杠分隔符（/）来表达层次结构</li>
+<li>若同一资源名会出现在资源地址、资源表述、query中，资源名必须一致，即统一使用下划线（_）分隔。</li>
+</ul>
+</li>
+</ul>
+<h4 id="二，-响应状态码"><a href="#二，-响应状态码" class="headerlink" title="二， 响应状态码"></a>二， 响应状态码</h4><p>所有API响应遵守HTTP规范，常见的HTTP状态码如下所示。</p>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1xx</td>
+<td>信息状态码</td>
+</tr>
+<tr>
+<td>2xx</td>
+<td>成功状态码</td>
+</tr>
+<tr>
+<td>3xx</td>
+<td>重定向状态码</td>
+</tr>
+<tr>
+<td>4xx</td>
+<td>客户端错误码</td>
+</tr>
+<tr>
+<td>5xx</td>
+<td>服务器错误码</td>
+</tr>
+</tbody></table>
+<ol>
+<li><p>请求被正确返回</p>
+<p>其返回参数定义如下：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>code</td>
+<td>int64</td>
+<td>是</td>
+<td>正确状态码</td>
+</tr>
+<tr>
+<td>data</td>
+<td>obj</td>
+<td>是</td>
+<td>响应的请求数据</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>请求调用失败，必须返回出错的相信信息，参数定义如下：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>是否必须</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>code</td>
+<td>int64</td>
+<td>是</td>
+<td>业务错误码</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>是</td>
+<td>业务错误信息，与code一一对应，用于表明code的含义，应尽量简短，抽象，具有概括性和通用性。</td>
+</tr>
+<tr>
+<td>cause</td>
+<td>string</td>
+<td>是</td>
+<td>导致此错误的原因，也可用于给接口调用者提示解决此错误的办法，相同的code可对应不同的cause</td>
+</tr>
+<tr>
+<td>detail</td>
+<td>obj</td>
+<td>否</td>
+<td>错误详细信息，供调用方查看和展示给最终用户的信息</td>
+</tr>
+</tbody></table>
+<p>备注：</p>
+<ul>
+<li>前三位为 HTTP标准状态码，中间三位为系统内全局唯一的微服务错误码标识号，后三位为自定义状态码，应尽量抽象，具有概括性和通用性。</li>
+<li>对于参数不合法、json格式不对等由客户端调用API代码不对导致的错误，code后3位为000，原因在cause中说明。</li>
+<li>对于需要由客户端判断，用于处理UI和具体功能逻辑的错误，code后3位表明具体错误，细节在detail中说明。</li>
+</ul>
+</li>
+</ol>
+<h4 id="三，错误码方案"><a href="#三，错误码方案" class="headerlink" title="三，错误码方案"></a>三，错误码方案</h4><p>PDI产品后期需要嵌入到爱数其他的产品中去，所以可以采取动态配置的方案，实现针对不同的产品，使用不同的错误码。</p>
+<p>常见的错误码：</p>
+<ul>
+<li>400XXX000： 参数不合法、json格式不对等由客户端调用API代码不对导致的错误</li>
+<li>500XXX000：服务内部错误</li>
+<li>501XXX000：方法为实现</li>
+</ul>
+<h4 id="四，Flask-异常方案"><a href="#四，Flask-异常方案" class="headerlink" title="四，Flask 异常方案"></a>四，Flask 异常方案</h4><p>Flask内部通过继承HTTPException类来处理异常，同样，我们可以自定义自己的异常基类类（继承自HTTPException），定义好返回的错误码，请求的url，错误原因等。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">APIException</span>(<span class="params">HTTPException</span>):</span></span><br><span class="line">    code = <span class="number">500</span></span><br><span class="line">    message = <span class="string">&#x27;sorry, we made a mistake&#x27;</span></span><br><span class="line">    error_code = <span class="number">999</span></span><br><span class="line">    cause = <span class="string">&#x27;just a mistake&#x27;</span></span><br><span class="line">    detail = <span class="literal">None</span></span><br><span class="line">    dump_json = <span class="literal">False</span>  <span class="comment"># 是否dump成json串。flask_restful.Resource方式需要设置为False，原生方式需要设置为True</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, msg=<span class="literal">None</span>, code=<span class="literal">None</span>, error_code=<span class="literal">None</span>, cause=<span class="literal">None</span>, header=<span class="literal">None</span>, detail=<span class="literal">None</span></span>):</span></span><br><span class="line">        <span class="keyword">if</span> code:</span><br><span class="line">            self.code = code</span><br><span class="line">        <span class="keyword">if</span> error_code:</span><br><span class="line">            self.error_code = error_code</span><br><span class="line">        <span class="keyword">if</span> msg:</span><br><span class="line">            self.msg = msg</span><br><span class="line">        <span class="keyword">if</span> cause:</span><br><span class="line">            self.cause = cause</span><br><span class="line">        <span class="keyword">if</span> detail:</span><br><span class="line">            self.detail = detail</span><br><span class="line">        <span class="built_in">super</span>(APIException, self).__init__(msg, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_body</span>(<span class="params">self, environ=<span class="literal">None</span></span>):</span></span><br><span class="line">        body = <span class="built_in">dict</span>(</span><br><span class="line">            message=self.message,</span><br><span class="line">            code=self.error_code,</span><br><span class="line">            cause=self.cause</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">if</span> self.detail:</span><br><span class="line">            body.update(&#123;<span class="string">&quot;detail&quot;</span>: self.detail&#125;)</span><br><span class="line"></span><br><span class="line">        data = json.dumps(body) <span class="keyword">if</span> self.dump_json <span class="keyword">else</span> body</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_headers</span>(<span class="params">self, environ=<span class="literal">None</span></span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;Get a list of headers.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> [(<span class="string">&#x27;Content-Type&#x27;</span>, <span class="string">&#x27;application/json&#x27;</span>)]</span><br></pre></td></tr></table></figure>
+
+
+
+<p>定义好基类之后，派生出各种各样的异常类，自由定义各种状态码的错误及对应的错误信息，出现该异常后，抛出异常。比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotFound</span>(<span class="params">APIException</span>):</span></span><br><span class="line">    code = <span class="number">404</span></span><br><span class="line">    message = <span class="string">&#x27;the resource are not found&#x27;</span></span><br><span class="line">    error_code = <span class="number">1001</span></span><br></pre></td></tr></table></figure>
+
+<p>目前定义的派生类有：</p>
+<ul>
+<li>Success  </li>
+<li>DeleteSucess</li>
+<li>UpdateSucess</li>
+<li>ServerError</li>
+<li>ParameterException</li>
+<li>NotFound</li>
+<li>AuthFailed</li>
+<li>Forbidden</li>
+</ul>
+<p>在程序中使用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@input_bp.route(<span class="params"><span class="string">&#x27;/input&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">input_m</span>():</span></span><br><span class="line">    d = request.get_json()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;file_id&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> d <span class="keyword">or</span> <span class="string">&quot;op_type&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> d:</span><br><span class="line">        <span class="keyword">return</span> ParameterException(message=<span class="string">&#x27;file_id 和 op_type两个参数不能为空&#x27;</span>).get_body()</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>虽然我们可以在可能出错的地方，继承自己的异常类，然后抛出，但是并不是所有的异常我们都能提前预知。比如参数错误等异常，我们可以提前预知并处理好，但是如果出现逻辑问题等提前没法感知的异常，就不是我们能够控制并处理的。所以我们还需要全局捕获所有异常。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 全局错误AOP处理</span></span><br><span class="line"><span class="meta">@app.errorhandler(<span class="params">Exception</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">framework_error</span>(<span class="params">e</span>):</span></span><br><span class="line">    api_logger.error(<span class="string">&quot;error info: %s&quot;</span> % e) <span class="comment"># 对错误进行日志记录</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(e, APIException):</span><br><span class="line">        <span class="keyword">return</span> e</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(e, HTTPException):</span><br><span class="line">        code = e.code</span><br><span class="line">        msg = e.description</span><br><span class="line">        error_code = <span class="number">1007</span></span><br><span class="line">        <span class="keyword">return</span> APIException(msg, code, error_code)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> app.config[<span class="string">&#x27;DEBUG&#x27;</span>]:</span><br><span class="line">            <span class="keyword">return</span> ServerError().get_body()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> e</span><br></pre></td></tr></table></figure>
+
+<p>如此，Flask中出现的所有异常皆可处理了，保证程序的健壮性。co</p>
+<h4 id="五，-Sanic异常方案"><a href="#五，-Sanic异常方案" class="headerlink" title="五， Sanic异常方案"></a>五， Sanic异常方案</h4><p>可以理解sanic为flask的升级版，采用协程机制，并发与效率都比flask高，用法基本上与flask一致。</p>
+<p>与flask不同的是：</p>
+<ul>
+<li>基类继承自HTTPResponse，而不是HTTPException</li>
+<li>全局错误AOP处理机制不同，sanic通过添加异常处理函数的方式实现。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyResponse</span>(<span class="params">HTTPResponse</span>):</span></span><br><span class="line">    code = <span class="number">500</span></span><br><span class="line">    message = <span class="string">&#x27;sorry, we made a mistake&#x27;</span></span><br><span class="line">    error_code = <span class="number">999</span></span><br><span class="line">    cause = <span class="literal">None</span></span><br><span class="line">    detail = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, message=<span class="literal">None</span>, code=<span class="literal">None</span>, error_code=<span class="literal">None</span>, cause=<span class="literal">None</span>, detail=<span class="literal">None</span></span>):</span></span><br><span class="line">        <span class="keyword">if</span> code:</span><br><span class="line">            self.code = code</span><br><span class="line">        <span class="keyword">if</span> error_code:</span><br><span class="line">            self.error_code = error_code</span><br><span class="line">        <span class="keyword">if</span> message:</span><br><span class="line">            self.message = message</span><br><span class="line">        <span class="keyword">if</span> cause <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            self.cause = cause</span><br><span class="line">        <span class="keyword">if</span> detail <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            self.detail = detail</span><br><span class="line">        <span class="built_in">super</span>(MyResponse, self).__init__(body=self.get_body(), status=self.code)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_body</span>(<span class="params">self</span>):</span></span><br><span class="line">        body = <span class="built_in">dict</span>(</span><br><span class="line">            message=self.message,</span><br><span class="line">            code=self.error_code</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.cause <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            body.update(<span class="built_in">dict</span>(cause=self.cause))</span><br><span class="line">        <span class="keyword">if</span> self.detail <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            body.update(&#123;<span class="string">&quot;detail&quot;</span>: self.detail&#125;)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> json_dumps(body)</span><br></pre></td></tr></table></figure>
+
+<p>至于各种派生的错误类，与flask一致。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Success</span>(<span class="params">MyResponse</span>):</span></span><br><span class="line">    code = <span class="number">200</span></span><br><span class="line">    message = <span class="string">&#x27;OK&#x27;</span></span><br><span class="line">    local_code = <span class="string">&quot;000&quot;</span></span><br><span class="line">    error_code = <span class="number">99999</span></span><br></pre></td></tr></table></figure>
+
+<p>全局异常处理。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">server_error_handler</span>(<span class="params">request, exception</span>):</span></span><br><span class="line">    logger.error(msg=traceback.format_exc())  <span class="comment"># 记录错误日志</span></span><br><span class="line">    <span class="keyword">return</span> ServerError(message=<span class="built_in">repr</span>(exception), cause=traceback.format_exc())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.error_handler.add(Exception, server_error_handler)</span><br></pre></td></tr></table></figure>
+
+<p>发生系统异常后，这里统一使用ServerError返回。ServerError是自己定义的继承自MyResponse的异常类。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ServerError</span>(<span class="params">MyResponse</span>):</span></span><br><span class="line">    code = <span class="number">500</span></span><br><span class="line">    message = <span class="string">&#x27;something happen&#x27;</span></span><br><span class="line">    local_code = <span class="string">&quot;000&quot;</span></span><br><span class="line">    error_code = <span class="number">99999</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/20/restful%E6%96%87%E6%A1%A3/" data-id="ckrbd2jea0003lro47iayeo2y" data-title="python web 异常框架" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-SanicDB使用文档" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/20/SanicDB%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/" class="article-date">
+  <time class="dt-published" datetime="2021-07-19T16:00:00.000Z" itemprop="datePublished">2021-07-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/20/SanicDB%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/">SanicDB 使用文档</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="1-sanicdb简介"><a href="#1-sanicdb简介" class="headerlink" title="1. sanicdb简介"></a>1. sanicdb简介</h3><p>SanicDB是为python的异步web框架sanic方便操作mysql（mariadb）而开发的工具，是对aiomysql.Pool的轻量级封装。Sanic是异步IO的web框架，用异步IO的方式读取mysql也才能更加发挥它的效率。</p>
+<p>备注：sanicdb也可以用于其他任何需要异步IO操作mysql的地方，不仅仅限于sanic中</p>
+<p>github：<a target="_blank" rel="noopener" href="https://github.com/veelion/sanicdb">https://github.com/veelion/sanicdb</a></p>
+<p>安装</p>
+<blockquote>
+<p>pip install sanicdb</p>
+</blockquote>
+<h3 id="2-初始化"><a href="#2-初始化" class="headerlink" title="2. 初始化"></a>2. 初始化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SanicDB</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;A lightweight wrapper around aiomysql.Pool for easy to use</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, host, database, user, password,</span></span></span><br><span class="line"><span class="params"><span class="function">                 loop=<span class="literal">None</span>, sanic=<span class="literal">None</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 minsize=<span class="number">3</span>, maxsize=<span class="number">5</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 return_dict=<span class="literal">True</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 pool_recycle=<span class="number">7</span>*<span class="number">3600</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 autocommit=<span class="literal">True</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 charset = <span class="string">&quot;utf8mb4&quot;</span>, **kwargs</span>):</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        kwargs: all parameters that aiomysql.connect() accept.</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p>前4个参数是对应mysql数据库的。</p>
+</li>
+<li><p>loop是应用程序中的事件循环（event_loop）,默认为None，则程序会自动调用asyncio.get_event_loop()创建。此外，sanic和loop两者只需要提供一个即可，当同时存在时，了解数据库其实用的是sanic中的loop。可以在初始化中看到</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">init_pool</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">if</span> self.sanic:</span><br><span class="line">        self.db_args[<span class="string">&#x27;loop&#x27;</span>] = self.sanic.loop</span><br><span class="line">    self.pool = <span class="keyword">await</span> aiomysql.create_pool(**self.db_args)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>minsize： 最小连接数量</li>
+<li>maxsize：最大连接数量</li>
+<li>return_dict ： 是返回的数据一条记录为一个dict，key是MySQL表的字段名，value是字段的值</li>
+<li>pool_recycle ：连接池重连的时间间隔，MySQL默认的连接闲置时间是8小时（我们服务器目前已改为24小时）</li>
+<li>autocommit：是否自动提交</li>
+</ul>
+<h3 id="3-函数定义"><a href="#3-函数定义" class="headerlink" title="3. 函数定义"></a>3. 函数定义</h3><p>sanicdb提供了6个功能函数。</p>
+<p><img src="C:\Users\23031\AppData\Roaming\Typora\typora-user-images\image-20201029172806082.png" alt="image-20201029172806082"></p>
+<ul>
+<li><p>query</p>
+<p>功能如名，查询数据库。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">query</span>(<span class="params">self, query, *parameters, **kwparameters</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Returns a row list for the given query and parameters.&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>get</p>
+<p>查询数据库，只返回一条数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self, query, *parameters, **kwparameters</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Returns the (singular) row returned by the given query.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>execute</p>
+<p>执行操作，返回受影响的行ID</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">execute</span>(<span class="params">self, query, *parameters, **kwparameters</span>):</span></span><br><span class="line">       <span class="string">&quot;&quot;&quot;Executes the given query, returning the lastrowid from the query.&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>table_has</p>
+<p>检查一个table中是否含有某字段为某值的记录</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">table_has</span>(<span class="params">self, table_name, field, value</span>):</span></span><br></pre></td></tr></table></figure></li>
+<li><p>table_insert</p>
+<p>插入数据库。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">table_insert</span>(<span class="params">self, table_name, item, ignore_duplicated=<span class="literal">True</span></span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;item is a dict : key is mysql table field&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>table_update</p>
+<p>更新数据库</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">table_update</span>(<span class="params">self, table_name, updates,</span></span></span><br><span class="line"><span class="params"><span class="function">                 field_where, value_where</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;updates is a dict of &#123;field_update:value_update&#125;&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="4-示例"><a href="#4-示例" class="headerlink" title="4. 示例"></a>4. 示例</h3><ol>
+<li><p>普通的异步mysql例子，参照官网给出的test</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> sanicdb <span class="keyword">import</span> SanicDB</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span>(<span class="params">loop</span>):</span></span><br><span class="line">    db = SanicDB(<span class="string">&#x27;localhost&#x27;</span>, <span class="string">&#x27;testdb&#x27;</span>, <span class="string">&#x27;root&#x27;</span>, <span class="string">&#x27;the_password&#x27;</span>,</span><br><span class="line">                 minsize=<span class="number">3</span>, maxsize=<span class="number">5</span>,</span><br><span class="line">                 connect_timeout=<span class="number">5</span>,</span><br><span class="line">                 loop=loop)</span><br><span class="line">    sql = <span class="string">&#x27;Drop table test&#x27;</span></span><br><span class="line">    <span class="keyword">await</span> db.execute(sql)</span><br><span class="line"></span><br><span class="line">    sql = <span class="string">&quot;&quot;&quot;CREATE TABLE `test` (</span></span><br><span class="line"><span class="string">    `id` int(8) NOT NULL AUTO_INCREMENT,</span></span><br><span class="line"><span class="string">    `name` varchar(16) NOT NULL,</span></span><br><span class="line"><span class="string">    `content` varchar(255) NOT NULL,</span></span><br><span class="line"><span class="string">    PRIMARY KEY (`id`),</span></span><br><span class="line"><span class="string">    UNIQUE KEY `name` (`name`)</span></span><br><span class="line"><span class="string">    ) ENGINE=MyISAM ;&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">await</span> db.execute(sql)</span><br><span class="line"></span><br><span class="line">    sql = <span class="string">&#x27;select * from test where name = %s&#x27;</span></span><br><span class="line">    data = <span class="keyword">await</span> db.query(sql, <span class="string">&#x27;abc&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;query():&#x27;</span>, data)</span><br><span class="line"></span><br><span class="line">    sql += <span class="string">&#x27; limit 1&#x27;</span></span><br><span class="line">    d = <span class="keyword">await</span> db.get(sql, <span class="string">&#x27;abc&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;get():&#x27;</span>, d)</span><br><span class="line"></span><br><span class="line">    sql = <span class="string">&#x27;delete from test where name=%s&#x27;</span></span><br><span class="line">    lastrowid = <span class="keyword">await</span> db.execute(sql, <span class="string">&#x27;xyz&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;execute(delete...):&#x27;</span>, lastrowid)</span><br><span class="line">    sql = <span class="string">&#x27;insert into test set name=%s, content=%s&#x27;</span></span><br><span class="line">    lastrowid = <span class="keyword">await</span> db.execute(sql, <span class="string">&#x27;xyz&#x27;</span>, <span class="string">&#x27;456&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;execute(insert...):&#x27;</span>, lastrowid)</span><br><span class="line"></span><br><span class="line">    ret = <span class="keyword">await</span> db.table_has(<span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;abc&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;has(): &#x27;</span>, ret)</span><br><span class="line"></span><br><span class="line">    ret = <span class="keyword">await</span> db.table_update(<span class="string">&#x27;test&#x27;</span>, &#123;<span class="string">&#x27;content&#x27;</span>: <span class="string">&#x27;updated&#x27;</span>&#125;,</span><br><span class="line">                          <span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;abc&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;update():&#x27;</span>, ret)</span><br><span class="line">    sql = <span class="string">&#x27;select * from test where name = %s&#x27;</span></span><br><span class="line">    data = <span class="keyword">await</span> db.query(sql, <span class="string">&#x27;abc&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;query():&#x27;</span>, data)</span><br><span class="line"></span><br><span class="line">    item = &#123;</span><br><span class="line">        <span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;abc&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;content&#x27;</span>: <span class="string">&#x27;123&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">            lastid = <span class="keyword">await</span> db.table_insert(<span class="string">&#x27;test&#x27;</span>, item, ignore_duplicated=<span class="literal">False</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            lastid = <span class="keyword">await</span> db.table_insert(<span class="string">&#x27;test&#x27;</span>, item)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;insert():&#x27;</span>, lastid)</span><br><span class="line">        <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    loop.run_until_complete(test(loop))</span><br></pre></td></tr></table></figure></li>
+<li><p>sanic web中异步插叙mysql</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># author： sunshine</span></span><br><span class="line"><span class="comment"># datetime： 2020/10/29 10:12 </span></span><br><span class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</span><br><span class="line"><span class="keyword">from</span> sanic_cors <span class="keyword">import</span> CORS</span><br><span class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> sanicdb <span class="keyword">import</span> SanicDB</span><br><span class="line"></span><br><span class="line">app = Sanic(__name__)</span><br><span class="line"><span class="comment"># 支持跨域</span></span><br><span class="line">CORS(app)</span><br><span class="line"></span><br><span class="line">db = SanicDB(</span><br><span class="line">    host=<span class="string">&#x27;172.27.0.6&#x27;</span>,</span><br><span class="line">    database=<span class="string">&#x27;privacy&#x27;</span>,</span><br><span class="line">    user=<span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">    password=<span class="string">&#x27;PdiCond$402875432&#x27;</span>,</span><br><span class="line">    sanic=app,</span><br><span class="line">    maxsize=<span class="number">18</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/simple&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">simple_query</span>(<span class="params">request</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    对数据库的简单查询测试</span></span><br><span class="line"><span class="string">    :param request:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    sql_str = <span class="string">&#x27;select * from employee&#x27;</span></span><br><span class="line">    num = <span class="number">0</span></span><br><span class="line">    data = <span class="keyword">await</span> app.db.query(sql_str)</span><br><span class="line">    num += <span class="built_in">len</span>(data)</span><br><span class="line">    <span class="keyword">return</span> json(&#123;<span class="string">&quot;查询条数&quot;</span>: num&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(<span class="string">&#x27;0.0.0.0&#x27;</span>, port=<span class="number">5067</span>)</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/20/SanicDB%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/" data-id="ckrbd2je30000lro4g8nod0ht" data-title="SanicDB 使用文档" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-orientdb ogm基本操作" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" class="article-date">
+  <time class="dt-published" datetime="2021-07-19T16:00:00.000Z" itemprop="datePublished">2021-07-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">Orientdb 基本操作</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h4 id="1-连接数据库"><a href="#1-连接数据库" class="headerlink" title="1. 连接数据库"></a>1. 连接数据库</h4><blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyorient.ogm <span class="keyword">import</span> Config, Gragph</span><br><span class="line">config = Config.from_url(server, user, pwd)</span><br><span class="line">g = Graph(config)</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="2-构造schema类"><a href="#2-构造schema类" class="headerlink" title="2. 构造schema类"></a>2. 构造schema类</h4><blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Node = declarative_node()</span><br><span class="line">Relationship = declarative_relationship()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义节点类，继承Node；定义关系时，继承Relationship</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrientdbFile</span>(<span class="params">Node</span>):</span></span><br><span class="line">    element_type = <span class="string">&#x27;file&#x27;</span>  <span class="comment"># 表名</span></span><br><span class="line">    element_plural = <span class="string">&#x27;files&#x27;</span>  <span class="comment"># </span></span><br><span class="line"></span><br><span class="line">    file_id = Integer(nullable=<span class="literal">False</span>, unique=<span class="literal">True</span>)</span><br><span class="line">    emp_no = Integer(nullable=<span class="literal">True</span>, unique=<span class="literal">False</span>)</span><br><span class="line">    file_type = String(nullable=<span class="literal">True</span>, unique=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+</blockquote>
+<ol>
+<li><p>初始化schema</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g.create_all(Node.registry) <span class="comment"># 创建节点</span></span><br><span class="line">g.create_all(Relationship.registry)  <span class="comment"># 创建边</span></span><br></pre></td></tr></table></figure></li>
+<li><p>绑定schema</p>
+<p>若orientdb中已存在表，则只需要绑定相应的表即可。</p>
+<ul>
+<li><p>from class</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g.include(Node.registry) <span class="comment"># 绑定节点</span></span><br><span class="line">g.include(Relationship.registry)  <span class="comment"># 绑定边</span></span><br></pre></td></tr></table></figure></li>
+<li><p>from schema</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">classes_from_schema = graph.build_mapping(</span><br><span class="line">   Node,</span><br><span class="line">   Relationship,</span><br><span class="line">   auto_plural = <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize Schema in PyOrient</span></span><br><span class="line">graph.include(classes_from_schema)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<h4 id="3-插入数据"><a href="#3-插入数据" class="headerlink" title="3. 插入数据"></a>3. 插入数据</h4><p>orientdb里，一条记录可以认为是表对象的一个实例。插入记录即新建一个对象实例。有两种方式实现。</p>
+<ul>
+<li><p>使用broker</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g.persons.create(<span class="built_in">id</span>=<span class="string">&quot;1&quot;</span>, name=<span class="string">&quot;张三&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p = &#123;<span class="string">&quot;id&quot;</span>: <span class="string">&quot;2&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;李四&quot;</span>&#125;</span><br><span class="line">Person.objects.create(**p)</span><br></pre></td></tr></table></figure></li>
+<li><p>原生方式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p = &#123;<span class="string">&quot;id&quot;</span>: <span class="string">&quot;3&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;王五&quot;</span>&#125;</span><br><span class="line">g.create_vertex(Person, **p)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="4-查询数据"><a href="#4-查询数据" class="headerlink" title="4. 查询数据"></a>4. 查询数据</h4><ul>
+<li><p>方式一</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">result = g.persons.query().<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(p.<span class="built_in">id</span>, p.name)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> 张三</span><br><span class="line"><span class="number">2</span> 李四</span><br><span class="line"><span class="number">3</span> 王五</span><br></pre></td></tr></table></figure></li>
+<li><p>方式二</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">result = g.query(Person).<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(p.<span class="built_in">id</span>, p.name)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> 张三</span><br><span class="line"><span class="number">2</span> 李四</span><br><span class="line"><span class="number">3</span> 王五</span><br></pre></td></tr></table></figure></li>
+<li><p>filter</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = g.persons.query(name=<span class="string">&#x27;张三&#x27;</span>).<span class="built_in">all</span>()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = g.query(Person).<span class="built_in">filter</span>(Person.name == <span class="string">&quot;&#x27;张三&#x27;&quot;</span>).<span class="built_in">all</span>()  <span class="comment"># 备注：张三内层同样需要用引号包裹起来，源代码的问题，所以建议使用上面方式。</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="5-修改数据"><a href="#5-修改数据" class="headerlink" title="5. 修改数据"></a>5. 修改数据</h4><p>pyorient的ogm本身并没有实现update功能，可以简单通过删除后插入实现修改功能。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ps = g.persons.query(name=<span class="string">&#x27;张三&#x27;</span>).<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> ps:</span><br><span class="line">    g.delete_vertex(Person, &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>&#125;)</span><br><span class="line">    p_dict = <span class="built_in">dict</span>(name=p.name, <span class="built_in">id</span>=p.<span class="built_in">id</span>)</span><br><span class="line">    p_dict.update(&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;张麻子&quot;</span>&#125;)</span><br><span class="line">    g.create_vertex(Person, **p_dict)</span><br><span class="line">result = g.persons.query().<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(p.<span class="built_in">id</span>, p.name)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2 李四</span><br><span class="line">3 王五</span><br><span class="line">1 张麻子</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-删除数据"><a href="#6-删除数据" class="headerlink" title="6. 删除数据"></a>6. 删除数据</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p_dict = &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>&#125;</span><br><span class="line">g.delete_vertex(Person, **p_dict)</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-batch"><a href="#7-batch" class="headerlink" title="7. batch"></a>7. batch</h4><p>批量操作</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">batch = g.batch()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>, <span class="number">10</span>):</span><br><span class="line">    batch[<span class="string">&#x27;f&#x27;</span> + <span class="built_in">str</span>(i)] = batch.persons.create(name=<span class="string">&#x27;name&#x27;</span> + <span class="built_in">str</span>(<span class="number">1</span>), <span class="built_in">id</span>=i)</span><br><span class="line">batch.commit()</span><br><span class="line"></span><br><span class="line">result = g.persons.query().<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(r.name, r.<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">李四 <span class="number">2</span></span><br><span class="line">name1 <span class="number">5</span></span><br><span class="line">王五 <span class="number">3</span></span><br><span class="line">name1 <span class="number">6</span></span><br><span class="line">张麻子 <span class="number">1</span></span><br><span class="line">name1 <span class="number">7</span></span><br><span class="line">name1 <span class="number">8</span></span><br><span class="line">name1 <span class="number">9</span></span><br></pre></td></tr></table></figure>
+
+<p>备注：</p>
+<ol>
+<li><p> batch的key不能为纯数字，例如batch[‘12’]，当然，batch[12]更不行。报错timeout，不解释。</p>
+</li>
+<li><p>batch的key必需明确，否则会不提交到库。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">batch = g.batch()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>, <span class="number">11</span>):</span><br><span class="line">    batch.persons.create(name=<span class="string">&#x27;name&#x27;</span> + <span class="built_in">str</span>(<span class="number">1</span>), <span class="built_in">id</span>=i)</span><br><span class="line">batch.commit()</span><br><span class="line"></span><br><span class="line">result = g.persons.query(<span class="built_in">id</span>=<span class="number">10</span>).<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(r.name, r.<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
+
+<p>并没有任何输出，表明，记录并没有正确提交。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" data-id="ckrbd2je70001lro40p9fgfgp" data-title="Orientdb 基本操作" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-信息熵" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/" class="article-date">
+  <time class="dt-published" datetime="2021-07-19T16:00:00.000Z" itemprop="datePublished">2021-07-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/">信息熵笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h4 id="一-熵"><a href="#一-熵" class="headerlink" title="一. 熵"></a>一. 熵</h4><ol>
+<li><p>解释</p>
+<ul>
+<li>熵是不确定的度量</li>
+<li>熵是信息的度量</li>
+</ul>
+</li>
+<li><p>计算公式<br>$$<br>S = - \sum _{x} p(x)\log p(x) \tag{1}<br>$$</p>
+<p>log可以取自然对数，也可以是以底为2的对数，任意大于1的底都是成立的。换底只不过换了信息的单位而已。</p>
+</li>
+</ol>
+<p>对于连续的概率分布，熵的定义为：<br>$$<br>S=- \int p(x) \log p (x)dx \tag{2}<br>$$</p>
+<ol start="3">
+<li><p>联合熵<br>$$<br>S[p(x,y)]=-\sum_{x} \sum_{y}p(x,y)\ln p(x,y) \tag{3}<br>$$</p>
+</li>
+<li><p>条件熵<br>$$<br>S(Y|X)=S[p(x,y)] - S[p(x)] \tag{4}<br>$$<br>等价于：<br>$$<br>S(Y|X)=-\sum_{x} \sum_{y}p(x,y) \log p(y:x) \tag{5}<br>$$<br>通俗的说，本来的信息量有$$S[p(x,y)]$$ ，然后$$p(x)$$ 能带来$$S[p(x)]$$ 的信息，减去其不确定性，剩下的就是条件熵。</p>
+</li>
+<li><p>互信息</p>
+<p>互信息可以度量两个随机事件“相关性”的量化<br>$$<br>S(X;Y)=\sum_{x}\sum_{y}p(x,y)\log \frac{p(x,y)}{p(x)p(y)} \tag{6}<br>$$</p>
+<p>互信息就是随机事件X，以及知道随机事件Y条件下的不确定性，或者条件熵之间的差异。即。<br>$$<br>S(X;Y)=S(X) -S(X|Y) \tag{7}<br>$$</p>
+</li>
+<li><p>相对熵</p>
+<p>相对熵也是来衡量相关性，但和互信息不同，它用来衡量两个取值为正数的函数的相似性。<br>$$<br>KL(f(x)||g(x))=\sum_{x \in X}f(x)\cdot \log \frac {f(x)}{g(x)} \tag{8}<br>$$</p>
+<ul>
+<li>对于两个完全相同的函数，他们的相对数为0</li>
+<li>相对熵越大，两个函数差异越大；反之，相对熵越小，两函数差异越小</li>
+<li>对于概率分布和概率密度分布，如果取值均大于0，相对熵可以度量两个随机分布的差异性</li>
+</ul>
+<p>相对熵是不对称的。<br>$$<br>KL(f(x)||g(x)) \ne KL(g(x)||f(x)) \tag{9}<br>$$<br>詹森和香农提出了一种相对熵的计算方法，将上面的不等式变为等式。<br>$$<br>JS(f(x)||g(x))=\frac{1}{2}[KL(f(x)||g(x))+KL(g(x)||f(x))] \tag{10}<br>$$</p>
+</li>
+</ol>
+<h4 id="二-最大熵"><a href="#二-最大熵" class="headerlink" title="二. 最大熵"></a>二. 最大熵</h4><p>当我们想要得到一个随机事件的概率分布时，如果没有足够的信息能够确定这个概率分布（可能是不能确定分布，也可能是知道分布的类型，但是还有若干个参数没有确定），那么最“保险”的方案就是选择使得熵最大的分布。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/" data-id="ckrbd2jeb0004lro4gt52htip" data-title="信息熵笔记" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-常见安装脚本" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/07/19/%E5%B8%B8%E8%A7%81%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC/" class="article-date">
@@ -150,63 +628,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/19/%E5%B8%B8%E8%A7%81%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC/" data-id="ckrai96c30001wwo4d2wfgv9n" data-title="常见安装脚本" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/07/19/%E5%B8%B8%E8%A7%81%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC/" data-id="ckrbd2jec0005lro43qldhldy" data-title="常见安装脚本" class="article-share-link">Share</a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/07/19/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2021-07-19T09:45:09.396Z" itemprop="datePublished">2021-07-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/07/19/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/19/hello-world/" data-id="ckrai96bz0000wwo4a03zczgy" data-title="Hello World" class="article-share-link">Share</a>
-      
-      
-      
     </footer>
   </div>
   
@@ -228,7 +655,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
     </div>
   </div>
 
@@ -238,7 +665,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">运维</a>
+      <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 20px;">数据库</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">运维</a>
     </div>
   </div>
 
@@ -260,11 +687,23 @@
       <ul>
         
           <li>
-            <a href="/2021/07/19/%E5%B8%B8%E8%A7%81%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC/">常见安装脚本</a>
+            <a href="/2021/07/20/restful%E6%96%87%E6%A1%A3/">python web 异常框架</a>
           </li>
         
           <li>
-            <a href="/2021/07/19/hello-world/">Hello World</a>
+            <a href="/2021/07/20/SanicDB%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/">SanicDB 使用文档</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">Orientdb 基本操作</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/">信息熵笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/19/%E5%B8%B8%E8%A7%81%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC/">常见安装脚本</a>
           </li>
         
       </ul>

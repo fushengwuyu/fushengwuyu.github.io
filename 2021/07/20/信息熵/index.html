@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>信息熵笔记 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="一. 熵 解释  熵是不确定的度量 熵是信息的度量   计算公式$$S &#x3D; - \sum _{x} p(x)\log p(x) \tag{1}$$ log可以取自然对数，也可以是以底为2的对数，任意大于1的底都是成立的。换底只不过换了信息的单位而已。   对于连续的概率分布，熵的定义为：$$S&#x3D;- \int p(x) \log p (x)dx \tag{2}$$  联合熵$$S[p(x,y)]&#x3D;-">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信息熵笔记">
+<meta property="og:url" content="http://example.com/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一. 熵 解释  熵是不确定的度量 熵是信息的度量   计算公式$$S &#x3D; - \sum _{x} p(x)\log p(x) \tag{1}$$ log可以取自然对数，也可以是以底为2的对数，任意大于1的底都是成立的。换底只不过换了信息的单位而已。   对于连续的概率分布，熵的定义为：$$S&#x3D;- \int p(x) \log p (x)dx \tag{2}$$  联合熵$$S[p(x,y)]&#x3D;-">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-07-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-20T01:08:46.308Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-信息熵" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/" class="article-date">
+  <time class="dt-published" datetime="2021-07-19T16:00:00.000Z" itemprop="datePublished">2021-07-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      信息熵笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h4 id="一-熵"><a href="#一-熵" class="headerlink" title="一. 熵"></a>一. 熵</h4><ol>
+<li><p>解释</p>
+<ul>
+<li>熵是不确定的度量</li>
+<li>熵是信息的度量</li>
+</ul>
+</li>
+<li><p>计算公式<br>$$<br>S = - \sum _{x} p(x)\log p(x) \tag{1}<br>$$</p>
+<p>log可以取自然对数，也可以是以底为2的对数，任意大于1的底都是成立的。换底只不过换了信息的单位而已。</p>
+</li>
+</ol>
+<p>对于连续的概率分布，熵的定义为：<br>$$<br>S=- \int p(x) \log p (x)dx \tag{2}<br>$$</p>
+<ol start="3">
+<li><p>联合熵<br>$$<br>S[p(x,y)]=-\sum_{x} \sum_{y}p(x,y)\ln p(x,y) \tag{3}<br>$$</p>
+</li>
+<li><p>条件熵<br>$$<br>S(Y|X)=S[p(x,y)] - S[p(x)] \tag{4}<br>$$<br>等价于：<br>$$<br>S(Y|X)=-\sum_{x} \sum_{y}p(x,y) \log p(y:x) \tag{5}<br>$$<br>通俗的说，本来的信息量有$$S[p(x,y)]$$ ，然后$$p(x)$$ 能带来$$S[p(x)]$$ 的信息，减去其不确定性，剩下的就是条件熵。</p>
+</li>
+<li><p>互信息</p>
+<p>互信息可以度量两个随机事件“相关性”的量化<br>$$<br>S(X;Y)=\sum_{x}\sum_{y}p(x,y)\log \frac{p(x,y)}{p(x)p(y)} \tag{6}<br>$$</p>
+<p>互信息就是随机事件X，以及知道随机事件Y条件下的不确定性，或者条件熵之间的差异。即。<br>$$<br>S(X;Y)=S(X) -S(X|Y) \tag{7}<br>$$</p>
+</li>
+<li><p>相对熵</p>
+<p>相对熵也是来衡量相关性，但和互信息不同，它用来衡量两个取值为正数的函数的相似性。<br>$$<br>KL(f(x)||g(x))=\sum_{x \in X}f(x)\cdot \log \frac {f(x)}{g(x)} \tag{8}<br>$$</p>
+<ul>
+<li>对于两个完全相同的函数，他们的相对数为0</li>
+<li>相对熵越大，两个函数差异越大；反之，相对熵越小，两函数差异越小</li>
+<li>对于概率分布和概率密度分布，如果取值均大于0，相对熵可以度量两个随机分布的差异性</li>
+</ul>
+<p>相对熵是不对称的。<br>$$<br>KL(f(x)||g(x)) \ne KL(g(x)||f(x)) \tag{9}<br>$$<br>詹森和香农提出了一种相对熵的计算方法，将上面的不等式变为等式。<br>$$<br>JS(f(x)||g(x))=\frac{1}{2}[KL(f(x)||g(x))+KL(g(x)||f(x))] \tag{10}<br>$$</p>
+</li>
+</ol>
+<h4 id="二-最大熵"><a href="#二-最大熵" class="headerlink" title="二. 最大熵"></a>二. 最大熵</h4><p>当我们想要得到一个随机事件的概率分布时，如果没有足够的信息能够确定这个概率分布（可能是不能确定分布，也可能是知道分布的类型，但是还有若干个参数没有确定），那么最“保险”的方案就是选择使得熵最大的分布。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/" data-id="ckrbd2jeb0004lro4gt52htip" data-title="信息熵笔记" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Orientdb 基本操作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/07/19/%E5%B8%B8%E8%A7%81%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">常见安装脚本</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 20px;">数据库</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">运维</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/07/20/restful%E6%96%87%E6%A1%A3/">python web 异常框架</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/20/SanicDB%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/">SanicDB 使用文档</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">Orientdb 基本操作</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/">信息熵笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2021/07/19/%E5%B8%B8%E8%A7%81%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC/">常见安装脚本</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
