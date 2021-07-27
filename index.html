@@ -187,6 +187,36 @@
         </li>
       
         
+        <li class="menu-item menu-item-about">
+          <a href="/about/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/%20" rel="section">
             
@@ -642,6 +672,142 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/keras%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/07/20/keras%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3/" itemprop="url">keras+python web 遇到的问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">
+                2021-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="1-ensorflow-python-framework-errors-impl-FailedPreconditionError-Error-while-reading-resource-variable-softmax-kernel-from-Container-localhost-This-could-mean-that-the-variable-was-uninitialized-Not-found-Resource-localhost-softmax-kernel-N10tensorflow3VarE-does-not-exist"><a href="#1-ensorflow-python-framework-errors-impl-FailedPreconditionError-Error-while-reading-resource-variable-softmax-kernel-from-Container-localhost-This-could-mean-that-the-variable-was-uninitialized-Not-found-Resource-localhost-softmax-kernel-N10tensorflow3VarE-does-not-exist" class="headerlink" title="1. ensorflow.python.framework.errors_impl.FailedPreconditionError: Error while reading resource variable softmax/kernel from Container: localhost. This could mean that the variable was uninitialized. Not found: Resource localhost/softmax/kernel/N10tensorflow3VarE does not exist."></a>1. ensorflow.python.framework.errors_impl.FailedPreconditionError: Error while reading resource variable softmax/kernel from Container: localhost. This could mean that the variable was uninitialized. Not found: Resource localhost/softmax/kernel/N10tensorflow3VarE does not exist.</h4><p>​    最近在使用flask部署keras服务的时候。遇到改错误，看错误，感觉是变量没有初始化，百度各种资料，成功找到解决办法。</p>
+<p>​     creating a reference to the session that is used for loading the models and then to set it to be used by keras in each request</p>
+<p>​    在加载模型之前，创建session。并在模型调用predict的时候，设置同样的session。保证整个项目使用模型使用同一个session。成功解决问题。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from tensorflow.python.keras.backend import set_session</span><br><span class="line">from tensorflow.python.keras.models import load_model</span><br><span class="line"></span><br><span class="line">tf_config = some_custom_config</span><br><span class="line">sess = tf.Session(config=tf_config)</span><br><span class="line">graph = tf.get_default_graph()</span><br><span class="line"></span><br><span class="line"># IMPORTANT: models have to be loaded AFTER SETTING THE SESSION for keras! </span><br><span class="line"># Otherwise, their weights will be unavailable in the threads after the session there has been set</span><br><span class="line">set_session(sess)</span><br><span class="line">model = load_model(...)</span><br></pre></td></tr></table></figure>
+
+<p>在调用的时候，如下设置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">global sess</span><br><span class="line">global graph</span><br><span class="line">with graph.as_default():</span><br><span class="line">    set_session(sess)</span><br><span class="line">    model.predict(...)</span><br></pre></td></tr></table></figure>
+
+
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensorflow/issues/28287">https://github.com/tensorflow/tensorflow/issues/28287</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.datalearner.com/blog/1051572578207468">https://www.datalearner.com/blog/1051572578207468</a></p>
+<h4 id="2-XLA-GPU"><a href="#2-XLA-GPU" class="headerlink" title="2. XLA_GPU"></a>2. XLA_GPU</h4><p>参考：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/53696654/why-keras-does-not-see-my-gpu-while-tensorflow-does?r=SearchResults">https://stackoverflow.com/questions/53696654/why-keras-does-not-see-my-gpu-while-tensorflow-does?r=SearchResults</a></p>
+<p>解决办法：</p>
+<blockquote>
+<p>sudo chmod -R a+r /usr/local/cuda*</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/SanicDB%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -815,7 +981,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/keras%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/l4t_docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -834,7 +1000,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/07/20/keras%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3/" itemprop="url">keras+python web 遇到的问题</a></h1>
+                <a class="post-title-link" href="/2021/07/20/l4t_docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" itemprop="url">jetson lt4 docker安装遇到的问题</a></h1>
         
 
         <div class="post-meta">
@@ -886,23 +1052,49 @@
       
         
           
-            <h4 id="1-ensorflow-python-framework-errors-impl-FailedPreconditionError-Error-while-reading-resource-variable-softmax-kernel-from-Container-localhost-This-could-mean-that-the-variable-was-uninitialized-Not-found-Resource-localhost-softmax-kernel-N10tensorflow3VarE-does-not-exist"><a href="#1-ensorflow-python-framework-errors-impl-FailedPreconditionError-Error-while-reading-resource-variable-softmax-kernel-from-Container-localhost-This-could-mean-that-the-variable-was-uninitialized-Not-found-Resource-localhost-softmax-kernel-N10tensorflow3VarE-does-not-exist" class="headerlink" title="1. ensorflow.python.framework.errors_impl.FailedPreconditionError: Error while reading resource variable softmax/kernel from Container: localhost. This could mean that the variable was uninitialized. Not found: Resource localhost/softmax/kernel/N10tensorflow3VarE does not exist."></a>1. ensorflow.python.framework.errors_impl.FailedPreconditionError: Error while reading resource variable softmax/kernel from Container: localhost. This could mean that the variable was uninitialized. Not found: Resource localhost/softmax/kernel/N10tensorflow3VarE does not exist.</h4><p>​    最近在使用flask部署keras服务的时候。遇到改错误，看错误，感觉是变量没有初始化，百度各种资料，成功找到解决办法。</p>
-<p>​     creating a reference to the session that is used for loading the models and then to set it to be used by keras in each request</p>
-<p>​    在加载模型之前，创建session。并在模型调用predict的时候，设置同样的session。保证整个项目使用模型使用同一个session。成功解决问题。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from tensorflow.python.keras.backend import set_session</span><br><span class="line">from tensorflow.python.keras.models import load_model</span><br><span class="line"></span><br><span class="line">tf_config = some_custom_config</span><br><span class="line">sess = tf.Session(config=tf_config)</span><br><span class="line">graph = tf.get_default_graph()</span><br><span class="line"></span><br><span class="line"># IMPORTANT: models have to be loaded AFTER SETTING THE SESSION for keras! </span><br><span class="line"># Otherwise, their weights will be unavailable in the threads after the session there has been set</span><br><span class="line">set_session(sess)</span><br><span class="line">model = load_model(...)</span><br></pre></td></tr></table></figure>
+            <ol>
+<li><p>swig（pyrfr）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install swig --fix-missing</span><br></pre></td></tr></table></figure>
 
-<p>在调用的时候，如下设置。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">global sess</span><br><span class="line">global graph</span><br><span class="line">with graph.as_default():</span><br><span class="line">    set_session(sess)</span><br><span class="line">    model.predict(...)</span><br></pre></td></tr></table></figure>
+<p>若提示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree       </span><br><span class="line">Reading state information... Done</span><br><span class="line">E: Unable to locate package swig</span><br></pre></td></tr></table></figure>
 
+<p>先更新源：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br></pre></td></tr></table></figure>
 
-<p>参考：</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensorflow/issues/28287">https://github.com/tensorflow/tensorflow/issues/28287</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.datalearner.com/blog/1051572578207468">https://www.datalearner.com/blog/1051572578207468</a></p>
-<h4 id="2-XLA-GPU"><a href="#2-XLA-GPU" class="headerlink" title="2. XLA_GPU"></a>2. XLA_GPU</h4><p>参考：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/53696654/why-keras-does-not-see-my-gpu-while-tensorflow-does?r=SearchResults">https://stackoverflow.com/questions/53696654/why-keras-does-not-see-my-gpu-while-tensorflow-does?r=SearchResults</a></p>
-<p>解决办法：</p>
+<p>再安装swig。</p>
+</li>
+<li><p>lazy_import-0.2.2（auto-sklearn）</p>
 <blockquote>
-<p>sudo chmod -R a+r /usr/local/cuda*</p>
+<p>vim setup.py</p>
 </blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;README.rst&#x27;</span>) <span class="keyword">as</span> infile:</span><br></pre></td></tr></table></figure>
+
+<p>改为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;README.rst&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> infile:</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>python setup.py  install</p>
+</blockquote>
+</li>
+<li><p>升级cmake（xgboost）</p>
+<ul>
+<li><p>下载源码<a target="_blank" rel="noopener" href="https://github.com/Kitware/CMake/releases/download/v3.20.4/cmake-3.20.4.tar.gz">https://github.com/Kitware/CMake/releases/download/v3.20.4/cmake-3.20.4.tar.gz</a></p>
+</li>
+<li><p>编译安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./boostrap</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></li>
+<li><p>添加软连接</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/local/bin/cmake /usr/bin/cmake</span><br></pre></td></tr></table></figure></li>
+<li><p>查看</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --version</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@3790ed27be82:~/cmake-3.20.4# cmake --version</span><br><span class="line">cmake version 3.20.4</span><br><span class="line"></span><br><span class="line">CMake suite maintained and supported by Kitware (kitware.com/cmake)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>numpy==1.19.4</p>
+<p>1.19.5暂时会有bug。报错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import numpy as np</span><br><span class="line">Illegal instruction (core dumped)</span><br></pre></td></tr></table></figure></li>
+</ol>
 
           
         
@@ -1086,168 +1278,6 @@
 
 <p>并没有任何输出，表明，记录并没有正确提交。</p>
 </li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/l4t_docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/07/20/l4t_docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" itemprop="url">jetson lt4 docker安装遇到的问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">
-                2021-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>swig（pyrfr）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install swig --fix-missing</span><br></pre></td></tr></table></figure>
-
-<p>若提示</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree       </span><br><span class="line">Reading state information... Done</span><br><span class="line">E: Unable to locate package swig</span><br></pre></td></tr></table></figure>
-
-<p>先更新源：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br></pre></td></tr></table></figure>
-
-<p>再安装swig。</p>
-</li>
-<li><p>lazy_import-0.2.2（auto-sklearn）</p>
-<blockquote>
-<p>vim setup.py</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;README.rst&#x27;</span>) <span class="keyword">as</span> infile:</span><br></pre></td></tr></table></figure>
-
-<p>改为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;README.rst&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> infile:</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>python setup.py  install</p>
-</blockquote>
-</li>
-<li><p>升级cmake（xgboost）</p>
-<ul>
-<li><p>下载源码<a target="_blank" rel="noopener" href="https://github.com/Kitware/CMake/releases/download/v3.20.4/cmake-3.20.4.tar.gz">https://github.com/Kitware/CMake/releases/download/v3.20.4/cmake-3.20.4.tar.gz</a></p>
-</li>
-<li><p>编译安装</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./boostrap</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></li>
-<li><p>添加软连接</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/local/bin/cmake /usr/bin/cmake</span><br></pre></td></tr></table></figure></li>
-<li><p>查看</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --version</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@3790ed27be82:~/cmake-3.20.4# cmake --version</span><br><span class="line">cmake version 3.20.4</span><br><span class="line"></span><br><span class="line">CMake suite maintained and supported by Kitware (kitware.com/cmake)</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>numpy==1.19.4</p>
-<p>1.19.5暂时会有bug。报错</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import numpy as np</span><br><span class="line">Illegal instruction (core dumped)</span><br></pre></td></tr></table></figure></li>
 </ol>
 
           
@@ -2280,10 +2310,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
+                <a href="/tags/index.html">
                   <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">tags</span>
-                
+                </a>
               </div>
             
 
