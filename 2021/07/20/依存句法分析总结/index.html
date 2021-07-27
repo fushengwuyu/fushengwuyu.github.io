@@ -1,37 +1,928 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+  
 
 
-{% block content %}
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="NLP," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 基本概念依存句法分析（Dependency Parsing，DP）通过分析语言单位内成分之间的依存关系，揭示其句法结构。直观来讲，就是分析句子中的“主谓宾”、“定状补”这些语法成分，并分析各成分的关系。对句法结构进行分析，一方面是语言理解的自身需求，句法分析是语言理解的基础，另外一方面，句法分析也为其他自然语言处理任务提供支持。比如：句法驱动的统计机器翻译需要对源语言或目标语言进行句法分析。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="依存句法关系总结">
+<meta property="og:url" content="http://example.com/2021/07/20/%E4%BE%9D%E5%AD%98%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 基本概念依存句法分析（Dependency Parsing，DP）通过分析语言单位内成分之间的依存关系，揭示其句法结构。直观来讲，就是分析句子中的“主谓宾”、“定状补”这些语法成分，并分析各成分的关系。对句法结构进行分析，一方面是语言理解的自身需求，句法分析是语言理解的基础，另外一方面，句法分析也为其他自然语言处理任务提供支持。比如：句法驱动的统计机器翻译需要对源语言或目标语言进行句法分析。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1587606360367.png">
+<meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1587606231909.png">
+<meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1587606449299.png">
+<meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1587606912240.png">
+<meta property="article:published_time" content="2021-07-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-20T02:15:01.823Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1587606360367.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/07/20/依存句法分析总结/"/>
+
+
+
+
+
+  <title>依存句法关系总结 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
 
   <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/%E4%BE%9D%E5%AD%98%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">依存句法关系总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">
+                2021-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1. 基本概念"></a>1. 基本概念</h4><p>依存句法分析（Dependency Parsing，DP）通过分析语言单位内成分之间的依存关系，揭示其句法结构。直观来讲，就是分析句子中的“主谓宾”、“定状补”这些语法成分，并分析各成分的关系。对句法结构进行分析，一方面是语言理解的自身需求，句法分析是语言理解的基础，另外一方面，句法分析也为其他自然语言处理任务提供支持。比如：句法驱动的统计机器翻译需要对源语言或目标语言进行句法分析。</p>
+<h5 id="1-1-谓词"><a href="#1-1-谓词" class="headerlink" title="1.1 谓词"></a>1.1 谓词</h5><p>依存句法认为“谓词”中的动词是一个句子的核心，其他成分与动词直接或者间接的产生联系。</p>
+<h5 id="1-2-依存理论"><a href="#1-2-依存理论" class="headerlink" title="1.2 依存理论"></a>1.2 依存理论</h5><p>依存理论中，“依存”指的是词与词之间处于支配与被支配的关系，这种关系具有方向性。处于支配地位的词称之为支配者（head），处于被支配地位的成分称之为从属者（dependency）。</p>
+<p>依存语法存在一个基本假设，句法分析核心是词与词的依存关系，一个依存关系连接两个词：head和dependency。依存关系可以细分为不同类型，表示具体的两个词的依存关系。</p>
+<h5 id="1-3-依存关系"><a href="#1-3-依存关系" class="headerlink" title="1.3 依存关系"></a>1.3 依存关系</h5><table>
+<thead>
+<tr>
+<th>关系类型</th>
+<th>Tag</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主谓关系</td>
+<td>SBV</td>
+<td>subject-verb</td>
+<td>我送她一束花 (我 &lt;– 送)</td>
+</tr>
+<tr>
+<td>动宾关系</td>
+<td>VOB</td>
+<td>直接宾语，verb-object</td>
+<td>我送她一束花 (送 –&gt; 花)</td>
+</tr>
+<tr>
+<td>间宾关系</td>
+<td>IOB</td>
+<td>间接宾语，indirect-object</td>
+<td>我送她一束花 (送 –&gt; 她)</td>
+</tr>
+<tr>
+<td>前置宾语</td>
+<td>FOB</td>
+<td>前置宾语，fronting-object</td>
+<td>他什么书都读 (书 &lt;– 读)</td>
+</tr>
+<tr>
+<td>兼语</td>
+<td>DBL</td>
+<td>double</td>
+<td>他请我吃饭 (请 –&gt; 我)</td>
+</tr>
+<tr>
+<td>定中关系</td>
+<td>ATT</td>
+<td>attribute</td>
+<td>红苹果 (红 &lt;– 苹果)</td>
+</tr>
+<tr>
+<td>状中结构</td>
+<td>ADV</td>
+<td>adverbial</td>
+<td>非常美丽 (非常 &lt;– 美丽)</td>
+</tr>
+<tr>
+<td>动补结构</td>
+<td>CMP</td>
+<td>complement</td>
+<td>做完了作业 (做 –&gt; 完)</td>
+</tr>
+<tr>
+<td>并列关系</td>
+<td>COO</td>
+<td>coordinate</td>
+<td>大山和大海 (大山 –&gt; 大海)</td>
+</tr>
+<tr>
+<td>介宾关系</td>
+<td>POB</td>
+<td>preposition-object</td>
+<td>在贸易区内 (在 –&gt; 内)</td>
+</tr>
+<tr>
+<td>左附加关系</td>
+<td>LAD</td>
+<td>left adjunct</td>
+<td>大山和大海 (和 &lt;– 大海)</td>
+</tr>
+<tr>
+<td>右附加关系</td>
+<td>RAD</td>
+<td>right adjunct</td>
+<td>孩子们 (孩子 –&gt; 们)</td>
+</tr>
+<tr>
+<td>独立结构</td>
+<td>IS</td>
+<td>independent structure</td>
+<td>两个单句在结构上彼此独立</td>
+</tr>
+<tr>
+<td>核心关系</td>
+<td>HED</td>
+<td>head</td>
+<td>指整个句子的核心</td>
+</tr>
+</tbody></table>
+<h4 id="2-基本方法"><a href="#2-基本方法" class="headerlink" title="2. 基本方法"></a>2. 基本方法</h4><ul>
+<li><p>基于转移的方法</p>
+<p>基于转移的方法通过shift-reduce两个基本动作，将序列转为树结构。首先用一个 buffer 来存储所有未处理的输入句子，并用一个栈来存储当前的分析状态。动作可以分为：</p>
+<ol>
+<li>shift，即将 buffer 中的一个词移到栈中；</li>
+<li>$left_arc(x)$，即栈顶两个词 a,b 为 a&lt;-b 的依赖关系，关系种类为 x；</li>
+<li>$right_arc(x)$，即栈顶两个词 a,b 为 a-&gt;b 的依赖关系，关系种类为 x。后两种动作为 reduce 动作。</li>
+</ol>
+<p>目前，基于转移的方法最好模型是stack lstm。 通过三个 LSTM 来分别建模栈状态、待输入序列和动作序列。 其中因为栈需要入栈和出栈，因此作者提出了一个 Stack LSTM 来建模栈状态。</p>
+<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1587606360367.png" alt="1587606360367"></p>
+<p>论文地址： <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1505.08075.pdf">https://arxiv.org/pdf/1505.08075.pdf</a></p>
+</li>
+<li><p>基于图的方法</p>
+<p>目前的依存句法分析中，<strong>最流行的方法是基于图的方法经典的方法是 Biaffine 模型</strong>。直接用神经网络来预测每两个词之间存在依存关系的概率，这样我们就得到一个全连接图，图上每个边代表了节点 a 指向节点 b 的概率。然后使用MST等方法来来将图转换为一棵树。</p>
+<p>Biaffine 模型其实和我们目前全连接自注意力模型非常类似。Biaffine 模型十分简单，并且容易理解，并且在很多数据集上都取得了目前最好的结果。</p>
+<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1587606231909.png" alt="1587606231909"></p>
+<p>论文地址：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1611.01734.pdf">https://arxiv.org/pdf/1611.01734.pdf</a></p>
+</li>
+<li><p>联合模型(深度学习)</p>
+<ol>
+<li><p>词性标注&amp;句法分析</p>
+<p>联合词性标注和句法分析的模型有很多，可以是基于转移的方法，也可以是基于图的方法，这里介绍一个简单思路。首先利用lstm来预测词性，然后联合词性信息和词信息一起用另外一个lstm来建模，并用Biaffine模型来做句法分析。</p>
+<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1587606449299.png" alt="1587606449299"></p>
+<p>论文地址：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1807.03955.pdf">https://arxiv.org/pdf/1807.03955.pdf</a></p>
+</li>
+<li><p>中文分词&amp;句法分析</p>
+<p>中文的句法分析是基于词级别的，所以在句法分析之前，会做分词。为了避免流水线模式的错误积累，很容易想到的就是分词和词法分析联合建模。</p>
+<p>这里主要介绍一下邱希鹏教授实验室提出的模型：joint CWS。</p>
+<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1587606912240.png" alt="1587606912240"></p>
+<p>其中两个关键点：</p>
+<ul>
+<li>biaffine parsing</li>
+<li>‘app’ 作为特殊的依赖关系</li>
+</ul>
+<p>其实方法很简单，只需要将词内部的字之间加上一个特殊的依赖关系“app”，然后将词级别的依存关系转换为字级别的依存关系。并且用 biaffine 模型来进行同时预测。</p>
+<p>论文地址：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1904.04697.pdf">https://arxiv.org/pdf/1904.04697.pdf</a></p>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="3-常用工具"><a href="#3-常用工具" class="headerlink" title="3. 常用工具"></a>3. 常用工具</h4><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/867bd48cd9ad">https://www.jianshu.com/p/867bd48cd9ad</a></p>
+<h5 id="3-1-LTP"><a href="#3-1-LTP" class="headerlink" title="3.1 LTP"></a>3.1 LTP</h5><ol>
+<li><p>安装</p>
+<blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyltp</span><br></pre></td></tr></table></figure></blockquote>
+</li>
+<li><p>下载数据包</p>
+<p>ltp_data_v3.4.0： 链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1aDrb95ylZHoTPKJY6K1Slw">https://pan.baidu.com/s/1aDrb95ylZHoTPKJY6K1Slw</a>  密码: ehe2</p>
+</li>
+<li><p>测试代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyltp <span class="keyword">import</span> Parser, Postagger, Segmentor</span><br><span class="line"></span><br><span class="line">text = <span class="string">&#x27;HanLP是一系列模型与算法组成的自然语言处理工具包，目标是普及自然语言处理在生产环境中的应用。&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 分词</span></span><br><span class="line">segmentor = Segmentor()</span><br><span class="line">segmentor.load(<span class="string">&quot;/home/sunshine/datasets/other/ltp_data_v3.4.0/cws.model&quot;</span>)</span><br><span class="line">tokens = segmentor.segment(text)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 词性</span></span><br><span class="line">postagger = Postagger()</span><br><span class="line">postagger.load(<span class="string">&#x27;/home/sunshine/datasets/other/ltp_data_v3.4.0/pos.model&#x27;</span>)</span><br><span class="line">postags = postagger.postag(tokens)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 依存句法分析</span></span><br><span class="line">parser = Parser()</span><br><span class="line">parser.load(<span class="string">&#x27;/home/sunshine/datasets/other/ltp_data_v3.4.0/parser.model&#x27;</span>)</span><br><span class="line">arcs = parser.parse(tokens, postags)</span><br><span class="line"></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line">result = <span class="built_in">zip</span>(tokens, postags, arcs)</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(i, item[<span class="number">0</span>], item[<span class="number">1</span>], item[<span class="number">2</span>].head, item[<span class="number">2</span>].relation)</span><br><span class="line">    i += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">1 HanLP ws 2 SBV</span><br><span class="line">2 是 v 0 HED</span><br><span class="line">3 一 m 4 ATT</span><br><span class="line">4 系列 q 5 ATT</span><br><span class="line">5 模型 n 8 SBV</span><br><span class="line">6 与 c 7 LAD</span><br><span class="line">7 算法 n 5 COO</span><br><span class="line">8 组成 v 12 ATT</span><br><span class="line">9 的 u 8 RAD</span><br><span class="line">10 自然 n 11 ATT</span><br><span class="line">11 语言 n 12 SBV</span><br><span class="line">12 处理 v 2 VOB</span><br><span class="line">13 工具包 n 12 VOB</span><br><span class="line">14 ， wp 2 WP</span><br><span class="line">15 目标 n 16 SBV</span><br><span class="line">16 是 v 2 COO</span><br><span class="line">17 普及 v 16 VOB</span><br><span class="line">18 自然 n 19 ATT</span><br><span class="line">19 语言 n 20 ATT</span><br><span class="line">20 处理 v 17 VOB</span><br><span class="line">21 在 p 26 ATT</span><br><span class="line">22 生产 v 23 ATT</span><br><span class="line">23 环境 n 24 ATT</span><br><span class="line">24 中 nd 21 POB</span><br><span class="line">25 的 u 21 RAD</span><br><span class="line">26 应用 v 20 VOB</span><br><span class="line">27 。 wp 2 WP</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h5 id="3-2-stanfordNLP"><a href="#3-2-stanfordNLP" class="headerlink" title="3.2 stanfordNLP"></a>3.2 stanfordNLP</h5><h6 id="3-2-1-StanordCoreNLP"><a href="#3-2-1-StanordCoreNLP" class="headerlink" title="3.2.1 StanordCoreNLP"></a>3.2.1 StanordCoreNLP</h6><p>Github地址：<a target="_blank" rel="noopener" href="https://github.com/Lynten/stanford-corenlp">https://github.com/Lynten/stanford-corenlp</a></p>
+<p>官网：<a target="_blank" rel="noopener" href="https://stanfordnlp.github.io/CoreNLP/">https://stanfordnlp.github.io/CoreNLP/</a></p>
+<ol>
+<li><p>安装</p>
+<blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install stanfordcorenlp</span><br></pre></td></tr></table></figure></blockquote>
+</li>
+<li><p>安装java环境（略）</p>
+</li>
+<li><p>下载数据包</p>
+<p>链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1kD3gaxVwvxZGaEN3EDedvA">https://pan.baidu.com/s/1kD3gaxVwvxZGaEN3EDedvA</a> 提取码: m72n</p>
+<p>数据包下载之后，解压stanford-corenlp-full-2018-02-27.zip，将stanford-chinese-corenlp-2018-02-27-models.jar拷贝至stanford-corenlp-full-2018-02-27.zip解压目录。</p>
+</li>
+<li><p>测试代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> stanfordcorenlp <span class="keyword">import</span> StanfordCoreNLP</span><br><span class="line">text = <span class="string">&#x27;HanLP是一系列模型与算法组成的自然语言处理工具包，目标是普及自然语言处理在生产环境中的应用。&#x27;</span></span><br><span class="line">nlp = StanfordCoreNLP(<span class="string">&quot;/home/sunshine/datasets/other/standfordCoreNLP/stanford-corenlp-full-2018-02-27&quot;</span>, lang=<span class="string">&#x27;zh&#x27;</span>)</span><br><span class="line">tokens = nlp.word_tokenize(text)</span><br><span class="line">postags = nlp.pos_tag(text)</span><br><span class="line">result = nlp.dependency_parse(text)</span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> <span class="built_in">zip</span>(tokens, postags, result):</span><br><span class="line">    <span class="built_in">print</span>(i, item[<span class="number">0</span>], item[<span class="number">1</span>][<span class="number">1</span>], item[<span class="number">2</span>][<span class="number">1</span>], item[<span class="number">2</span>][<span class="number">2</span>])</span><br><span class="line">    i += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">1 HanLP NR 0 12</span><br><span class="line">2 是 VC 12 1</span><br><span class="line">3 一 CD 12 2</span><br><span class="line">4 系列 M 11 3</span><br><span class="line">5 模型 NN 3 4</span><br><span class="line">6 与 CC 7 5</span><br><span class="line">7 算法 NN 7 6</span><br><span class="line">8 组成 VV 8 7</span><br><span class="line">9 的 DEC 11 8</span><br><span class="line">10 自然 NN 8 9</span><br><span class="line">11 语言 NN 11 10</span><br><span class="line">12 处理 VV 12 11</span><br><span class="line">13 工具包 NN 12 13</span><br><span class="line">14 ， PU 12 14</span><br><span class="line">15 目标 NN 17 15</span><br><span class="line">16 是 VC 17 16</span><br><span class="line">17 普及 VV 12 17</span><br><span class="line">18 自然 NN 19 18</span><br><span class="line">19 语言 NN 17 19</span><br><span class="line">20 处理 VV 17 20</span><br><span class="line">21 在 P 23 21</span><br><span class="line">22 生产 NN 23 22</span><br><span class="line">23 环境 NN 26 23</span><br><span class="line">24 中 LC 23 24</span><br><span class="line">25 的 DEG 23 25</span><br><span class="line">26 应用 NN 20 26</span><br><span class="line">27 。 PU 12 27</span><br></pre></td></tr></table></figure></li>
+<li><p>依存句法解释</p>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br></pre></td><td class="code"><pre><span class="line">&gt; &gt; ROOT：要处理文本的语句</span><br><span class="line">&gt; &gt; IP：简单从句</span><br><span class="line">&gt; &gt; NP：名词短语</span><br><span class="line">&gt; &gt; VP：动词短语</span><br><span class="line">&gt; &gt; PU：断句符，通常是句号、问号、感叹号等标点符号</span><br><span class="line">&gt; &gt; LCP：方位词短语</span><br><span class="line">&gt; &gt; PP：介词短语</span><br><span class="line">&gt; &gt; CP：由‘的’构成的表示修饰性关系的短语</span><br><span class="line">&gt; &gt; DNP：由‘的’构成的表示所属关系的短语</span><br><span class="line">&gt; &gt; ADVP：副词短语</span><br><span class="line">&gt; &gt; ADJP：形容词短语</span><br><span class="line">&gt; &gt; DP：限定词短语</span><br><span class="line">&gt; &gt; QP：量词短语</span><br><span class="line">&gt; &gt; NN：常用名词</span><br><span class="line">&gt; &gt; NR：固有名词</span><br><span class="line">&gt; &gt; NT：时间名词</span><br><span class="line">&gt; &gt; PN：代词</span><br><span class="line">&gt; &gt; VV：动词</span><br><span class="line">&gt; &gt; VC：是</span><br><span class="line">&gt; &gt; CC：表示连词</span><br><span class="line">&gt; &gt; VE：有</span><br><span class="line">&gt; &gt; VA：表语形容词</span><br><span class="line">&gt; &gt; AS：内容标记（如：了）</span><br><span class="line">&gt; &gt; VRD：动补复合词</span><br><span class="line">&gt; &gt; CD: 表示基数词</span><br><span class="line">&gt; &gt; DT: determiner 表示限定词</span><br><span class="line">&gt; &gt; EX: existential there 存在句</span><br><span class="line">&gt; &gt; FW: foreign word 外来词</span><br><span class="line">&gt; &gt; IN: preposition or conjunction, subordinating 介词或从属连词</span><br><span class="line">&gt; &gt; JJ: adjective or numeral, ordinal 形容词或序数词</span><br><span class="line">&gt; &gt; JJR: adjective, comparative 形容词比较级</span><br><span class="line">&gt; &gt; JJS: adjective, superlative 形容词最高级</span><br><span class="line">&gt; &gt; LS: list item marker 列表标识</span><br><span class="line">&gt; &gt; MD: modal auxiliary 情态助动词</span><br><span class="line">&gt; &gt; PDT: pre-determiner 前位限定词</span><br><span class="line">&gt; &gt; POS: genitive marker 所有格标记</span><br><span class="line">&gt; &gt; PRP: pronoun, personal 人称代词</span><br><span class="line">&gt; &gt; RB: adverb 副词</span><br><span class="line">&gt; &gt; RBR: adverb, comparative 副词比较级</span><br><span class="line">&gt; &gt; RBS: adverb, superlative 副词最高级</span><br><span class="line">&gt; &gt; RP: particle 小品词</span><br><span class="line">&gt; &gt; SYM: symbol 符号</span><br><span class="line">&gt; &gt; TO:”to” as preposition or infinitive marker 作为介词或不定式标记</span><br><span class="line">&gt; &gt; WDT: WH-determiner WH限定词</span><br><span class="line">&gt; &gt; WP: WH-pronoun WH代词</span><br><span class="line">&gt; &gt; WP$: WH-pronoun, possessive WH所有格代词</span><br><span class="line">&gt; &gt; WRB:Wh-adverb WH副词</span><br><span class="line">&gt; &gt; </span><br><span class="line">&gt; &gt; 关系表示</span><br><span class="line">&gt; &gt; abbrev: abbreviation modifier，缩写</span><br><span class="line">&gt; &gt; acomp: adjectival complement，形容词的补充；</span><br><span class="line">&gt; &gt; advcl : adverbial clause modifier，状语从句修饰词</span><br><span class="line">&gt; &gt; advmod: adverbial modifier状语</span><br><span class="line">&gt; &gt; agent: agent，代理，一般有by的时候会出现这个</span><br><span class="line">&gt; &gt; amod: adjectival modifier形容词</span><br><span class="line">&gt; &gt; appos: appositional modifier,同位词</span><br><span class="line">&gt; &gt; attr: attributive，属性</span><br><span class="line">&gt; &gt; aux: auxiliary，非主要动词和助词，如BE,HAVE SHOULD/COULD等到</span><br><span class="line">&gt; &gt; auxpass: passive auxiliary 被动词</span><br><span class="line">&gt; &gt; cc: coordination，并列关系，一般取第一个词</span><br><span class="line">&gt; &gt; ccomp: clausal complement从句补充</span><br><span class="line">&gt; &gt; complm: complementizer，引导从句的词好重聚中的主要动词</span><br><span class="line">&gt; &gt; conj : conjunct，连接两个并列的词。</span><br><span class="line">&gt; &gt; cop: copula。系动词（如be,seem,appear等），（命题主词与谓词间的）连系</span><br><span class="line">&gt; &gt; csubj : clausal subject，从主关系</span><br><span class="line">&gt; &gt; csubjpass: clausal passive subject 主从被动关系</span><br><span class="line">&gt; &gt; dep: dependent依赖关系</span><br><span class="line">&gt; &gt; det: determiner决定词，如冠词等</span><br><span class="line">&gt; &gt; dobj : direct object直接宾语</span><br><span class="line">&gt; &gt; expl: expletive，主要是抓取there</span><br><span class="line">&gt; &gt; infmod: infinitival modifier，动词不定式</span><br><span class="line">&gt; &gt; iobj : indirect object，非直接宾语，也就是所以的间接宾语；</span><br><span class="line">&gt; &gt; mark: marker，主要出现在有“that” or “whether”“because”, “when”,</span><br><span class="line">&gt; &gt; mwe: multi-word expression，多个词的表示</span><br><span class="line">&gt; &gt; neg: negation modifier否定词</span><br><span class="line">&gt; &gt; nn: noun compound modifier名词组合形式</span><br><span class="line">&gt; &gt; npadvmod: noun phrase as adverbial modifier名词作状语</span><br><span class="line">&gt; &gt; nsubj : nominal subject，名词主语</span><br><span class="line">&gt; &gt; nsubjpass: passive nominal subject，被动的名词主语</span><br><span class="line">&gt; &gt; num: numeric modifier，数值修饰</span><br><span class="line">&gt; &gt; number: element of compound number，组合数字</span><br><span class="line">&gt; &gt; parataxis: parataxis: parataxis，并列关系</span><br><span class="line">&gt; &gt; partmod: participial modifier动词形式的修饰</span><br><span class="line">&gt; &gt; pcomp: prepositional complement，介词补充</span><br><span class="line">&gt; &gt; pobj : object of a preposition，介词的宾语</span><br><span class="line">&gt; &gt; poss: possession modifier，所有形式，所有格，所属</span><br><span class="line">&gt; &gt; possessive: possessive modifier，这个表示所有者和那个’S的关系</span><br><span class="line">&gt; &gt; preconj : preconjunct，常常是出现在 “either”, “both”, “neither”的情况下</span><br><span class="line">&gt; &gt; predet: predeterminer，前缀决定，常常是表示所有</span><br><span class="line">&gt; &gt; prep: prepositional modifier</span><br><span class="line">&gt; &gt; prepc: prepositional clausal modifier</span><br><span class="line">&gt; &gt; prt: phrasal verb particle，动词短语</span><br><span class="line">&gt; &gt; punct: punctuation，这个很少见，但是保留下来了，结果当中不会出现这个</span><br><span class="line">&gt; &gt; purpcl : purpose clause modifier，目的从句</span><br><span class="line">&gt; &gt; quantmod: quantifier phrase modifier，数量短语</span><br><span class="line">&gt; &gt; rcmod: relative clause modifier相关关系</span><br><span class="line">&gt; &gt; ref : referent，指示物，指代</span><br><span class="line">&gt; &gt; rel : relative</span><br><span class="line">&gt; &gt; root: root，最重要的词，从它开始，根节点</span><br><span class="line">&gt; &gt; tmod: temporal modifier</span><br><span class="line">&gt; &gt; xcomp: open clausal complement</span><br><span class="line">&gt; &gt; xsubj : controlling subject 掌控者</span><br><span class="line">&gt; &gt; 中心语为谓词</span><br><span class="line">&gt; &gt; subj — 主语</span><br><span class="line">&gt; &gt; nsubj — 名词性主语（nominal subject） （同步，建设）</span><br><span class="line">&gt; &gt; top — 主题（topic） （是，建筑）</span><br><span class="line">&gt; &gt; npsubj — 被动型主语（nominal passive subject），专指由“被”引导的被动句中的主语，一般是谓词语义上的受事 （称作，镍）</span><br><span class="line">&gt; &gt; csubj — 从句主语（clausal subject），中文不存在</span><br><span class="line">&gt; &gt; xsubj — x主语，一般是一个主语下面含多个从句 （完善，有些）</span><br><span class="line">&gt; &gt; 中心语为谓词或介词</span><br><span class="line">&gt; &gt; obj — 宾语</span><br><span class="line">&gt; &gt; dobj — 直接宾语 （颁布，文件）</span><br><span class="line">&gt; &gt; iobj — 间接宾语（indirect object），基本不存在</span><br><span class="line">&gt; &gt; range — 间接宾语为数量词，又称为与格 （成交，元）</span><br><span class="line">&gt; &gt; pobj — 介词宾语 （根据，要求）</span><br><span class="line">&gt; &gt; lobj — 时间介词 （来，近年）</span><br><span class="line">&gt; &gt; 中心语为谓词</span><br><span class="line">&gt; &gt; comp — 补语</span><br><span class="line">&gt; &gt; ccomp — 从句补语，一般由两个动词构成，中心语引导后一个动词所在的从句(IP) （出现，纳入）</span><br><span class="line">&gt; &gt; xcomp — x从句补语（xclausal complement），不存在</span><br><span class="line">&gt; &gt; acomp — 形容词补语（adjectival complement）</span><br><span class="line">&gt; &gt; tcomp — 时间补语（temporal complement） （遇到，以前）</span><br><span class="line">&gt; &gt; lccomp — 位置补语（localizer complement） （占，以上）</span><br><span class="line">&gt; &gt; — 结果补语（resultative complement）</span><br><span class="line">&gt; &gt; 中心语为名词</span><br><span class="line">&gt; &gt; mod — 修饰语（modifier）</span><br><span class="line">&gt; &gt; pass — 被动修饰（passive）</span><br><span class="line">&gt; &gt; tmod — 时间修饰（temporal modifier）</span><br><span class="line">&gt; &gt; rcmod — 关系从句修饰（relative clause modifier） （问题，遇到）</span><br><span class="line">&gt; &gt; numod — 数量修饰（numeric modifier） （规定，若干）</span><br><span class="line">&gt; &gt; ornmod — 序数修饰（numeric modifier）</span><br><span class="line">&gt; &gt; clf — 类别修饰（classifier modifier） （文件，件）</span><br><span class="line">&gt; &gt; nmod — 复合名词修饰（noun compound modifier） （浦东，上海）</span><br><span class="line">&gt; &gt; amod — 形容词修饰（adjetive modifier） （情况，新）</span><br><span class="line">&gt; &gt; advmod — 副词修饰（adverbial modifier） （做到，基本）</span><br><span class="line">&gt; &gt; vmod — 动词修饰（verb modifier，participle modifier）</span><br><span class="line">&gt; &gt; prnmod — 插入词修饰（parenthetical modifier）</span><br><span class="line">&gt; &gt; neg — 不定修饰（negative modifier） (遇到，不)</span><br><span class="line">&gt; &gt; det — 限定词修饰（determiner modifier） （活动，这些）</span><br><span class="line">&gt; &gt; possm — 所属标记（possessive marker），NP</span><br><span class="line">&gt; &gt; poss — 所属修饰（possessive modifier），NP</span><br><span class="line">&gt; &gt; dvpm — DVP标记（dvp marker），DVP （简单，的）</span><br><span class="line">&gt; &gt; dvpmod — DVP修饰（dvp modifier），DVP （采取，简单）</span><br><span class="line">&gt; &gt; assm — 关联标记（associative marker），DNP （开发，的）</span><br><span class="line">&gt; &gt; assmod — 关联修饰（associative modifier），NP|QP （教训，特区）</span><br><span class="line">&gt; &gt; prep — 介词修饰（prepositional modifier） NP|VP|IP（采取，对）</span><br><span class="line">&gt; &gt; clmod — 从句修饰（clause modifier） （因为，开始）</span><br><span class="line">&gt; &gt; plmod — 介词性地点修饰（prepositional localizer modifier） （在，上）</span><br><span class="line">&gt; &gt; asp — 时态标词（aspect marker） （做到，了）</span><br><span class="line">&gt; &gt; partmod– 分词修饰（participial modifier） 不存在</span><br><span class="line">&gt; &gt; etc — 等关系（etc） （办法，等）</span><br><span class="line">&gt; &gt; 中心语为实词</span><br><span class="line">&gt; &gt; conj — 联合(conjunct)</span><br><span class="line">&gt; &gt; cop — 系动(copula) 双指助动词？？？？</span><br><span class="line">&gt; &gt; cc — 连接(coordination)，指中心词与连词 （开发，与）</span><br><span class="line">&gt; &gt; 其它</span><br><span class="line">&gt; &gt; attr — 属性关系 （是，工程）</span><br><span class="line">&gt; &gt; cordmod– 并列联合动词（coordinated verb compound） （颁布，实行）</span><br><span class="line">&gt; &gt; mmod — 情态动词（modal verb） （得到，能）</span><br><span class="line">&gt; &gt; ba — 把字关系</span><br><span class="line">&gt; &gt; tclaus — 时间从句 （以后，积累）</span><br><span class="line">&gt; &gt; — semantic dependent</span><br><span class="line">&gt; &gt; cpm — 补语化成分（complementizer），一般指“的”引导的CP （振兴，的）</span><br></pre></td></tr></table></figure>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">###### 3.2.2 stanza</span><br><span class="line"></span><br><span class="line">github: &lt;https://github.com/stanfordnlp/stanza&gt;</span><br><span class="line"></span><br><span class="line">stanza同样是stanford发布的版本。</span><br><span class="line"></span><br><span class="line">1. 安装</span><br><span class="line"></span><br><span class="line">```shell</span><br><span class="line">pip install stanza</span><br></pre></td></tr></table></figure></blockquote>
+</blockquote>
+</li>
+<li><p>下载模型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> stanza</span><br><span class="line">stanza.download(<span class="string">&#x27;zh&#x27;</span>) </span><br></pre></td></tr></table></figure>
+
+<p>我这里提供一份中文的模型包供大家下载。</p>
+<p>链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1hb9ATqpOGC9sHBHZ2hNdeg">https://pan.baidu.com/s/1hb9ATqpOGC9sHBHZ2hNdeg</a> 提取码: fqdm</p>
+</li>
+<li><p>测试代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> stanza</span><br><span class="line">nlp = stanza.Pipeline(<span class="string">&#x27;zh&#x27;</span>) <span class="comment"># This sets up a default neural pipeline in English</span></span><br><span class="line">doc = nlp(<span class="string">&quot;HanLP是一系列模型与算法组成的自然语言处理工具包，目标是普及自然语言处理在生产环境中的应用。&quot;</span>)</span><br><span class="line">doc.sentences[<span class="number">0</span>].print_dependencies()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">(&#x27;HanLP&#x27;, &#x27;14&#x27;, &#x27;nsubj&#x27;)</span><br><span class="line">(&#x27;是&#x27;, &#x27;14&#x27;, &#x27;cop&#x27;)</span><br><span class="line">(&#x27;一&#x27;, &#x27;4&#x27;, &#x27;nummod&#x27;)</span><br><span class="line">(&#x27;系列&#x27;, &#x27;5&#x27;, &#x27;clf&#x27;)</span><br><span class="line">(&#x27;模型&#x27;, &#x27;8&#x27;, &#x27;nsubj&#x27;)</span><br><span class="line">(&#x27;与&#x27;, &#x27;7&#x27;, &#x27;cc&#x27;)</span><br><span class="line">(&#x27;算法&#x27;, &#x27;5&#x27;, &#x27;conj&#x27;)</span><br><span class="line">(&#x27;组成&#x27;, &#x27;14&#x27;, &#x27;acl:relcl&#x27;)</span><br><span class="line">(&#x27;的&#x27;, &#x27;8&#x27;, &#x27;mark:relcl&#x27;)</span><br><span class="line">(&#x27;自然&#x27;, &#x27;12&#x27;, &#x27;nmod&#x27;)</span><br><span class="line">(&#x27;语言&#x27;, &#x27;12&#x27;, &#x27;compound&#x27;)</span><br><span class="line">(&#x27;处&#x27;, &#x27;13&#x27;, &#x27;nmod&#x27;)</span><br><span class="line">(&#x27;理工&#x27;, &#x27;14&#x27;, &#x27;nsubj&#x27;)</span><br><span class="line">(&#x27;具包&#x27;, &#x27;0&#x27;, &#x27;root&#x27;)</span><br><span class="line">(&#x27;，&#x27;, &#x27;14&#x27;, &#x27;punct&#x27;)</span><br><span class="line">(&#x27;目标&#x27;, &#x27;17&#x27;, &#x27;nsubj&#x27;)</span><br><span class="line">(&#x27;是&#x27;, &#x27;14&#x27;, &#x27;parataxis&#x27;)</span><br><span class="line">(&#x27;普及&#x27;, &#x27;17&#x27;, &#x27;xcomp&#x27;)</span><br><span class="line">(&#x27;自然&#x27;, &#x27;20&#x27;, &#x27;nmod&#x27;)</span><br><span class="line">(&#x27;语言&#x27;, &#x27;21&#x27;, &#x27;nsubj&#x27;)</span><br><span class="line">(&#x27;处理&#x27;, &#x27;18&#x27;, &#x27;ccomp&#x27;)</span><br><span class="line">(&#x27;在&#x27;, &#x27;27&#x27;, &#x27;det&#x27;)</span><br><span class="line">(&#x27;生产&#x27;, &#x27;24&#x27;, &#x27;nmod&#x27;)</span><br><span class="line">(&#x27;环境&#x27;, &#x27;22&#x27;, &#x27;nmod&#x27;)</span><br><span class="line">(&#x27;中&#x27;, &#x27;24&#x27;, &#x27;acl&#x27;)</span><br><span class="line">(&#x27;的&#x27;, &#x27;22&#x27;, &#x27;case:dec&#x27;)</span><br><span class="line">(&#x27;应用&#x27;, &#x27;18&#x27;, &#x27;obj&#x27;)</span><br><span class="line">(&#x27;。&#x27;, &#x27;14&#x27;, &#x27;punct&#x27;)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h5 id="3-3-HaNLP"><a href="#3-3-HaNLP" class="headerlink" title="3.3 HaNLP"></a>3.3 HaNLP</h5><p>官网：<a target="_blank" rel="noopener" href="http://hanlp.linrunsoft.com/">http://hanlp.linrunsoft.com/</a></p>
+<p>在线演示：<a target="_blank" rel="noopener" href="http://hanlp.com/">http://hanlp.com/</a></p>
+<h6 id="3-3-1-pyhanlp-hanlp1-x"><a href="#3-3-1-pyhanlp-hanlp1-x" class="headerlink" title="3.3.1 pyhanlp(hanlp1.x)"></a>3.3.1 pyhanlp(hanlp1.x)</h6><p>Github地址：<a target="_blank" rel="noopener" href="https://github.com/hankcs/pyhanlp">https://github.com/hankcs/pyhanlp</a></p>
+<ol>
+<li><p>安装</p>
+<blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyhanlp</span><br></pre></td></tr></table></figure></blockquote>
+</li>
+<li><p>下载数据包</p>
+<p>data：链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/169Fgb6vhfsx10O2xEomY1Q">https://pan.baidu.com/s/169Fgb6vhfsx10O2xEomY1Q</a> 提取码: r4zv</p>
+<p>将下载的数据包解压至%python_lib%/site-packages/pyhanlp/static文件夹。我这里提供的是1.7.5版本，同样支持1.7.7版本的pyhanlp。</p>
+<p>默认会自动下载相关的jar包。</p>
+</li>
+<li><p>测试代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyhanlp <span class="keyword">import</span> HanLP</span><br><span class="line">    <span class="built_in">print</span>(HanLP.parseDependency(<span class="string">&quot;HanLP是一系列模型与算法组成的自然语言处理工具包，目标是普及自然语言处理在生产环境中的应用&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">1	HanLP	HanLP	ws	nx	_	2	主谓关系	_	_</span><br><span class="line">2	是	是	v	v	_	0	核心关系	_	_</span><br><span class="line">3	一系列	一系列	n	n	_	4	定中关系	_	_</span><br><span class="line">4	模型	模型	n	n	_	7	主谓关系	_	_</span><br><span class="line">5	与	与	p	p	_	7	状中结构	_	_</span><br><span class="line">6	算法	算法	n	n	_	5	介宾关系	_	_</span><br><span class="line">7	组成	组成	v	v	_	10	定中关系	_	_</span><br><span class="line">8	的	的	u	u	_	7	右附加关系	_	_</span><br><span class="line">9	自然语言处理	自然语言处理	nz	nz	_	10	定中关系	_	_</span><br><span class="line">10	工具包	工具包	n	n	_	2	动宾关系	_	_</span><br><span class="line">11	，	，	wp	w	_	2	标点符号	_	_</span><br><span class="line">12	目标	目标	n	n	_	13	主谓关系	_	_</span><br><span class="line">13	是	是	v	v	_	2	并列关系	_	_</span><br><span class="line">14	普及	普及	v	v	_	13	动宾关系	_	_</span><br><span class="line">15	自然语言处理	自然语言处理	nz	nz	_	19	主谓关系	_	_</span><br><span class="line">16	在	在	p	p	_	19	状中结构	_	_</span><br><span class="line">17	生产环境	生产环境	n	n	_	16	介宾关系	_	_</span><br><span class="line">18	中的	中的	v	v	_	19	状中结构	_	_</span><br><span class="line">19	应用	应用	v	vn	_	14	动宾关系	_	_</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h6 id="3-3-2-hanlp2-0"><a href="#3-3-2-hanlp2-0" class="headerlink" title="3.3.2 hanlp2.0"></a>3.3.2 hanlp2.0</h6><ol>
+<li><p>安装</p>
+<blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install hanlp</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>hanlp2.0是基于tensorflow2.1训练的网络模型，线上提供了很多训练好的预训练模型，问题在于基本上不可能自动下载成功，需要手动下载模型并存放到相应的位置。</p>
+</li>
+<li><p>查看已经提供的模型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hanlp</span><br><span class="line"><span class="keyword">for</span> k,v <span class="keyword">in</span> hanlp.pretrained.ALL.items():</span><br><span class="line">    <span class="built_in">print</span>(k, v)</span><br></pre></td></tr></table></figure></li>
+<li><p>测试代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">tokenizer = hanlp.load(<span class="string">&#x27;CTB6_CONVSEG&#x27;</span>)</span><br><span class="line">tagger = hanlp.load(<span class="string">&#x27;CTB5_POS_RNN&#x27;</span>)</span><br><span class="line">syntactic_parser = hanlp.load(<span class="string">&#x27;CTB7_BIAFFINE_DEP_ZH&#x27;</span>)</span><br><span class="line"></span><br><span class="line">pipeline = hanlp.pipeline() \</span><br><span class="line">.append(hanlp.utils.rules.split_sentence, output_key=<span class="string">&#x27;sentences&#x27;</span>) \</span><br><span class="line">.append(tokenizer, output_key=<span class="string">&#x27;tokens&#x27;</span>) \</span><br><span class="line">.append(tagger, output_key=<span class="string">&#x27;part_of_speech_tags&#x27;</span>) \</span><br><span class="line">.append(syntactic_parser, input_key=(<span class="string">&#x27;tokens&#x27;</span>, <span class="string">&#x27;part_of_speech_tags&#x27;</span>), output_key=<span class="string">&#x27;syntactic_dependencies&#x27;</span>,</span><br><span class="line">        conll=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">text = <span class="string">&#x27;HanLP是一系列模型与算法组成的自然语言处理工具包，目标是普及自然语言处理在生产环境中的应用&#x27;</span></span><br><span class="line"></span><br><span class="line">doc = pipeline(text)</span><br><span class="line">tokens = doc.tokens[<span class="number">0</span>]</span><br><span class="line">pos = doc.part_of_speech_tags[<span class="number">0</span>]</span><br><span class="line">dependencies = doc.syntactic_dependencies[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(tokens)):</span><br><span class="line">    <span class="built_in">print</span>(i, tokens[i], pos[i], dependencies[i][<span class="number">0</span>], dependencies[i][<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">0 HanLP NN 2 top</span><br><span class="line">1 是 VC 0 root</span><br><span class="line">2 一系列 NN 6 nn</span><br><span class="line">3 模型 NN 6 conj</span><br><span class="line">4 与 CC 6 cc</span><br><span class="line">5 算法 NN 7 nsubj</span><br><span class="line">6 组成 VV 10 rcmod</span><br><span class="line">7 的 DEC 7 cpm</span><br><span class="line">8 自然 NN 10 nn</span><br><span class="line">9 语言 NN 11 nsubj</span><br><span class="line">10 处理 VV 2 ccomp</span><br><span class="line">11 工具包 PU 11 punct</span><br><span class="line">12 ， PU 2 punct</span><br><span class="line">13 目标 NN 15 top</span><br><span class="line">14 是 VC 2 conj</span><br><span class="line">15 普及 VV 15 ccomp</span><br><span class="line">16 自然 NN 18 nn</span><br><span class="line">17 语言 NN 16 dobj</span><br><span class="line">18 处理 VV 16 conj</span><br><span class="line">19 在 P 25 assmod</span><br><span class="line">20 生产 NN 22 nn</span><br><span class="line">21 环境 NN 23 lobj</span><br><span class="line">22 中 LC 20 plmod</span><br><span class="line">23 的 DEG 20 assm</span><br><span class="line">24 应用 NN 19 dobj</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="4-数据集"><a href="#4-数据集" class="headerlink" title="4. 数据集"></a>4. 数据集</h4><ul>
+<li><p>Penn Treebank</p>
+<p>Penn Treebank是一个项目的名称，项目目的是对语料进行标注，标注内容包括词性标注以及句法分析。</p>
+</li>
+<li><p>SemEval-2016 Task 9</p>
+<p>中文语义依存图数据：<a target="_blank" rel="noopener" href="http://ir.hit.edu.cn/2461.html">http://ir.hit.edu.cn/2461.html</a></p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/HIT-SCIR/SemEval-2016">https://github.com/HIT-SCIR/SemEval-2016</a></p>
+</li>
+<li><p>evsam05</p>
+<p>链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1cFQBNcd-HnuTPUlGT7h9wg">https://pan.baidu.com/s/1cFQBNcd-HnuTPUlGT7h9wg</a> 提取码: tjdx </p>
+</li>
+<li><p>CoNLL任务</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://universaldependencies.org/conll18/">http://universaldependencies.org/conll18/</a></li>
+<li><a target="_blank" rel="noopener" href="http://ufal.mff.cuni.cz/conll2009-st/">http://ufal.mff.cuni.cz/conll2009-st/</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.clips.uantwerpen.be/conll2008/">https://www.clips.uantwerpen.be/conll2008/</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.clips.uantwerpen.be/conll2007/">https://www.clips.uantwerpen.be/conll2007/</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="5-可视化工具"><a href="#5-可视化工具" class="headerlink" title="5. 可视化工具"></a>5. 可视化工具</h4><ol>
+<li><p>conllu.js</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/spyysalo/conllu.js">https://github.com/spyysalo/conllu.js</a></p>
+</li>
+<li><p>DependencyViewer.exe </p>
+<p><a target="_blank" rel="noopener" href="http://nlp.nju.edu.cn/tanggc/tools/DependencyViewer.html">http://nlp.nju.edu.cn/tanggc/tools/DependencyViewer.html</a></p>
+</li>
+</ol>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/AP4TCnRfIccqAxDu4FlBew">https://mp.weixin.qq.com/s/AP4TCnRfIccqAxDu4FlBew</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NLP/" rel="tag"># NLP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/07/20/%E5%85%B3%E7%B3%BB%E6%8A%BD%E5%8F%96%E6%80%BB%E7%BB%93/" rel="next" title="关系抽取总结">
+                <i class="fa fa-chevron-left"></i> 关系抽取总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/07/20/tensorflow%20serving/" rel="prev" title="tensorflow serving 总结文档">
+                tensorflow serving 总结文档 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
 
     <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+      
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+          </div>
+          
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">1. 基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-%E8%B0%93%E8%AF%8D"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 谓词</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-%E4%BE%9D%E5%AD%98%E7%90%86%E8%AE%BA"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 依存理论</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-%E4%BE%9D%E5%AD%98%E5%85%B3%E7%B3%BB"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 依存关系</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">2. 基本方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="nav-number">3.</span> <span class="nav-text">3. 常用工具</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-LTP"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 LTP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-stanfordNLP"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 stanfordNLP</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-2-1-StanordCoreNLP"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 StanordCoreNLP</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-HaNLP"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 HaNLP</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-3-1-pyhanlp-hanlp1-x"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.3.1 pyhanlp(hanlp1.x)</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-3-2-hanlp2-0"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.3.2 hanlp2.0</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">4.</span> <span class="nav-text">4. 数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7"><span class="nav-number">5.</span> <span class="nav-text">5. 可视化工具</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
