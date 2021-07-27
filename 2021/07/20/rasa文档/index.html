@@ -1,346 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>rasa总结文档 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="1. 基本命令1.1 训练模型无论是单独训练，还是2个模型一起训练，均可以使用rasa train命令实现（rasa nlu和rasa core合并为RASA），不同之处在于，提供的训练数据，若同时提供两份数据，则会同时训练nlu和core。  训练nlu模型  1python -m rasa train --config configs&#x2F;zh_jieba_supervised_embedding">
-<meta property="og:type" content="article">
-<meta property="og:title" content="rasa总结文档">
-<meta property="og:url" content="http://example.com/2021/07/20/rasa%E6%96%87%E6%A1%A3/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 基本命令1.1 训练模型无论是单独训练，还是2个模型一起训练，均可以使用rasa train命令实现（rasa nlu和rasa core合并为RASA），不同之处在于，提供的训练数据，若同时提供两份数据，则会同时训练nlu和core。  训练nlu模型  1python -m rasa train --config configs&#x2F;zh_jieba_supervised_embedding">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1590138247599.png">
-<meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1590138270872.png">
-<meta property="article:published_time" content="2021-07-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-07-20T02:18:58.757Z">
-<meta property="article:author" content="John Doe">
-<meta property="article:tag" content="NLP">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1590138247599.png">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
-
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
-  
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-
-      <div class="outer">
-        <section id="main"><article id="post-rasa文档" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/07/20/rasa%E6%96%87%E6%A1%A3/" class="article-date">
-  <time class="dt-published" datetime="2021-07-19T16:00:00.000Z" itemprop="datePublished">2021-07-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      rasa总结文档
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h3 id="1-基本命令"><a href="#1-基本命令" class="headerlink" title="1. 基本命令"></a>1. 基本命令</h3><h4 id="1-1-训练模型"><a href="#1-1-训练模型" class="headerlink" title="1.1 训练模型"></a>1.1 训练模型</h4><p>无论是单独训练，还是2个模型一起训练，均可以使用rasa train命令实现（rasa nlu和rasa core合并为RASA），不同之处在于，提供的训练数据，若同时提供两份数据，则会同时训练nlu和core。</p>
-<ul>
-<li><p>训练nlu模型</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
-</li>
-<li><p>训练core模型</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
-</li>
-<li><p>一起训练两个模型</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
-</li>
-</ul>
-<h4 id="1-2-启动rasa"><a href="#1-2-启动rasa" class="headerlink" title="1.2 启动rasa"></a>1.2 启动rasa</h4><ul>
-<li><p>不额外独立nlu服务</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml </span><br></pre></td></tr></table></figure></blockquote>
-</li>
-<li><p>启动额外nlu服务</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml --enable-api -m models/nlu-20190515-144445.tar.gz </span><br></pre></td></tr></table></figure></blockquote>
-</li>
-<li><p>单独启动nlu服务</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa run --enable-api -m models/nlu-20190515-144445.tar.gz</span><br></pre></td></tr></table></figure></blockquote>
-</li>
-<li><p>调用第三方模型服务</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa run --enable-api --log-file out.log --endpoints my_endpoints.yml</span><br></pre></td></tr></table></figure>
-
-<p>在my_endpoints.yml中配置rasa模型的url</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">models:</span><br><span class="line">  url: http:<span class="comment">//my-server.com/models/2019-1222.tar.gz</span></span><br><span class="line">  wait_time_between_pulls: <span class="number">10</span>   # [optional](default: <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
-
-<p>rasa模型还可以存放在<a target="_blank" rel="noopener" href="https://aws.amazon.com/s3/">S3</a> , <a target="_blank" rel="noopener" href="https://cloud.google.com/storage/">GCS</a> and <a target="_blank" rel="noopener" href="https://azure.microsoft.com/services/storage/">Azure Storage</a> 云盘中，同样远程调用，这里不多赘述。</p>
-<p><a target="_blank" rel="noopener" href="https://rasa.com/docs/rasa/user-guide/configuring-http-api/">https://rasa.com/docs/rasa/user-guide/configuring-http-api/</a></p>
-</blockquote>
-</li>
-</ul>
-<p>nlu服务开启后，post方式调用</p>
-<p>post <a target="_blank" rel="noopener" href="http://localhost:5005/model/parse">http://localhost:5005/model/parse</a></p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">input:</span><br><span class="line">&#123;<span class="attr">&quot;text&quot;</span>: <span class="string">&quot;明天成都的天气如何&quot;</span>&#125;</span><br><span class="line">output:</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;intent&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;request_weather&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.5547698674</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;entities&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;entity&quot;</span>: <span class="string">&quot;date_time&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;明天&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;start&quot;</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">&quot;end&quot;</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">&quot;extractor&quot;</span>: <span class="string">&quot;MitieEntityExtractor&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;entity&quot;</span>: <span class="string">&quot;address&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;成都&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;start&quot;</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">&quot;end&quot;</span>: <span class="number">4</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">&quot;extractor&quot;</span>: <span class="string">&quot;MitieEntityExtractor&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;intent_ranking&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;request_weather&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.5547698674</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;affirm&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0898880708</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;deny&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.078563989</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;thanks&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.072717722</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;goodbye&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0726876305</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;greet&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0697155938</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;whattodo&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0443638481</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;whoareyou&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0172932785</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;text&quot;</span>: <span class="string">&quot;明天成都的天气如何&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+{% extends '_layout.swig' %}
+{% import '_macro/post.swig' as post_template %}
+{% import '_macro/sidebar.swig' as sidebar_template %}
 
 
+{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-<h4 id="1-3-启动action"><a href="#1-3-启动action" class="headerlink" title="1.3 启动action"></a>1.3 启动action</h4><blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run actions --port 5055 --actions actions --debug</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h3 id="2-NLU"><a href="#2-NLU" class="headerlink" title="2. NLU"></a>2. NLU</h3><p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1590138247599.png" alt="1590138247599"></p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1590138270872.png" alt="1590138270872"></p>
-<h4 id="2-1-数据格式"><a href="#2-1-数据格式" class="headerlink" title="2.1 数据格式"></a>2.1 数据格式</h4><p>rasa支持markdown和json两种数据格式，同时提供了相互转化的命令。</p>
-<p>nlu训练数据包含四个部分：</p>
-<ul>
-<li><p>Common Example</p>
-<p>唯一必须提供数据。由三部分组成：intent、text、entities。</p>
-<blockquote>
-<p>## intent: 你的意图名称</p>
-<p>- text</p>
-</blockquote>
-<p>text中可以不包括实体，如果有实体使用<code>[entityText](entityName)</code>来标记。</p>
-</li>
-<li><p>synonyms</p>
-</li>
-<li><p>Regular Expression Features</p>
-</li>
-<li><p>lookup tables</p>
-</li>
-</ul>
-<h4 id="2-2-数据转化"><a href="#2-2-数据转化" class="headerlink" title="2.2 数据转化"></a>2.2 数据转化</h4><p>rasa提供了json和markdown格式的转化命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">usage: rasa data convert nlu [-h] [-v] [-vv] [--quiet] --data DATA --out OUT</span><br><span class="line">                             [-l LANGUAGE] -f &#123;json,md&#125;</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --help            show this help message and exit</span><br><span class="line">  --data DATA           Path to the file or directory containing Rasa NLU</span><br><span class="line">                        data. (default: None)</span><br><span class="line">  --out OUT             File where to save training data in Rasa format.</span><br><span class="line">                        (default: None)</span><br><span class="line">  -l LANGUAGE, --language LANGUAGE</span><br><span class="line">                        Language of data. (default: en)</span><br><span class="line">  -f &#123;json,md&#125;, --format &#123;json,md&#125;</span><br><span class="line">                        Output format the training data should be converted</span><br><span class="line">                        into. (default: None)</span><br><span class="line"></span><br><span class="line">Python Logging Options:</span><br><span class="line">  -v, --verbose         Be verbose. Sets logging level to INFO. (default:</span><br><span class="line">                        None)</span><br><span class="line">  -vv, --debug          Print lots of debugging statements. Sets logging level</span><br><span class="line">                        to DEBUG. (default: None)</span><br><span class="line">  --quiet               Be quiet! Sets logging level to WARNING. (default:</span><br><span class="line">                        None)</span><br></pre></td></tr></table></figure>
-
-<p>example：</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa data convert nlu --data M3-training_dataset_1564317234.json --out M3-training_dataset_1564317234.md -f md</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h3 id="3-core"><a href="#3-core" class="headerlink" title="3. core"></a>3. core</h3><p>备注1： core模型是一个分类分为，类别数为domain中定义的action数。action主要分为以下4类：</p>
-<ul>
-<li><p>custom action</p>
-</li>
-<li><p>utterance：response、template</p>
-</li>
-<li><p>default actions</p>
-<blockquote>
-<p>[‘action_listen’, ‘action_restart’, ‘action_session_start’, ‘action_default_fallback’, ‘action_deactivate_form’, ‘action_revert_fallback_events’, ‘action_default_ask_affirmation’, ‘action_default_ask_rephrase’, ‘action_back’]</p>
-</blockquote>
-</li>
-<li><p>forms（表单）</p>
-</li>
-</ul>
-<p>action类别为各类action取交集后的结果。</p>
-<p>备注2：用户可以直接像core发送请求，不经过nlu模块。参数格式：/intent{“entityName”: “entityValue”, …}</p>
-<blockquote>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;sender&quot;</span>: <span class="string">&quot;kkkkkkk&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;message&quot;</span>: <span class="string">&quot;/search_treat&#123;\&quot;disease\&quot;:\&quot;丛集性头痛\&quot;, \&quot;sure\&quot;:\&quot;丛集性头痛\&quot;&#125;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;recipient_id&quot;: &quot;kkkkkkk&quot;,</span><br><span class="line">        &quot;text&quot;: &quot;丛集性头痛的简介：从集性头痛(clusterheadaches)亦称偏头痛性神经痛、组胺性头痛、岩神经痛、蝶腭神经痛、Horton头痛等，.病员在某个时期内突然出现一系列的剧烈头痛。一般无前兆，疼痛多见于一侧眼眶或(及)额颞部，可伴同侧眼结膜充血、流泪、眼睑水肿或鼻塞、流涕，有时出现瞳孔缩小、垂睑、脸红、颊肿等症状。头痛多为非搏动性剧痛。病人坐立不安或前俯后仰地摇动，部分病员用拳击头部以缓解疼痛。&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;recipient_id&quot;: &quot;kkkkkkk&quot;,</span><br><span class="line">        &quot;text&quot;: &quot;丛集性头痛的治疗方式有：药物治疗、支持性治疗&quot;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/20/rasa%E6%96%87%E6%A1%A3/" data-id="ckrbfqatk000aklo458uoa99i" data-title="rasa总结文档" class="article-share-link">Share</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2021/07/20/pycharm+Ubuntu/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          pycharm+Ubuntu20.04
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2021/07/20/vim%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">vim常用命令总结</div>
-    </a>
-  
-</nav>
-
-  
-</article>
+{% block page_class %}page-post-detail{% endblock %}
 
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
+{% block content %}
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
+  <div id="posts" class="posts-expand">
+    {{ post_template.render(page) }}
+
+    <div class="post-spread">
+      {% if theme.jiathis %}
+        {% include '_partials/share/jiathis.swig' %}
+      {% elseif theme.baidushare %}
+        {% include '_partials/share/baidushare.swig' %}
+      {% elseif theme.add_this_id %}
+        {% include '_partials/share/add-this.swig' %}
+      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
+        {% include '_partials/share/duoshuo_share.swig' %}
+      {% endif %}
     </div>
   </div>
 
+{% endblock %}
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/NLP/" style="font-size: 16.67px;">NLP</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 20px;">运维</a>
-    </div>
-  </div>
+{% block sidebar %}
+  {{ sidebar_template.render(true) }}
+{% endblock %}
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/07/20/restful%E6%96%87%E6%A1%A3/">python web 异常框架</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/20/SanicDB%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/">SanicDB 使用文档</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/20/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">docker常用命令</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/20/keras%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3/">keras+python web 遇到的问题</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/20/l4t_docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">jetson lt4 docker安装遇到的问题</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2021 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.4.1.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+{% block script_extra %}
+  {% include '_scripts/pages/post-details.swig' %}
+{% endblock %}

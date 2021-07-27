@@ -1,311 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>Orientdb 基本操作 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="1. 连接数据库 123from pyorient.ogm import Config, Gragphconfig &#x3D; Config.from_url(server, user, pwd)g &#x3D; Graph(config)  2. 构造schema类 1234567891011Node &#x3D; declarative_node()Relationship &#x3D; declarative_relations">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Orientdb 基本操作">
-<meta property="og:url" content="http://example.com/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. 连接数据库 123from pyorient.ogm import Config, Gragphconfig &#x3D; Config.from_url(server, user, pwd)g &#x3D; Graph(config)  2. 构造schema类 1234567891011Node &#x3D; declarative_node()Relationship &#x3D; declarative_relations">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-07-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-07-20T01:03:26.073Z">
-<meta property="article:author" content="John Doe">
-<meta property="article:tag" content="数据库">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
-
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
-  
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-
-      <div class="outer">
-        <section id="main"><article id="post-orientdb ogm基本操作" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" class="article-date">
-  <time class="dt-published" datetime="2021-07-19T16:00:00.000Z" itemprop="datePublished">2021-07-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      Orientdb 基本操作
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h4 id="1-连接数据库"><a href="#1-连接数据库" class="headerlink" title="1. 连接数据库"></a>1. 连接数据库</h4><blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyorient.ogm <span class="keyword">import</span> Config, Gragph</span><br><span class="line">config = Config.from_url(server, user, pwd)</span><br><span class="line">g = Graph(config)</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h4 id="2-构造schema类"><a href="#2-构造schema类" class="headerlink" title="2. 构造schema类"></a>2. 构造schema类</h4><blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Node = declarative_node()</span><br><span class="line">Relationship = declarative_relationship()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义节点类，继承Node；定义关系时，继承Relationship</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrientdbFile</span>(<span class="params">Node</span>):</span></span><br><span class="line">    element_type = <span class="string">&#x27;file&#x27;</span>  <span class="comment"># 表名</span></span><br><span class="line">    element_plural = <span class="string">&#x27;files&#x27;</span>  <span class="comment"># </span></span><br><span class="line"></span><br><span class="line">    file_id = Integer(nullable=<span class="literal">False</span>, unique=<span class="literal">True</span>)</span><br><span class="line">    emp_no = Integer(nullable=<span class="literal">True</span>, unique=<span class="literal">False</span>)</span><br><span class="line">    file_type = String(nullable=<span class="literal">True</span>, unique=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
-
-</blockquote>
-<ol>
-<li><p>初始化schema</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g.create_all(Node.registry) <span class="comment"># 创建节点</span></span><br><span class="line">g.create_all(Relationship.registry)  <span class="comment"># 创建边</span></span><br></pre></td></tr></table></figure></li>
-<li><p>绑定schema</p>
-<p>若orientdb中已存在表，则只需要绑定相应的表即可。</p>
-<ul>
-<li><p>from class</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g.include(Node.registry) <span class="comment"># 绑定节点</span></span><br><span class="line">g.include(Relationship.registry)  <span class="comment"># 绑定边</span></span><br></pre></td></tr></table></figure></li>
-<li><p>from schema</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">classes_from_schema = graph.build_mapping(</span><br><span class="line">   Node,</span><br><span class="line">   Relationship,</span><br><span class="line">   auto_plural = <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize Schema in PyOrient</span></span><br><span class="line">graph.include(classes_from_schema)</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ol>
-<h4 id="3-插入数据"><a href="#3-插入数据" class="headerlink" title="3. 插入数据"></a>3. 插入数据</h4><p>orientdb里，一条记录可以认为是表对象的一个实例。插入记录即新建一个对象实例。有两种方式实现。</p>
-<ul>
-<li><p>使用broker</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g.persons.create(<span class="built_in">id</span>=<span class="string">&quot;1&quot;</span>, name=<span class="string">&quot;张三&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p = &#123;<span class="string">&quot;id&quot;</span>: <span class="string">&quot;2&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;李四&quot;</span>&#125;</span><br><span class="line">Person.objects.create(**p)</span><br></pre></td></tr></table></figure></li>
-<li><p>原生方式</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p = &#123;<span class="string">&quot;id&quot;</span>: <span class="string">&quot;3&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;王五&quot;</span>&#125;</span><br><span class="line">g.create_vertex(Person, **p)</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="4-查询数据"><a href="#4-查询数据" class="headerlink" title="4. 查询数据"></a>4. 查询数据</h4><ul>
-<li><p>方式一</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">result = g.persons.query().<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(p.<span class="built_in">id</span>, p.name)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> 张三</span><br><span class="line"><span class="number">2</span> 李四</span><br><span class="line"><span class="number">3</span> 王五</span><br></pre></td></tr></table></figure></li>
-<li><p>方式二</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">result = g.query(Person).<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(p.<span class="built_in">id</span>, p.name)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> 张三</span><br><span class="line"><span class="number">2</span> 李四</span><br><span class="line"><span class="number">3</span> 王五</span><br></pre></td></tr></table></figure></li>
-<li><p>filter</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = g.persons.query(name=<span class="string">&#x27;张三&#x27;</span>).<span class="built_in">all</span>()</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = g.query(Person).<span class="built_in">filter</span>(Person.name == <span class="string">&quot;&#x27;张三&#x27;&quot;</span>).<span class="built_in">all</span>()  <span class="comment"># 备注：张三内层同样需要用引号包裹起来，源代码的问题，所以建议使用上面方式。</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="5-修改数据"><a href="#5-修改数据" class="headerlink" title="5. 修改数据"></a>5. 修改数据</h4><p>pyorient的ogm本身并没有实现update功能，可以简单通过删除后插入实现修改功能。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ps = g.persons.query(name=<span class="string">&#x27;张三&#x27;</span>).<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> ps:</span><br><span class="line">    g.delete_vertex(Person, &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>&#125;)</span><br><span class="line">    p_dict = <span class="built_in">dict</span>(name=p.name, <span class="built_in">id</span>=p.<span class="built_in">id</span>)</span><br><span class="line">    p_dict.update(&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;张麻子&quot;</span>&#125;)</span><br><span class="line">    g.create_vertex(Person, **p_dict)</span><br><span class="line">result = g.persons.query().<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(p.<span class="built_in">id</span>, p.name)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2 李四</span><br><span class="line">3 王五</span><br><span class="line">1 张麻子</span><br></pre></td></tr></table></figure>
-
-<h4 id="6-删除数据"><a href="#6-删除数据" class="headerlink" title="6. 删除数据"></a>6. 删除数据</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p_dict = &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>&#125;</span><br><span class="line">g.delete_vertex(Person, **p_dict)</span><br></pre></td></tr></table></figure>
-
-<h4 id="7-batch"><a href="#7-batch" class="headerlink" title="7. batch"></a>7. batch</h4><p>批量操作</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">batch = g.batch()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>, <span class="number">10</span>):</span><br><span class="line">    batch[<span class="string">&#x27;f&#x27;</span> + <span class="built_in">str</span>(i)] = batch.persons.create(name=<span class="string">&#x27;name&#x27;</span> + <span class="built_in">str</span>(<span class="number">1</span>), <span class="built_in">id</span>=i)</span><br><span class="line">batch.commit()</span><br><span class="line"></span><br><span class="line">result = g.persons.query().<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(r.name, r.<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">李四 <span class="number">2</span></span><br><span class="line">name1 <span class="number">5</span></span><br><span class="line">王五 <span class="number">3</span></span><br><span class="line">name1 <span class="number">6</span></span><br><span class="line">张麻子 <span class="number">1</span></span><br><span class="line">name1 <span class="number">7</span></span><br><span class="line">name1 <span class="number">8</span></span><br><span class="line">name1 <span class="number">9</span></span><br></pre></td></tr></table></figure>
-
-<p>备注：</p>
-<ol>
-<li><p> batch的key不能为纯数字，例如batch[‘12’]，当然，batch[12]更不行。报错timeout，不解释。</p>
-</li>
-<li><p>batch的key必需明确，否则会不提交到库。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">batch = g.batch()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>, <span class="number">11</span>):</span><br><span class="line">    batch.persons.create(name=<span class="string">&#x27;name&#x27;</span> + <span class="built_in">str</span>(<span class="number">1</span>), <span class="built_in">id</span>=i)</span><br><span class="line">batch.commit()</span><br><span class="line"></span><br><span class="line">result = g.persons.query(<span class="built_in">id</span>=<span class="number">10</span>).<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(r.name, r.<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
-
-<p>并没有任何输出，表明，记录并没有正确提交。</p>
-</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" data-id="ckrbfqati0005klo4grocdgiz" data-title="Orientdb 基本操作" class="article-share-link">Share</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2021/07/20/l4t_docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          jetson lt4 docker安装遇到的问题
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2021/07/20/pycharm+Ubuntu/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">pycharm+Ubuntu20.04</div>
-    </a>
-  
-</nav>
-
-  
-</article>
+{% extends '_layout.swig' %}
+{% import '_macro/post.swig' as post_template %}
+{% import '_macro/sidebar.swig' as sidebar_template %}
 
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
+{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/" rel="tag">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
+{% block page_class %}page-post-detail{% endblock %}
+
+
+{% block content %}
+
+  <div id="posts" class="posts-expand">
+    {{ post_template.render(page) }}
+
+    <div class="post-spread">
+      {% if theme.jiathis %}
+        {% include '_partials/share/jiathis.swig' %}
+      {% elseif theme.baidushare %}
+        {% include '_partials/share/baidushare.swig' %}
+      {% elseif theme.add_this_id %}
+        {% include '_partials/share/add-this.swig' %}
+      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
+        {% include '_partials/share/duoshuo_share.swig' %}
+      {% endif %}
     </div>
   </div>
 
+{% endblock %}
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/NLP/" style="font-size: 16.67px;">NLP</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 20px;">运维</a>
-    </div>
-  </div>
+{% block sidebar %}
+  {{ sidebar_template.render(true) }}
+{% endblock %}
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/07/20/restful%E6%96%87%E6%A1%A3/">python web 异常框架</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/20/SanicDB%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/">SanicDB 使用文档</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/20/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">docker常用命令</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/20/keras%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3/">keras+python web 遇到的问题</a>
-          </li>
-        
-          <li>
-            <a href="/2021/07/20/l4t_docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">jetson lt4 docker安装遇到的问题</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2021 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.4.1.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+{% block script_extra %}
+  {% include '_scripts/pages/post-details.swig' %}
+{% endblock %}
