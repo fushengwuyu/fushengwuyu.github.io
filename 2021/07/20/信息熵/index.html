@@ -21,12 +21,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="一. 熵 解释  熵是不确定的度量 熵是信息的度量   计算公式  S &#x3D; - \sum _{x} p(x)\log p(x) \tag{1}     log可以取自然对数，也可以是以底为2的对数，任意大于1的底都是成立的。换底只不过换了信息的单位而已。 对于连续的概率分布，熵的定义为：  S&#x3D;- \int p(x) \log p (x)dx \tag{2} 联合熵  S[p(x,y)]&#x3D;-\su">
+  <meta name="description" content="一. 熵 解释  熵是不确定的度量 熵是信息的度量   计算公式$$S &#x3D; - \sum _{x} p(x)\log p(x) \tag{1}$$ log可以取自然对数，也可以是以底为2的对数，任意大于1的底都是成立的。换底只不过换了信息的单位而已。   对于连续的概率分布，熵的定义为：$$S&#x3D;- \int p(x) \log p (x)dx \tag{2}$$  联合熵$$S[p(x,y)]&#x3D;-">
 <meta property="og:type" content="article">
 <meta property="og:title" content="信息熵笔记">
 <meta property="og:url" content="http://example.com/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/index.html">
 <meta property="og:site_name" content="浮生物语的博客">
-<meta property="og:description" content="一. 熵 解释  熵是不确定的度量 熵是信息的度量   计算公式  S &#x3D; - \sum _{x} p(x)\log p(x) \tag{1}     log可以取自然对数，也可以是以底为2的对数，任意大于1的底都是成立的。换底只不过换了信息的单位而已。 对于连续的概率分布，熵的定义为：  S&#x3D;- \int p(x) \log p (x)dx \tag{2} 联合熵  S[p(x,y)]&#x3D;-\su">
+<meta property="og:description" content="一. 熵 解释  熵是不确定的度量 熵是信息的度量   计算公式$$S &#x3D; - \sum _{x} p(x)\log p(x) \tag{1}$$ log可以取自然对数，也可以是以底为2的对数，任意大于1的底都是成立的。换底只不过换了信息的单位而已。   对于连续的概率分布，熵的定义为：$$S&#x3D;- \int p(x) \log p (x)dx \tag{2}$$  联合熵$$S[p(x,y)]&#x3D;-">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-19T16:00:00.000Z">
 <meta property="article:modified_time" content="2021-07-20T01:08:46.308Z">
@@ -198,46 +198,30 @@
 <li>熵是信息的度量</li>
 </ul>
 </li>
-<li><p>计算公式</p>
-<script type="math/tex; mode=display">
-S = - \sum _{x} p(x)\log p(x) \tag{1}</script></li>
+<li><p>计算公式<br>$$<br>S = - \sum _{x} p(x)\log p(x) \tag{1}<br>$$</p>
+<p>log可以取自然对数，也可以是以底为2的对数，任意大于1的底都是成立的。换底只不过换了信息的单位而已。</p>
+</li>
 </ol>
-<p>   log可以取自然对数，也可以是以底为2的对数，任意大于1的底都是成立的。换底只不过换了信息的单位而已。</p>
-<p>对于连续的概率分布，熵的定义为：</p>
-<script type="math/tex; mode=display">
-S=- \int p(x) \log p (x)dx \tag{2}</script><ol>
-<li><p>联合熵</p>
-<script type="math/tex; mode=display">
-S[p(x,y)]=-\sum_{x} \sum_{y}p(x,y)\ln p(x,y) \tag{3}</script></li>
-<li><p>条件熵</p>
-<script type="math/tex; mode=display">
-S(Y|X)=S[p(x,y)] - S[p(x)] \tag{4}</script><p>等价于：</p>
-<script type="math/tex; mode=display">
-S(Y|X)=-\sum_{x} \sum_{y}p(x,y) \log p(y:x) \tag{5}</script><p>通俗的说，本来的信息量有<script type="math/tex">S[p(x,y)]</script> ，然后<script type="math/tex">p(x)</script> 能带来<script type="math/tex">S[p(x)]</script> 的信息，减去其不确定性，剩下的就是条件熵。</p>
+<p>对于连续的概率分布，熵的定义为：<br>$$<br>S=- \int p(x) \log p (x)dx \tag{2}<br>$$</p>
+<ol start="3">
+<li><p>联合熵<br>$$<br>S[p(x,y)]=-\sum_{x} \sum_{y}p(x,y)\ln p(x,y) \tag{3}<br>$$</p>
+</li>
+<li><p>条件熵<br>$$<br>S(Y|X)=S[p(x,y)] - S[p(x)] \tag{4}<br>$$<br>等价于：<br>$$<br>S(Y|X)=-\sum_{x} \sum_{y}p(x,y) \log p(y:x) \tag{5}<br>$$<br>通俗的说，本来的信息量有$$S[p(x,y)]$$ ，然后$$p(x)$$ 能带来$$S[p(x)]$$ 的信息，减去其不确定性，剩下的就是条件熵。</p>
 </li>
 <li><p>互信息</p>
-<p>互信息可以度量两个随机事件“相关性”的量化</p>
-<script type="math/tex; mode=display">
-S(X;Y)=\sum_{x}\sum_{y}p(x,y)\log \frac{p(x,y)}{p(x)p(y)} \tag{6}</script></li>
-</ol>
-<p>   互信息就是随机事件X，以及知道随机事件Y条件下的不确定性，或者条件熵之间的差异。即。</p>
-<script type="math/tex; mode=display">
-   S(X;Y)=S(X) -S(X|Y) \tag{7}</script><ol>
+<p>互信息可以度量两个随机事件“相关性”的量化<br>$$<br>S(X;Y)=\sum_{x}\sum_{y}p(x,y)\log \frac{p(x,y)}{p(x)p(y)} \tag{6}<br>$$</p>
+<p>互信息就是随机事件X，以及知道随机事件Y条件下的不确定性，或者条件熵之间的差异。即。<br>$$<br>S(X;Y)=S(X) -S(X|Y) \tag{7}<br>$$</p>
+</li>
 <li><p>相对熵</p>
-<p>相对熵也是来衡量相关性，但和互信息不同，它用来衡量两个取值为正数的函数的相似性。</p>
-<script type="math/tex; mode=display">
-KL(f(x)||g(x))=\sum_{x \in X}f(x)\cdot \log \frac {f(x)}{g(x)} \tag{8}</script></li>
-</ol>
+<p>相对熵也是来衡量相关性，但和互信息不同，它用来衡量两个取值为正数的函数的相似性。<br>$$<br>KL(f(x)||g(x))=\sum_{x \in X}f(x)\cdot \log \frac {f(x)}{g(x)} \tag{8}<br>$$</p>
 <ul>
 <li>对于两个完全相同的函数，他们的相对数为0</li>
 <li>相对熵越大，两个函数差异越大；反之，相对熵越小，两函数差异越小</li>
-<li><p>对于概率分布和概率密度分布，如果取值均大于0，相对熵可以度量两个随机分布的差异性</p>
-<p>相对熵是不对称的。</p>
-<script type="math/tex; mode=display">
-KL(f(x)||g(x)) \ne KL(g(x)||f(x)) \tag{9}</script><p>詹森和香农提出了一种相对熵的计算方法，将上面的不等式变为等式。</p>
-<script type="math/tex; mode=display">
-JS(f(x)||g(x))=\frac{1}{2}[KL(f(x)||g(x))+KL(g(x)||f(x))] \tag{10}</script></li>
+<li>对于概率分布和概率密度分布，如果取值均大于0，相对熵可以度量两个随机分布的差异性</li>
 </ul>
+<p>相对熵是不对称的。<br>$$<br>KL(f(x)||g(x)) \ne KL(g(x)||f(x)) \tag{9}<br>$$<br>詹森和香农提出了一种相对熵的计算方法，将上面的不等式变为等式。<br>$$<br>JS(f(x)||g(x))=\frac{1}{2}[KL(f(x)||g(x))+KL(g(x)||f(x))] \tag{10}<br>$$</p>
+</li>
+</ol>
 <h4 id="二-最大熵"><a href="#二-最大熵" class="headerlink" title="二. 最大熵"></a>二. 最大熵</h4><p>当我们想要得到一个随机事件的概率分布时，如果没有足够的信息能够确定这个概率分布（可能是不能确定分布，也可能是知道分布的类型，但是还有若干个参数没有确定），那么最“保险”的方案就是选择使得熵最大的分布。</p>
 
     </div>

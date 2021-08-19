@@ -239,8 +239,10 @@
 </li>
 <li><p>暴露偏差：关系训练输入的是gold实体，而预测时候输入的是实体模型预测的实体</p>
 </li>
-<li>实体冗余：存在大量的没有关系的实体，提升错误率，增加计算复杂度</li>
-<li>交互缺失：忽略了两个任务之间的内在联系和依赖关系</li>
+<li><p>实体冗余：存在大量的没有关系的实体，提升错误率，增加计算复杂度</p>
+</li>
+<li><p>交互缺失：忽略了两个任务之间的内在联系和依赖关系</p>
+</li>
 </ul>
 <h3 id="1-pipline"><a href="#1-pipline" class="headerlink" title="1. pipline"></a>1. pipline</h3><h4 id="1-1-NER"><a href="#1-1-NER" class="headerlink" title="1.1 NER"></a>1.1 NER</h4><ol>
 <li><p>序列标注：SoftMax和CRF</p>
@@ -261,20 +263,17 @@
 <p>构建query问题指代所要抽取的实体类型，同时引入先验知识。</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210521164345702.png" alt="image-20210521164345702"></p>
 </li>
-</ul>
-</li>
-</ol>
-<ul>
 <li><p>多层指针网络</p>
 <p>构建多层指针网络，每层对应一个实体类型</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210521164426461.png" alt="image-20210521164426461"></p>
+</li>
+</ul>
 <p>注意：</p>
-</li>
-<li><p>MRC-QA会引入query对实体类型编码，需要对原始文本重复编码以构造不同实体类型的query，将会大大增加计算量</p>
-</li>
+<ul>
+<li>MRC-QA会引入query对实体类型编码，需要对原始文本重复编码以构造不同实体类型的query，将会大大增加计算量</li>
 <li>多层指针网络（n个2元sigmoid分类），会导致样本tag空间稀疏，收敛较慢。</li>
 </ul>
-<ol>
+</li>
 <li><p>片段排列+分类（Span-Level Model for Relation Extraction）</p>
 <p>针对Span排列的方式，显示所有可能的span排列，针对每个独立的span进行分类。由于选择的每个span都是独立的，所有该方式可以解决重叠实体问题。</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210521165013140.png" alt="image-20210521165013140"></p>
@@ -282,13 +281,10 @@
 <ul>
 <li><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2012.05426v5.pdf">Empirical Analysis of Unlabeled Entity Problem in Named Entity Recognition</a></p>
 <p>利用负采样技巧，大大提升实体识别效果。</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210610093043724.png" alt="image-20210610093043724"></p>
-<script type="math/tex; mode=display">
-s_{i, j}=h_i \oplus h_j \oplus (h_i-h_j)\oplus(h_i \odot h_j)</script></li>
+<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210610093043724.png" alt="image-20210610093043724"><br>$$<br>s_{i, j}=h_i \oplus h_j \oplus (h_i-h_j)\oplus(h_i \odot h_j)<br>$$</p>
+</li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p>MRC（A Unified MRC Framework for Named Entity Recognition）</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210525085754303.png" alt="image-20210525085754303"></p>
 <p>实验证明，MRC效果的提升主要来自于基于自然语言的标签描述引入了更多的先验信息，对数据稀少的标签提升比较明显。</p>
@@ -297,20 +293,18 @@ s_{i, j}=h_i \oplus h_j \oplus (h_i-h_j)\oplus(h_i \odot h_j)</script></li>
 </li>
 <li><p>针对一条样本，需要构造多个不同的query，重复编码，增加计算量</p>
 </li>
-<li><p>标签不平衡问题，真实场景下，大部分文本中只存在少量类别的实体，绝大部分query对对应了负样本。针对该，该团队提出了DSC loss，参考：<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1911.02855.pdf">Dice Loss for Data-imbalanced NLP Tasks</a></p>
+<li><p>标签不平衡问题，真实场景下，大部分文本中只存在少量类别的实体，绝大部分query对对应了负样本。针对该，该团队提出了DSC loss，参考：<a href="https://link.zhihu.com/?target=https://arxiv.org/pdf/1911.02855.pdf">Dice Loss for Data-imbalanced NLP Tasks</a></p>
 </li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p>bi-affine（Named Entity Recognition as Dependency Parsing）</p>
 <p>将实体识别任务转化为start和end索引问题，采用biaffine模型对句子中的tokens的start和end对进行评分。最终biaffine模型的输出为$l\times l\times c$ 的矩阵（l为句子长度，c为标签类别数）</p>
 </li>
 </ol>
-<script type="math/tex; mode=display">
-h_s(i) = FFNN_s(x_{s_i})</script><script type="math/tex; mode=display">
-h_e(i) = FFNN_e(x_{e_i})</script><script type="math/tex; mode=display">
-    r_m(i)=h_s(i)^TU_mh_e(i)+W_m(h_s(i)\oplus h_e(i))+b_m</script><p>   <img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210521170107671.png" alt="image-20210521170107671"></p>
+<p>$$<br>h_s(i) = FFNN_s(x_{s_i})<br>$$</p>
+<p>$$<br>h_e(i) = FFNN_e(x_{e_i})<br>$$</p>
+<p>$$<br>    r_m(i)=h_s(i)^TU_mh_e(i)+W_m(h_s(i)\oplus h_e(i))+b_m<br>$$</p>
+<p>   <img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210521170107671.png" alt="image-20210521170107671"></p>
 <p>   备注：</p>
 <ul>
 <li>线性模型（linear）： $Wx^T$</li>
@@ -324,8 +318,6 @@ h_e(i) = FFNN_e(x_{e_i})</script><script type="math/tex; mode=display">
 <p>基于bert，采用6中不同结构来进行实体pair的pooling，然后讲pooling后的编码进行关系分类。实验显示（f）结果最好。</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210521171610550.png" alt="image-20210521171610550"></p>
 </li>
-</ol>
-<ol>
 <li><p><strong>Extracting Multiple-Relations in One-Pass with Pre-Trained Transformers</strong></p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210521171853468.png" alt="image-20210521171853468"></p>
 <p>Pipline方式下的关系分类，同一个句子通常会有多个不同的实体对关系，一般的做法是构造多个实体对，进行多次关系分类，本质是上一个muti pass问题，同一个句子会进行多次计算，增加计算时间。</p>
@@ -334,26 +326,22 @@ h_e(i) = FFNN_e(x_{e_i})</script><script type="math/tex; mode=display">
 </li>
 <li><p>本文将还编码词和实体之间的相对距离计算Entity-Aware Self-Attention。$w_{d(i-j)}$ 代表实体$x_i$ 到token $x_j$的相对距离的embedding。</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210610142844105.png" alt="image-20210610142844105"></p>
-<p>在标准self-attention的基础上增加了实体距离信息。</p>
-<script type="math/tex; mode=display">
-Q_{south}=h_{south}W^Q</script><script type="math/tex; mode=display">
-K_{in}=h_{in}W^K+A^K_{south\_in}</script><script type="math/tex; mode=display">
-V_{in}=h_{in}W^V+B^V_{south\_in}</script><script type="math/tex; mode=display">
-Z_{south\_in}=softmax(\frac{Q_{south}K_{in}}{\sqrt{d_{k}}})V_{in}</script><p>实体距离信息计算如下：</p>
+<p>在标准self-attention的基础上增加了实体距离信息。<br>$$<br>Q_{south}=h_{south}W^Q<br>$$</p>
+<p>$$<br>K_{in}=h_{in}W^K+A^K_{south_in}<br>$$</p>
+<p>$$<br>V_{in}=h_{in}W^V+B^V_{south_in}<br>$$</p>
+<p>$$<br>Z_{south_in}=softmax(\frac{Q_{south}K_{in}}{\sqrt{d_{k}}})V_{in}<br>$$</p>
+<p>实体距离信息计算如下：</p>
 <ul>
-<li>if south is entity: $A^K<em>{south_in}=W^K</em>{d(index(south), index(in))}$</li>
-<li>if in is entity: $B^V<em>{south_in}=W^V</em>{d(index(south), index(in))}$</li>
+<li>if south is entity: $A^K_{south_in}=W^K_{d(index(south), index(in))}$</li>
+<li>if in is entity: $B^V_{south_in}=W^V_{d(index(south), index(in))}$</li>
 <li>else: $A^K_{south_in}=O$</li>
 </ul>
 </li>
 </ul>
 </li>
-</ol>
-<ol>
-<li>Enriching Pre-trained Language Model with Entity Information for Relation Classification</li>
-</ol>
-<p>   <img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210522110111197.png" alt="image-20210522110111197"></p>
-<ol>
+<li><p>Enriching Pre-trained Language Model with Entity Information for Relation Classification</p>
+<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210522110111197.png" alt="image-20210522110111197"></p>
+</li>
 <li><p><strong>Simultaneously Self-Attending to All Mentions for Full-Abstract Biological Relation Extraction</strong></p>
 <ul>
 <li>采用one-pass对所有实体进行关系分类，从所有实体mention中定位关系</li>
@@ -363,8 +351,6 @@ Z_{south\_in}=softmax(\frac{Q_{south}K_{in}}{\sqrt{d_{k}}})V_{in}</script><p>实
 <p>使用Tansformer编码，对每个token通过两个独立的MLP进行三元组中的head和tail表征，最后使用Bi-affine计算每个三元组的得分。</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210522110921353.png" alt="image-20210522110921353"></p>
 </li>
-</ol>
-<ol>
 <li><p><strong>A Frustratingly Easy Approach for Joint Entity and Relation Extraction</strong></p>
 <ul>
 <li><p>实体模型采用Span-level NER的方式</p>
@@ -376,9 +362,10 @@ Z_{south\_in}=softmax(\frac{Q_{south}K_{in}}{\sqrt{d_{k}}})V_{in}</script><p>实
 <li><p>跨句信息：通过窗口滑动的方式引入跨句信息，即文本输入的左右上下文中分别滑动$(W-n)/2$ 个词，n为文本长度，W为固定窗口大小。<img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210522111559571.png" alt="image-20210522111559571"></p>
 <p> attention mask实现：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Compute the attention mask matrix</span></span><br><span class="line">        attention_mask = []</span><br><span class="line">        <span class="keyword">for</span> _, from_mask <span class="keyword">in</span> <span class="built_in">enumerate</span>(input_mask):</span><br><span class="line">            attention_mask_i = []</span><br><span class="line">            <span class="keyword">for</span> to_mask <span class="keyword">in</span> input_mask:</span><br><span class="line">                <span class="keyword">if</span> to_mask &lt;= <span class="number">1</span>:</span><br><span class="line">                    attention_mask_i.append(to_mask)</span><br><span class="line">                <span class="keyword">elif</span> from_mask == to_mask <span class="keyword">and</span> from_mask &gt; <span class="number">0</span>:</span><br><span class="line">                    attention_mask_i.append(<span class="number">1</span>)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    attention_mask_i.append(<span class="number">0</span>)</span><br><span class="line">            attention_mask.append(attention_mask_i)</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">input_mask = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3]</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]</span><br></pre></td></tr></table></figure>
-</li>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]</span><br><span class="line">[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ol>
@@ -405,8 +392,6 @@ Z_{south\_in}=softmax(\frac{Q_{south}K_{in}}{\sqrt{d_{k}}})V_{in}</script><p>实
 </li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p>SPO+指针网络： <strong>Joint Extraction of Entities and Relations Based on a Novel Decomposition Strategy</strong></p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210524105215439.png" alt="image-20210524105215439"></p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210524105239802.png" alt="image-20210524105239802"></p>
@@ -417,16 +402,14 @@ Z_{south\_in}=softmax(\frac{Q_{south}K_{in}}{\sqrt{d_{k}}})V_{in}</script><p>实
 </li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p>LIC2020冠军方案</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210524113526222.png" alt="image-20210524113526222"></p>
-</li>
-</ol>
 <ul>
 <li>spo抽取，先抽s，再抽o，最后抽取p</li>
 <li>随机的把subject加到句子的开头，用sep分割组成新的输入，预测o。预测p同理</li>
 </ul>
+</li>
+</ol>
 <h4 id="2-2-基于联合解码的联合抽取方法"><a href="#2-2-基于联合解码的联合抽取方法" class="headerlink" title="2.2 基于联合解码的联合抽取方法"></a>2.2 基于联合解码的联合抽取方法</h4><p>​    基于共享参数的联合抽取方法中，并没有显示的刻画两个任务之间的交互。同时，训练和预测仍然存在gap。</p>
 <ol>
 <li><p><strong>Joint Extraction of Entities and Overlapping Relations Using Position-Attentive Sequence Labeling</strong></p>
@@ -440,8 +423,6 @@ Z_{south\_in}=softmax(\frac{Q_{south}K_{in}}{\sqrt{d_{k}}})V_{in}</script><p>实
 <li>若p处的实体为object，则其余位置标记为“O”</li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p><strong>Joint extraction of entities and relations based on a novel tagging scheme</strong></p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210524115546893.png" alt="image-20210524115546893"></p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210524120026450.png" alt="image-20210524120026450"></p>
@@ -452,8 +433,6 @@ Z_{south\_in}=softmax(\frac{Q_{south}K_{in}}{\sqrt{d_{k}}})V_{in}</script><p>实
 <li>该框架不发解决实体重叠的关系抽取</li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p>TPLinker: Single-stage Joint Extraction of Entities and Relations Through Token Pair Linking</p>
 <p>TPLinker整体标注框架是基于token pair进行的，本质上是一个span矩阵（类似于多头标注、bi-affine）。</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210524120815690.png" alt="image-20210524120815690"></p>
@@ -506,12 +485,12 @@ Z_{south\_in}=softmax(\frac{Q_{south}K_{in}}{\sqrt{d_{k}}})V_{in}</script><p>实
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/20/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%A6%82%E8%BF%B0/" rel="prev" title="知识图谱概述">
-      <i class="fa fa-chevron-left"></i> 知识图谱概述
+    <a href="/2021/07/20/%E4%BE%9D%E5%AD%98%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/" rel="prev" title="依存句法关系总结">
+      <i class="fa fa-chevron-left"></i> 依存句法关系总结
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/07/20/%E4%BE%9D%E5%AD%98%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93/" rel="next" title="依存句法关系总结">
-      依存句法关系总结 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/07/20/tensorflow%20serving/" rel="next" title="tensorflow serving 总结文档">
+      tensorflow serving 总结文档 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
