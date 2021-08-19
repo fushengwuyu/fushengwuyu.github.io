@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -14,22 +14,23 @@
 
 
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="1. 连接数据库 123from pyorient.ogm import Config, Gragphconfig &#x3D; Config.from_url(server, user, pwd)g &#x3D; Graph(config)  2. 构造schema类 1234567891011Node &#x3D; declarative_node()Relationship &#x3D; declarative_relations">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Orientdb 基本操作">
 <meta property="og:url" content="http://example.com/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="浮生物语的博客">
 <meta property="og:description" content="1. 连接数据库 123from pyorient.ogm import Config, Gragphconfig &#x3D; Config.from_url(server, user, pwd)g &#x3D; Graph(config)  2. 构造schema类 1234567891011Node &#x3D; declarative_node()Relationship &#x3D; declarative_relations">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-19T16:00:00.000Z">
 <meta property="article:modified_time" content="2021-07-20T01:03:26.073Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="sunshine">
 <meta property="article:tag" content="数据库">
 <meta name="twitter:card" content="summary">
 
@@ -42,11 +43,11 @@
     sidebar: "",
     isHome : false,
     isPost : true,
-    lang   : 'en'
+    lang   : 'zh-CN'
   };
 </script>
 
-  <title>Orientdb 基本操作 | Hexo</title>
+  <title>Orientdb 基本操作 | 浮生物语的博客</title>
   
 
 
@@ -86,7 +87,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -97,9 +98,10 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Hexo</h1>
+      <h1 class="site-title">浮生物语的博客</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
+      <p class="site-subtitle" itemprop="description">记录学习</p>
   </div>
 
   <div class="site-nav-right">
@@ -115,12 +117,12 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/%E5%BD%92%E6%A1%A3/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
   </ul>
@@ -150,17 +152,17 @@
     
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/orientdb%20ogm%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="sunshine">
       <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="浮生物语的博客">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -172,10 +174,10 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="Created: 2021-07-20 00:00:00 / Modified: 09:03:26" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
+              <time title="创建时间：2021-07-20 00:00:00 / 修改时间：09:03:26" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
             </span>
 
           
@@ -194,18 +196,20 @@
 </blockquote>
 <h4 id="2-构造schema类"><a href="#2-构造schema类" class="headerlink" title="2. 构造schema类"></a>2. 构造schema类</h4><blockquote>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Node = declarative_node()</span><br><span class="line">Relationship = declarative_relationship()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义节点类，继承Node；定义关系时，继承Relationship</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrientdbFile</span>(<span class="params">Node</span>):</span></span><br><span class="line">    element_type = <span class="string">&#x27;file&#x27;</span>  <span class="comment"># 表名</span></span><br><span class="line">    element_plural = <span class="string">&#x27;files&#x27;</span>  <span class="comment"># </span></span><br><span class="line"></span><br><span class="line">    file_id = Integer(nullable=<span class="literal">False</span>, unique=<span class="literal">True</span>)</span><br><span class="line">    emp_no = Integer(nullable=<span class="literal">True</span>, unique=<span class="literal">False</span>)</span><br><span class="line">    file_type = String(nullable=<span class="literal">True</span>, unique=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
-
 </blockquote>
 <ol>
 <li><p>初始化schema</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g.create_all(Node.registry) <span class="comment"># 创建节点</span></span><br><span class="line">g.create_all(Relationship.registry)  <span class="comment"># 创建边</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g.create_all(Node.registry) <span class="comment"># 创建节点</span></span><br><span class="line">g.create_all(Relationship.registry)  <span class="comment"># 创建边</span></span><br></pre></td></tr></table></figure>
+</li>
 <li><p>绑定schema</p>
 <p>若orientdb中已存在表，则只需要绑定相应的表即可。</p>
 <ul>
 <li><p>from class</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g.include(Node.registry) <span class="comment"># 绑定节点</span></span><br><span class="line">g.include(Relationship.registry)  <span class="comment"># 绑定边</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g.include(Node.registry) <span class="comment"># 绑定节点</span></span><br><span class="line">g.include(Relationship.registry)  <span class="comment"># 绑定边</span></span><br></pre></td></tr></table></figure>
+</li>
 <li><p>from schema</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">classes_from_schema = graph.build_mapping(</span><br><span class="line">   Node,</span><br><span class="line">   Relationship,</span><br><span class="line">   auto_plural = <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize Schema in PyOrient</span></span><br><span class="line">graph.include(classes_from_schema)</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">classes_from_schema = graph.build_mapping(</span><br><span class="line">   Node,</span><br><span class="line">   Relationship,</span><br><span class="line">   auto_plural = <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize Schema in PyOrient</span></span><br><span class="line">graph.include(classes_from_schema)</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 </li>
 </ol>
@@ -213,44 +217,39 @@
 <ul>
 <li><p>使用broker</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g.persons.create(<span class="built_in">id</span>=<span class="string">&quot;1&quot;</span>, name=<span class="string">&quot;张三&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p = &#123;<span class="string">&quot;id&quot;</span>: <span class="string">&quot;2&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;李四&quot;</span>&#125;</span><br><span class="line">Person.objects.create(**p)</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p = &#123;<span class="string">&quot;id&quot;</span>: <span class="string">&quot;2&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;李四&quot;</span>&#125;</span><br><span class="line">Person.objects.create(**p)</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>原生方式</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p = &#123;<span class="string">&quot;id&quot;</span>: <span class="string">&quot;3&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;王五&quot;</span>&#125;</span><br><span class="line">g.create_vertex(Person, **p)</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p = &#123;<span class="string">&quot;id&quot;</span>: <span class="string">&quot;3&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;王五&quot;</span>&#125;</span><br><span class="line">g.create_vertex(Person, **p)</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <h4 id="4-查询数据"><a href="#4-查询数据" class="headerlink" title="4. 查询数据"></a>4. 查询数据</h4><ul>
 <li><p>方式一</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">result = g.persons.query().<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(p.<span class="built_in">id</span>, p.name)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> 张三</span><br><span class="line"><span class="number">2</span> 李四</span><br><span class="line"><span class="number">3</span> 王五</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> 张三</span><br><span class="line"><span class="number">2</span> 李四</span><br><span class="line"><span class="number">3</span> 王五</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>方式二</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">result = g.query(Person).<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(p.<span class="built_in">id</span>, p.name)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> 张三</span><br><span class="line"><span class="number">2</span> 李四</span><br><span class="line"><span class="number">3</span> 王五</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> 张三</span><br><span class="line"><span class="number">2</span> 李四</span><br><span class="line"><span class="number">3</span> 王五</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>filter</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = g.persons.query(name=<span class="string">&#x27;张三&#x27;</span>).<span class="built_in">all</span>()</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = g.query(Person).<span class="built_in">filter</span>(Person.name == <span class="string">&quot;&#x27;张三&#x27;&quot;</span>).<span class="built_in">all</span>()  <span class="comment"># 备注：张三内层同样需要用引号包裹起来，源代码的问题，所以建议使用上面方式。</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = g.query(Person).<span class="built_in">filter</span>(Person.name == <span class="string">&quot;&#x27;张三&#x27;&quot;</span>).<span class="built_in">all</span>()  <span class="comment"># 备注：张三内层同样需要用引号包裹起来，源代码的问题，所以建议使用上面方式。</span></span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <h4 id="5-修改数据"><a href="#5-修改数据" class="headerlink" title="5. 修改数据"></a>5. 修改数据</h4><p>pyorient的ogm本身并没有实现update功能，可以简单通过删除后插入实现修改功能。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ps = g.persons.query(name=<span class="string">&#x27;张三&#x27;</span>).<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> ps:</span><br><span class="line">    g.delete_vertex(Person, &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>&#125;)</span><br><span class="line">    p_dict = <span class="built_in">dict</span>(name=p.name, <span class="built_in">id</span>=p.<span class="built_in">id</span>)</span><br><span class="line">    p_dict.update(&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;张麻子&quot;</span>&#125;)</span><br><span class="line">    g.create_vertex(Person, **p_dict)</span><br><span class="line">result = g.persons.query().<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> p <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(p.<span class="built_in">id</span>, p.name)</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2 李四</span><br><span class="line">3 王五</span><br><span class="line">1 张麻子</span><br></pre></td></tr></table></figure>
-
 <h4 id="6-删除数据"><a href="#6-删除数据" class="headerlink" title="6. 删除数据"></a>6. 删除数据</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p_dict = &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>&#125;</span><br><span class="line">g.delete_vertex(Person, **p_dict)</span><br></pre></td></tr></table></figure>
-
 <h4 id="7-batch"><a href="#7-batch" class="headerlink" title="7. batch"></a>7. batch</h4><p>批量操作</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">batch = g.batch()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>, <span class="number">10</span>):</span><br><span class="line">    batch[<span class="string">&#x27;f&#x27;</span> + <span class="built_in">str</span>(i)] = batch.persons.create(name=<span class="string">&#x27;name&#x27;</span> + <span class="built_in">str</span>(<span class="number">1</span>), <span class="built_in">id</span>=i)</span><br><span class="line">batch.commit()</span><br><span class="line"></span><br><span class="line">result = g.persons.query().<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(r.name, r.<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">李四 <span class="number">2</span></span><br><span class="line">name1 <span class="number">5</span></span><br><span class="line">王五 <span class="number">3</span></span><br><span class="line">name1 <span class="number">6</span></span><br><span class="line">张麻子 <span class="number">1</span></span><br><span class="line">name1 <span class="number">7</span></span><br><span class="line">name1 <span class="number">8</span></span><br><span class="line">name1 <span class="number">9</span></span><br></pre></td></tr></table></figure>
-
 <p>备注：</p>
 <ol>
-<li><p> batch的key不能为纯数字，例如batch[‘12’]，当然，batch[12]更不行。报错timeout，不解释。</p>
+<li><p>batch的key不能为纯数字，例如batch[‘12’]，当然，batch[12]更不行。报错timeout，不解释。</p>
 </li>
 <li><p>batch的key必需明确，否则会不提交到库。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">batch = g.batch()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>, <span class="number">11</span>):</span><br><span class="line">    batch.persons.create(name=<span class="string">&#x27;name&#x27;</span> + <span class="built_in">str</span>(<span class="number">1</span>), <span class="built_in">id</span>=i)</span><br><span class="line">batch.commit()</span><br><span class="line"></span><br><span class="line">result = g.persons.query(<span class="built_in">id</span>=<span class="number">10</span>).<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> result:</span><br><span class="line">    <span class="built_in">print</span>(r.name, r.<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
-
 <p>并没有任何输出，表明，记录并没有正确提交。</p>
 </li>
 </ol>
@@ -328,10 +327,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -343,27 +342,27 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">John Doe</p>
+  <p class="site-author-name" itemprop="name">sunshine</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
+          <a href="/%E5%BD%92%E6%A1%A3/">
         
-          <span class="site-state-item-count">17</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
         <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
         <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -393,9 +392,9 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">sunshine</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
         
@@ -413,6 +412,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -14,23 +14,24 @@
 
 
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="1. 知识图谱概述与架构1.1 web发展路线 web 1.0时代：文档互联 web 2.0 时代：数据互联 web 3.0时代：知识互联，知识图谱强大的语义理解和开放互联能力为基础  RDF（resource description framework）和OWL（web ontology language），基于使用本体模式来形式化的表达数据中的隐含语义的目的。知识图谱是基于语义网的相关研究，是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="知识图谱概述">
 <meta property="og:url" content="http://example.com/2021/07/20/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%A6%82%E8%BF%B0/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="浮生物语的博客">
 <meta property="og:description" content="1. 知识图谱概述与架构1.1 web发展路线 web 1.0时代：文档互联 web 2.0 时代：数据互联 web 3.0时代：知识互联，知识图谱强大的语义理解和开放互联能力为基础  RDF（resource description framework）和OWL（web ontology language），基于使用本体模式来形式化的表达数据中的隐含语义的目的。知识图谱是基于语义网的相关研究，是">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1578539136186.png">
 <meta property="article:published_time" content="2021-07-19T16:00:00.000Z">
 <meta property="article:modified_time" content="2021-07-20T02:15:48.279Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="sunshine">
 <meta property="article:tag" content="NLP">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1578539136186.png">
@@ -44,11 +45,11 @@
     sidebar: "",
     isHome : false,
     isPost : true,
-    lang   : 'en'
+    lang   : 'zh-CN'
   };
 </script>
 
-  <title>知识图谱概述 | Hexo</title>
+  <title>知识图谱概述 | 浮生物语的博客</title>
   
 
 
@@ -88,7 +89,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -99,9 +100,10 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Hexo</h1>
+      <h1 class="site-title">浮生物语的博客</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
+      <p class="site-subtitle" itemprop="description">记录学习</p>
   </div>
 
   <div class="site-nav-right">
@@ -117,12 +119,12 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/%E5%BD%92%E6%A1%A3/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
   </ul>
@@ -152,17 +154,17 @@
     
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%A6%82%E8%BF%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="sunshine">
       <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="浮生物语的博客">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -174,10 +176,10 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="Created: 2021-07-20 00:00:00 / Modified: 10:15:48" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
+              <time title="创建时间：2021-07-20 00:00:00 / 修改时间：10:15:48" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
             </span>
 
           
@@ -206,8 +208,8 @@
 <ul>
 <li><p>三元组：$G=(E, R, S)$</p>
 <ul>
-<li>$E={e_{1}, e_{2}, … e_{n}}$ 是知识库中实体集合。</li>
-<li>$R={r_{1}, r_{2}, … r_{n}}$ 是知识库中的关系集合。</li>
+<li>$E={e<em>{1}, e</em>{2}, … e_{n}}$ 是知识库中实体集合。</li>
+<li>$R={r<em>{1}, r</em>{2}, … r_{n}}$ 是知识库中的关系集合。</li>
 <li>$S ={ r | r \in E × R × E}$ 代表知识库中三元组集合</li>
 </ul>
 </li>
@@ -246,8 +248,7 @@
 <li><p>体系结构</p>
 <p> 知识图谱的体系结构指构建模式。如下图所示。</p>
 <pre><code>![1577761955307](./1577761955307.png)
-</code></pre>
-<ul>
+</code></pre><ul>
 <li>自顶向下(top-down)：先定义本体与数据模式，再将实体加入到知识库。例如：Freebase。</li>
 <li>自底向上(bottom-up)：从一些开放链路数据中提取实体，选择置信度较高的实体加入知识库，最后再构建本体模式。目前，大多数采用自底向上的模式构建知识图谱，典型的有Google的Knowledge Vault。</li>
 </ul>
@@ -256,10 +257,8 @@
 </li>
 </ul>
 <h4 id="2-大规模知识库"><a href="#2-大规模知识库" class="headerlink" title="2. 大规模知识库"></a>2. 大规模知识库</h4><h5 id="2-1-开放链接知识库"><a href="#2-1-开放链接知识库" class="headerlink" title="2.1 开放链接知识库"></a>2.1 开放链接知识库</h5><ul>
-<li><p>Freebase：Metaweb(创建)-&gt;Google（收购）。Freebase在人工构建的基础上，融合了维基百科、IMDB、Flick等语料库。截止2014年底，Freebase包含6800万实体，10亿条关系信息，24亿条事实三元组信息。2015年6月，Freebase整体移入WikiData。</p>
-</li>
-<li><p>Wikidata：维基媒体基金会主持的一个自由的协作式多语言辅助知识库。Wikidata中的数据主要以文档的形式进行存储，目前已包含了超过1 700万个文档。其中的每个文档都有一个主题或一个管理页面，且被唯一的数字标识。</p>
-</li>
+<li>Freebase：Metaweb(创建)-&gt;Google（收购）。Freebase在人工构建的基础上，融合了维基百科、IMDB、Flick等语料库。截止2014年底，Freebase包含6800万实体，10亿条关系信息，24亿条事实三元组信息。2015年6月，Freebase整体移入WikiData。</li>
+<li>Wikidata：维基媒体基金会主持的一个自由的协作式多语言辅助知识库。Wikidata中的数据主要以文档的形式进行存储，目前已包含了超过1 700万个文档。其中的每个文档都有一个主题或一个管理页面，且被唯一的数字标识。</li>
 <li><p>DBpedia：DBpedia[18]是由德国莱比锡大学和曼海姆大学的科研人员创建的多语言综合型知识库，在LOD项目中处于最核心的地位。截止至2014年年底，DBpedia中的事实三元组 数量已经超过了30亿条。</p>
 </li>
 <li><p>YAGO：YAGO[19]是由德国马普所(max planck institute，MPI)的科研人员构建的综合型知识库。YAGO整合了维基百科、WordNet以及GeoNames等数据源。2012年发布的第二版本，包含了超过1000万的实体以及超过1.2亿的事实。</p>
@@ -268,8 +267,7 @@
 <h5 id="2-2-垂直行业知识库"><a href="#2-2-垂直行业知识库" class="headerlink" title="2.2 垂直行业知识库"></a>2.2 垂直行业知识库</h5><ul>
 <li><p>IMDB：关于电影、演员、电视节目的知识库。截止到2012年2月，IMDB共收集了2 132 383部作品资料和4 530 159名人物资料。</p>
 <pre><code>  MusicBrainz：一个结构化的音乐维基百科，致力于收藏所有的音乐元数据，并向大众用户开放。
-</code></pre>
-</li>
+</code></pre></li>
 <li><p>ConceptNet：语义知识网络。与链路数据和Google知识图谱相比，ConceptNet更加侧重与词与词的关系。ConceptNet完全免费开放，并支持多种语言。</p>
 </li>
 </ul>
@@ -316,9 +314,13 @@
 </li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p>属性抽取</p>
 <p>针对实体而言，通过属性形成对实体的完整刻画。实体的属性抽取可以转化为关系抽取问题。</p>
 </li>
+</ul>
+<ul>
 <li><p>事件抽取</p>
 <p>事件抽取指从自然语言中抽取出用户感兴趣的事件信息，并以结构化的形式呈现出来。事件指发生的事件，通常具有时间、地点、参与者等属性。事件的发生可能因为一个动作的产生或者系统状态的改变。一般地，事件抽取任务包含的子任务有:</p>
 <ul>
@@ -344,8 +346,7 @@
 </li>
 </ul>
 <h5 id="3-2-知识表示"><a href="#3-2-知识表示" class="headerlink" title="3.2 知识表示"></a>3.2 知识表示</h5><pre><code> 知识表示主要有两种：基于离散符号的知识表示和基于连续向量的知识表示方法
-</code></pre>
-<p>​    基于离散符号化的表示方法可以很有效的将数据结构化，节点对应着三元组的头实体和尾实体，边对应着三元组的关系。但是它并不能在计算机中表达相应的语义层面的信息，也不能进行语义计算。</p>
+</code></pre><p>​    基于离散符号化的表示方法可以很有效的将数据结构化，节点对应着三元组的头实体和尾实体，边对应着三元组的关系。但是它并不能在计算机中表达相应的语义层面的信息，也不能进行语义计算。</p>
 <ul>
 <li><p>基于离散符号的知识表示</p>
 <p>随着语义网的发展，早期web的标准语言HTML和XML无法适应语义网对知识表示的要求，W3C提出了新的标准语言：RDF、RDFS和OWL</p>
@@ -381,8 +382,6 @@
 <li><p>属性的全称限定声明：声明一个属性是全称限定的。例如：</p>
 <blockquote>
 <p>exp:Person owl:allValuesFrom exp:Woman </p>
-</blockquote>
-<blockquote>
 <p>exp:Person owl:onProperty exp:hasMother</p>
 </blockquote>
 <p>   上诉说明exp:haMother在主语exp:Person类的条件下，宾语的取值只能来自于exp:Women类。</p>
@@ -420,12 +419,13 @@
 <li><p>转移距离模型（Translation Distance Model）</p>
 <p>transD模型的主要思想是讲衡量向量化的知识图谱中三元组的合理性问题，转化为衡量头实体和尾实体的距离问题。核心在于如何设计得分函数，得分函数通常被设计成利用关系把头实体转移到尾实体的合理性的函数。</p>
 <p>TransE受到词向量中平移不变性的启发，把实体和关系表示成向量，对某一个具体的关系(h, r, t)，把关系的向量表示解释成头实体的向量到尾实体的向量的转移向量，即满足关系$h+r \approx t$关系。</p>
-<p>$$<br>vec(Rome)+vec(is-capital-of) \approx vec(Italy)<br>$$</p>
-</li>
+<script type="math/tex; mode=display">
+vec(Rome)+vec(is-capital-of) \approx vec(Italy)</script></li>
 <li><p>语义匹配模型（Semantic Matching Models）</p>
 <p>语义匹配模型更加注重挖掘向量化后的实体和关系的潜在语义，该方向上的模型主要是RESCAL以及它的延伸模型。</p>
-<p>在RESCAL模型中，知识库中的三元组(h,r,t)集合被表示为一个三阶张量，该张量可以分解为一个核心张量和一个因子矩阵，核心张量中的每个二维矩阵切片代表一个关系，因子矩阵中的每一行代表一个实体。三阶张量中的值表示对应三元组成立的概率，如果概率大于某个阈值，则三元组成立，否则不成立。其得分函数如下：<br>$$<br>f_{r}(h,t)=h^{T}M_{r}t=\sum_{i=0}^{d-1}\sum_{j=0}^{d-1}[M_{r}]<em>{ij}\cdot[h]</em>{i}\cdot[r]_{j}<br>$$</p>
-</li>
+<p>在RESCAL模型中，知识库中的三元组(h,r,t)集合被表示为一个三阶张量，该张量可以分解为一个核心张量和一个因子矩阵，核心张量中的每个二维矩阵切片代表一个关系，因子矩阵中的每一行代表一个实体。三阶张量中的值表示对应三元组成立的概率，如果概率大于某个阈值，则三元组成立，否则不成立。其得分函数如下：</p>
+<script type="math/tex; mode=display">
+f_{r}(h,t)=h^{T}M_{r}t=\sum_{i=0}^{d-1}\sum_{j=0}^{d-1}[M_{r}]_{ij}\cdot[h]_{i}\cdot[r]_{j}</script></li>
 <li><p>考虑附加信息的模型</p>
 <p>除了仅仅依靠知识图谱中的三元组构造KG embedding的模型，还有一些模型考虑额外的附加信息进行提升。</p>
 <p>通常考虑的附加信息有：实体类型、关系路劲、文本描述、逻辑规则等。</p>
@@ -473,7 +473,7 @@
 <p>分块是从给定的知识库中的所有实体对中，选出潜在匹配的记录对作为候选项，尽可能的缩小候选项，减少数据量、</p>
 <p>Hash函数的分块</p>
 <ul>
-<li><p>给定记录$x$，$hash(x)=h_{i}$ 则x映射到关键字$h_{i}$ 绑定的块$C_{i}$ 上。</p>
+<li><p>给定记录$x$，$hash(x)=h<em>{i}$ 则x映射到关键字$h</em>{i}$ 绑定的块$C_{i}$ 上。</p>
 </li>
 <li><p>近邻分块</p>
 <p>canopy聚类、排序邻居算法、Red-Blue Set Cover等</p>
@@ -484,10 +484,12 @@
 <p>负载均衡 (Load Balance)来保证所有块中的实体数目相当,从而保证分块对性能的提升程度。最简单的方法是多次Map-Reduce操作。</p>
 </li>
 <li><p>记录链接</p>
-<p>假定两个实体$X={x_{0}, x_{1},…,x_{n}} ，Y={y_{0}, y_{1},…,y_{n}}$ ，$x_{i}$是实体X第$i$个属性的值。</p>
+<p>假定两个实体$X={x<em>{0}, x</em>{1},…,x<em>{n}} ，Y={y</em>{0}, y<em>{1},…,y</em>{n}}$ ，$x_{i}$是实体X第$i$个属性的值。</p>
 <ul>
 <li><p>属性相似度</p>
-<p>综合单个属性相似度得到属性相似度向量：<br>$$<br>[sim(x_{1},y_{1}),sim(x_{2},y_{2}),…,sim(x_{n},y_{n})]<br>$$<br>属性相似度的计算方式通常有以下几类：</p>
+<p>综合单个属性相似度得到属性相似度向量：</p>
+<script type="math/tex; mode=display">
+[sim(x_{1},y_{1}),sim(x_{2},y_{2}),...,sim(x_{n},y_{n})]</script><p>属性相似度的计算方式通常有以下几类：</p>
 <ul>
 <li>编辑距离：最小编辑距离(Levenstein)、Wagner and Fisher Distance、Edit Distance with affine gaps</li>
 <li>集合相似度计算：Dice系数、Jaccard系数</li>
@@ -500,11 +502,13 @@
 <li><p>聚合</p>
 <ul>
 <li><p>加权平均</p>
-<p>对相似度向量各个分量加权求和，得到最终的实体相似度:<br>$$<br>S = w_{1}\ast sim(x_{1}, y_{1}) +…+w_{n} \ast sim(x_{n}, y_{n})<br>$$</p>
-</li>
+<p>对相似度向量各个分量加权求和，得到最终的实体相似度:</p>
+<script type="math/tex; mode=display">
+S = w_{1}\ast sim(x_{1}, y_{1}) +...+w_{n} \ast sim(x_{n}, y_{n})</script></li>
 <li><p>规则</p>
-<p>可以为每个相似度分量设置一个阈值，若果超过改阈值则将两实体融合。<br>$$<br>sim(x_{1}, y_{1}) &gt;T_{1} and(or) … sim(x_{n}, y_{n}) &gt;T_{n}<br>$$</p>
-</li>
+<p>可以为每个相似度分量设置一个阈值，若果超过改阈值则将两实体融合。</p>
+<script type="math/tex; mode=display">
+sim(x_{1}, y_{1}) >T_{1} and(or) ... sim(x_{n}, y_{n}) >T_{n}</script></li>
 <li><p>分类器</p>
 <p>常用的分类模型，但存在最大问题在于如何生成训练集合。</p>
 </li>
@@ -669,10 +673,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -684,27 +688,27 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">John Doe</p>
+  <p class="site-author-name" itemprop="name">sunshine</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
+          <a href="/%E5%BD%92%E6%A1%A3/">
         
-          <span class="site-state-item-count">17</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
         <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
         <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -734,9 +738,9 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">sunshine</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
         
@@ -754,6 +758,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -14,19 +14,20 @@
 
 
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="1. 常见的中文错误类型 发音错误， 特点：音近，发音不标准， 原因：地方发音，语言转化。 - 灰机  拼写错误：特点： 正确词语错误使用， 原因： 输入法导致-拼音、五笔、手写 - 眼睛蛇  语法，知识错误： 特点：逻辑错误，多字、少字，乱序 - 女性患病前列腺炎   2. 研究现状2.1 通用纠错项目 https:&#x2F;&#x2F;github.com&#x2F;shibing624&#x2F;pycorrector   错误">
 <meta property="og:type" content="article">
 <meta property="og:title" content="中文文本纠错调研">
 <meta property="og:url" content="http://example.com/2021/07/20/%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%BA%A0%E9%94%99%E8%B0%83%E7%A0%94/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="浮生物语的博客">
 <meta property="og:description" content="1. 常见的中文错误类型 发音错误， 特点：音近，发音不标准， 原因：地方发音，语言转化。 - 灰机  拼写错误：特点： 正确词语错误使用， 原因： 输入法导致-拼音、五笔、手写 - 眼睛蛇  语法，知识错误： 特点：逻辑错误，多字、少字，乱序 - 女性患病前列腺炎   2. 研究现状2.1 通用纠错项目 https:&#x2F;&#x2F;github.com&#x2F;shibing624&#x2F;pycorrector   错误">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577068913235.png">
 <meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577069217626.png">
 <meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577070846118.png">
@@ -44,7 +45,7 @@
 <meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581930742369.png">
 <meta property="article:published_time" content="2021-07-19T16:00:00.000Z">
 <meta property="article:modified_time" content="2021-07-20T02:16:06.611Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="sunshine">
 <meta property="article:tag" content="NLP">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577068913235.png">
@@ -58,11 +59,11 @@
     sidebar: "",
     isHome : false,
     isPost : true,
-    lang   : 'en'
+    lang   : 'zh-CN'
   };
 </script>
 
-  <title>中文文本纠错调研 | Hexo</title>
+  <title>中文文本纠错调研 | 浮生物语的博客</title>
   
 
 
@@ -102,7 +103,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -113,9 +114,10 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Hexo</h1>
+      <h1 class="site-title">浮生物语的博客</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
+      <p class="site-subtitle" itemprop="description">记录学习</p>
   </div>
 
   <div class="site-nav-right">
@@ -131,12 +133,12 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/%E5%BD%92%E6%A1%A3/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
   </ul>
@@ -166,17 +168,17 @@
     
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%BA%A0%E9%94%99%E8%B0%83%E7%A0%94/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="sunshine">
       <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="浮生物语的博客">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -188,10 +190,10 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="Created: 2021-07-20 00:00:00 / Modified: 10:16:06" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
+              <time title="创建时间：2021-07-20 00:00:00 / 修改时间：10:16:06" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
             </span>
 
           
@@ -237,18 +239,22 @@
 <p>P(患者1天前体检发现脾动脉瘤)</p>
 <p>P(患者1天前体检发现皮动脉瘤)</p>
 <p>P(患者1天前体检发现劈动脉瘤)</p>
-</blockquote>
-<h5 id="2-2-学术界进展"><a href="#2-2-学术界进展" class="headerlink" title="2.2 学术界进展"></a>2.2 学术界进展</h5></li>
+<h5 id="2-2-学术界进展"><a href="#2-2-学术界进展" class="headerlink" title="2.2 学术界进展"></a>2.2 学术界进展</h5></blockquote>
+</li>
 <li><p>基于序列标注的纠错</p>
 <blockquote>
 <p>《 Alibaba at IJCNLP-2017 Task 1: Embedding Grammatical Features<br>into LSTMs for Chinese Grammatical Error Diagnosis Task 》</p>
 </blockquote>
 <p>利用序列标注模型 + 人工提取特征进行错误位置的标注</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577068913235.png" alt="1577068913235"></p>
-<pre><code>                 2017年IJCNLP举办的CGED比赛中阿里团队提出的Top1方案
-</code></pre>
-<p>成绩： P：0.36， R： 0.21， F1：0.27</p>
 </li>
+</ul>
+</li>
+</ul>
+<pre><code>                     2017年IJCNLP举办的CGED比赛中阿里团队提出的Top1方案
+
+成绩： P：0.36， R： 0.21， F1：0.27
+</code></pre><ul>
 <li><p>基于NMT的纠错</p>
 <blockquote>
 <p>《 Youdao’s Winning Solution to the NLPCC-2018 Task 2 Challenge: A Neural<br>Machine Translation Approach to Chinese Grammatical Error Correction 》</p>
@@ -258,18 +264,15 @@
 <p>成绩： P： 0.34， R：0.18， F0.5： 0.29</p>
 </li>
 </ul>
-</li>
-</ul>
 <h5 id="2-3-评价指标"><a href="#2-3-评价指标" class="headerlink" title="2.3 评价指标"></a>2.3 评价指标</h5><ul>
 <li><p>过纠率 / 误报率</p>
 <p>$FAR = \frac{正确句子被纠错的个数}{正确句子的个数}$</p>
 </li>
 <li><p>召回率</p>
-<p>$$R = \frac{错误句子被改正的句子数}{错误的句子总数}$$</p>
-</li>
+<script type="math/tex; mode=display">R = \frac{错误句子被改正的句子数}{错误的句子总数}</script></li>
 <li><p>纠错目标</p>
 <p>被改正的句子数 &gt;&gt; 被改错的句子数</p>
-<p>​                       $$K * R &gt;&gt; (1 - K) * FAR$$</p>
+<p>​                       <script type="math/tex">K * R >> (1 - K) * FAR</script></p>
 <p>目标在于尽可能的提高召回率R。</p>
 </li>
 </ul>
@@ -286,11 +289,14 @@
 <li><p>基于规则的错误检测</p>
 <ul>
 <li><p>拼音匹配： 适合实体错误检测，比如疾病，药品等实体，需要维护拼音-实体隐射字典</p>
-<img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577071517262.png" alt="1577071517262" style="zoom:80%;" /></li>
+<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577071517262.png" alt="1577071517262" style="zoom:80%;" /></p>
+</li>
 <li><p>拼音编辑距离：1.  检测所有编辑距离小于阈值的路径 2. 最优路径选取（最小拼音编辑距离， 最长字符匹配）3. 语言模型 + 规则联合筛选</p>
 </li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p>单双向2gram检测</p>
 <p>当前词与上下文组成的2gram词频很低，认为有错</p>
 <p>基于假设： 正确表述发生的频次要远远大于错误表述发生的次数</p>
@@ -314,6 +320,8 @@
 </li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p>基于word2vec-cbow改造的音字混合受限字表示语言模型检测算法</p>
 <p>基于CSLM的中文拼写检测：《Chinese Spelling Errors Detection Based on  CSLM,2015》</p>
 <p>主要特征：</p>
@@ -363,15 +371,17 @@
 <li>4gram-LM概率差值：候选替换后橘子越通顺分数越高</li>
 </ul>
 <p>一级排序大致流程如下：</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581916837380.png" alt="1581916837380"></p>
-<p>例如：甲状腺==姐姐==该怎么治疗？ -&gt;==结节  0.99==</p>
+</li>
+</ul>
+<p>  <img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581916837380.png" alt="1581916837380"></p>
+<p>  例如：甲状腺==姐姐==该怎么治疗？ -&gt;==结节  0.99==</p>
 <ul>
 <li>频次： 55 -&gt; 94</li>
 <li>编辑距离：2</li>
 <li>拼音jaccard距离：0</li>
 <li>语言模型概率：-21.9 -&gt; -8.6</li>
 </ul>
-</li>
+<ul>
 <li><p>二级排序</p>
 <p>模型：xgboost</p>
 <p>作用：分数超过设定阈值且是Top1作为最终候选</p>
@@ -399,7 +409,7 @@
 <ul>
 <li>频次 ：20 -&gt; 1688</li>
 <li>切词：红\癍\狼疮 (1\1\2) -&gt; 红斑狼疮 (4)</li>
-<li>nn语言模型:癍 (&lt;0.001) -&gt; 斑 (0.979)</li>
+<li>nn语言模型:癍 (<0.001) -> 斑 (0.979)</li>
 <li>4gram语言模型:-19.2 -&gt; -10.6</li>
 <li>PMI:红癍(0.33) -&gt;红斑(9.7)</li>
 </ul>
@@ -569,10 +579,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -584,27 +594,27 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">John Doe</p>
+  <p class="site-author-name" itemprop="name">sunshine</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
+          <a href="/%E5%BD%92%E6%A1%A3/">
         
-          <span class="site-state-item-count">17</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
         <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
         <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -634,9 +644,9 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">sunshine</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
         
@@ -654,6 +664,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 

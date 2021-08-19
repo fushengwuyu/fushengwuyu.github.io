@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -14,24 +14,25 @@
 
 
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="1. 基本命令1.1 训练模型无论是单独训练，还是2个模型一起训练，均可以使用rasa train命令实现（rasa nlu和rasa core合并为RASA），不同之处在于，提供的训练数据，若同时提供两份数据，则会同时训练nlu和core。  训练nlu模型  1python -m rasa train --config configs&#x2F;zh_jieba_supervised_embedding">
 <meta property="og:type" content="article">
 <meta property="og:title" content="rasa总结文档">
 <meta property="og:url" content="http://example.com/2021/07/20/rasa%E6%96%87%E6%A1%A3/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="浮生物语的博客">
 <meta property="og:description" content="1. 基本命令1.1 训练模型无论是单独训练，还是2个模型一起训练，均可以使用rasa train命令实现（rasa nlu和rasa core合并为RASA），不同之处在于，提供的训练数据，若同时提供两份数据，则会同时训练nlu和core。  训练nlu模型  1python -m rasa train --config configs&#x2F;zh_jieba_supervised_embedding">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1590138247599.png">
 <meta property="og:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1590138270872.png">
 <meta property="article:published_time" content="2021-07-19T16:00:00.000Z">
 <meta property="article:modified_time" content="2021-07-20T02:18:58.757Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="sunshine">
 <meta property="article:tag" content="NLP">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1590138247599.png">
@@ -45,11 +46,11 @@
     sidebar: "",
     isHome : false,
     isPost : true,
-    lang   : 'en'
+    lang   : 'zh-CN'
   };
 </script>
 
-  <title>rasa总结文档 | Hexo</title>
+  <title>rasa总结文档 | 浮生物语的博客</title>
   
 
 
@@ -89,7 +90,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -100,9 +101,10 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Hexo</h1>
+      <h1 class="site-title">浮生物语的博客</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
+      <p class="site-subtitle" itemprop="description">记录学习</p>
   </div>
 
   <div class="site-nav-right">
@@ -118,12 +120,12 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/%E5%BD%92%E6%A1%A3/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
   </ul>
@@ -153,17 +155,17 @@
     
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/rasa%E6%96%87%E6%A1%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="sunshine">
       <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="浮生物语的博客">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -175,10 +177,10 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="Created: 2021-07-20 00:00:00 / Modified: 10:18:58" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
+              <time title="创建时间：2021-07-20 00:00:00 / 修改时间：10:18:58" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
             </span>
 
           
@@ -196,38 +198,42 @@
 <ul>
 <li><p>训练nlu模型</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>训练core模型</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/stories/number_story.md</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>一起训练两个模型</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 </ul>
 <h4 id="1-2-启动rasa"><a href="#1-2-启动rasa" class="headerlink" title="1.2 启动rasa"></a>1.2 启动rasa</h4><ul>
 <li><p>不额外独立nlu服务</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml </span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml </span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>启动额外nlu服务</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml --enable-api -m models/nlu-20190515-144445.tar.gz </span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml --enable-api -m models/nlu-20190515-144445.tar.gz </span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>单独启动nlu服务</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa run --enable-api -m models/nlu-20190515-144445.tar.gz</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa run --enable-api -m models/nlu-20190515-144445.tar.gz</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>调用第三方模型服务</p>
 <blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa run --enable-api --log-file out.log --endpoints my_endpoints.yml</span><br></pre></td></tr></table></figure>
-
 <p>在my_endpoints.yml中配置rasa模型的url</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">models:</span><br><span class="line">  url: http:<span class="comment">//my-server.com/models/2019-1222.tar.gz</span></span><br><span class="line">  wait_time_between_pulls: <span class="number">10</span>   # [optional](default: <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
-
-<p>rasa模型还可以存放在<a target="_blank" rel="noopener" href="https://aws.amazon.com/s3/">S3</a> , <a target="_blank" rel="noopener" href="https://cloud.google.com/storage/">GCS</a> and <a target="_blank" rel="noopener" href="https://azure.microsoft.com/services/storage/">Azure Storage</a> 云盘中，同样远程调用，这里不多赘述。</p>
+<p>rasa模型还可以存放在<a target="_blank" rel="noopener" href="https://aws.amazon.com/s3/">S3</a> , <a target="_blank" rel="noopener" href="https://cloud.google.com/storage/">GCS</a> and <a target="_blank" rel="noopener" href="https://azure.microsoft.com/services/storage/">Azure Storage</a> 云盘中，同样远程调用，这里不多赘述。</p>
 <p><a target="_blank" rel="noopener" href="https://rasa.com/docs/rasa/user-guide/configuring-http-api/">https://rasa.com/docs/rasa/user-guide/configuring-http-api/</a></p>
 </blockquote>
 </li>
@@ -235,9 +241,6 @@
 <p>nlu服务开启后，post方式调用</p>
 <p>post <a target="_blank" rel="noopener" href="http://localhost:5005/model/parse">http://localhost:5005/model/parse</a></p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">input:</span><br><span class="line">&#123;<span class="attr">&quot;text&quot;</span>: <span class="string">&quot;明天成都的天气如何&quot;</span>&#125;</span><br><span class="line">output:</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;intent&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;request_weather&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.5547698674</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;entities&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;entity&quot;</span>: <span class="string">&quot;date_time&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;明天&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;start&quot;</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">&quot;end&quot;</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">&quot;extractor&quot;</span>: <span class="string">&quot;MitieEntityExtractor&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;entity&quot;</span>: <span class="string">&quot;address&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;成都&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;start&quot;</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">&quot;end&quot;</span>: <span class="number">4</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">&quot;extractor&quot;</span>: <span class="string">&quot;MitieEntityExtractor&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;intent_ranking&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;request_weather&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.5547698674</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;affirm&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0898880708</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;deny&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.078563989</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;thanks&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.072717722</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;goodbye&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0726876305</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;greet&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0697155938</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;whattodo&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0443638481</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;whoareyou&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0172932785</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;text&quot;</span>: <span class="string">&quot;明天成都的天气如何&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <h4 id="1-3-启动action"><a href="#1-3-启动action" class="headerlink" title="1.3 启动action"></a>1.3 启动action</h4><blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run actions --port 5055 --actions actions --debug</span><br></pre></td></tr></table></figure>
 </blockquote>
@@ -263,7 +266,6 @@
 </ul>
 <h4 id="2-2-数据转化"><a href="#2-2-数据转化" class="headerlink" title="2.2 数据转化"></a>2.2 数据转化</h4><p>rasa提供了json和markdown格式的转化命令</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">usage: rasa data convert nlu [-h] [-v] [-vv] [--quiet] --data DATA --out OUT</span><br><span class="line">                             [-l LANGUAGE] -f &#123;json,md&#125;</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --help            show this help message and exit</span><br><span class="line">  --data DATA           Path to the file or directory containing Rasa NLU</span><br><span class="line">                        data. (default: None)</span><br><span class="line">  --out OUT             File where to save training data in Rasa format.</span><br><span class="line">                        (default: None)</span><br><span class="line">  -l LANGUAGE, --language LANGUAGE</span><br><span class="line">                        Language of data. (default: en)</span><br><span class="line">  -f &#123;json,md&#125;, --format &#123;json,md&#125;</span><br><span class="line">                        Output format the training data should be converted</span><br><span class="line">                        into. (default: None)</span><br><span class="line"></span><br><span class="line">Python Logging Options:</span><br><span class="line">  -v, --verbose         Be verbose. Sets logging level to INFO. (default:</span><br><span class="line">                        None)</span><br><span class="line">  -vv, --debug          Print lots of debugging statements. Sets logging level</span><br><span class="line">                        to DEBUG. (default: None)</span><br><span class="line">  --quiet               Be quiet! Sets logging level to WARNING. (default:</span><br><span class="line">                        None)</span><br></pre></td></tr></table></figure>
-
 <p>example：</p>
 <blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa data convert nlu --data M3-training_dataset_1564317234.json --out M3-training_dataset_1564317234.md -f md</span><br></pre></td></tr></table></figure>
@@ -286,7 +288,6 @@
 <p>备注2：用户可以直接像core发送请求，不经过nlu模块。参数格式：/intent{“entityName”: “entityValue”, …}</p>
 <blockquote>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;sender&quot;</span>: <span class="string">&quot;kkkkkkk&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;message&quot;</span>: <span class="string">&quot;/search_treat&#123;\&quot;disease\&quot;:\&quot;丛集性头痛\&quot;, \&quot;sure\&quot;:\&quot;丛集性头痛\&quot;&#125;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;recipient_id&quot;: &quot;kkkkkkk&quot;,</span><br><span class="line">        &quot;text&quot;: &quot;丛集性头痛的简介：从集性头痛(clusterheadaches)亦称偏头痛性神经痛、组胺性头痛、岩神经痛、蝶腭神经痛、Horton头痛等，.病员在某个时期内突然出现一系列的剧烈头痛。一般无前兆，疼痛多见于一侧眼眶或(及)额颞部，可伴同侧眼结膜充血、流泪、眼睑水肿或鼻塞、流涕，有时出现瞳孔缩小、垂睑、脸红、颊肿等症状。头痛多为非搏动性剧痛。病人坐立不安或前俯后仰地摇动，部分病员用拳击头部以缓解疼痛。&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;recipient_id&quot;: &quot;kkkkkkk&quot;,</span><br><span class="line">        &quot;text&quot;: &quot;丛集性头痛的治疗方式有：药物治疗、支持性治疗&quot;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 </blockquote>
 
@@ -363,10 +364,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -378,27 +379,27 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">John Doe</p>
+  <p class="site-author-name" itemprop="name">sunshine</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
+          <a href="/%E5%BD%92%E6%A1%A3/">
         
-          <span class="site-state-item-count">17</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
         <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
         <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -428,9 +429,9 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">sunshine</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
         
@@ -448,6 +449,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 
