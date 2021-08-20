@@ -21,15 +21,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="1. 安装python3.6.5 安装依赖包  centos  1yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel  ubuntu">
+  <meta name="description" content="1. 安装python3.6.5 安装依赖包  centos  1yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel   ubunt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="常见安装脚本">
 <meta property="og:url" content="http://example.com/2021/07/20/%E5%B8%B8%E8%A7%81%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC/index.html">
 <meta property="og:site_name" content="浮生物语的博客">
-<meta property="og:description" content="1. 安装python3.6.5 安装依赖包  centos  1yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel  ubuntu">
+<meta property="og:description" content="1. 安装python3.6.5 安装依赖包  centos  1yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel   ubunt">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-07-20T02:14:11.654Z">
+<meta property="article:modified_time" content="2021-08-20T02:31:13.720Z">
 <meta property="article:author" content="sunshine">
 <meta property="article:tag" content="运维">
 <meta name="twitter:card" content="summary">
@@ -175,9 +175,28 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-07-20 00:00:00 / 修改时间：10:14:11" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
+              <time title="创建时间：2021-07-20 00:00:00" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-20 10:31:13" itemprop="dateModified" datetime="2021-08-20T10:31:13+08:00">2021-08-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/neo4j/" itemprop="url" rel="index"><span itemprop="name">neo4j</span></a>
+                </span>
             </span>
 
           
@@ -196,11 +215,13 @@
 <ul>
 <li><p>centos</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>ubuntu</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install zlib1g-dev libbz2-dev libssl-dev libncurses5-dev libsqlite3-dev libreadline-dev tk-dev libgdbm-dev libdb-dev libpcap-dev xz-utils libexpat1-dev liblzma-dev libffi-dev libc6-dev</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install zlib1g-dev libbz2-dev libssl-dev libncurses5-dev libsqlite3-dev libreadline-dev tk-dev libgdbm-dev libdb-dev libpcap-dev xz-utils libexpat1-dev liblzma-dev libffi-dev libc6-dev</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 </ul>
 </li>
@@ -208,11 +229,13 @@
 </li>
 <li><p>安装</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>添加软连接</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/local/python3/bin/python3.6.7 /usr/bin/python3</span><br><span class="line">ln -s /usr/local/python3/bin/pip3.6.5 /usr/bin/pip3</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/local/python3/bin/python3.6.7 /usr/bin/python3</span><br><span class="line">ln -s /usr/local/python3/bin/pip3.6.5 /usr/bin/pip3</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 </ol>
 <h2 id="2-安装neo4j"><a href="#2-安装neo4j" class="headerlink" title="2. 安装neo4j"></a>2. 安装neo4j</h2><ol>
@@ -225,21 +248,18 @@
 </li>
 <li><p>配置neo4j.conf文件，修改相应配置(配置行数针对3.4.5版本，其他版本自行寻找相应配置)</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 修改第22行load csv时l路径，在前面加个<span class="comment">#，可从任意路径读取文件</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">dbms.directories.import=import</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改35行和36行，设置JVM初始堆内存和JVM最大堆内存</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 生产环境给的JVM最大堆内存越大越好，但是要小于机器的物理内存</span></span><br><span class="line">dbms.memory.heap.initial_size=5g</span><br><span class="line">dbms.memory.heap.max_size=10g</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改46行，可以认为这个是缓存，如果机器配置高，这个越大越好</span></span><br><span class="line">dbms.memory.pagecache.size=10g</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改54行，去掉改行的<span class="comment">#，可以远程通过ip访问neo4j数据库</span></span></span><br><span class="line">dbms.connectors.default_listen_address=0.0.0.0</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 默认 bolt端口是7687，http端口是7474，https关口是7473，不修改下面3项也可以</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改71行，去掉<span class="comment">#，设置http端口为7687，端口可以自定义，只要不和其他端口冲突就行</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">dbms.connector.bolt.listen_address=:7687</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改75行，去掉<span class="comment">#，设置http端口为7474，端口可以自定义，只要不和其他端口冲突就行</span></span></span><br><span class="line">dbms.connector.http.listen_address=:7474</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改79行，去掉<span class="comment">#，设置http端口为7473，端口可以自定义，只要不和其他端口冲突就行</span></span></span><br><span class="line">dbms.connector.https.listen_address=:7473</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改227行，去掉<span class="comment">#，允许从远程url来load csv</span></span></span><br><span class="line">dbms.security.allow_csv_import_from_file_urls=true</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改246行，允许使用neo4j-shell，类似于mysql 命令行之类的</span></span><br><span class="line">dbms.shell.enabled=true</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改235行，去掉<span class="comment">#，设置连接neo4j-shell的端口，一般都是localhost或者127.0.0.1，这样安全，其他地址的话，一般使用https就行</span></span></span><br><span class="line">dbms.shell.host=127.0.0.1</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改250行，去掉<span class="comment">#，设置neo4j-shell端口，端口可以自定义，只要不和其他端口冲突就行</span></span></span><br><span class="line">dbms.shell.port=1337</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改254行，设置neo4j可读可写</span></span><br><span class="line">dbms.read_only=false</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 修改第22行load csv时l路径，在前面加个<span class="comment">#，可从任意路径读取文件</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">dbms.directories.import=import</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改35行和36行，设置JVM初始堆内存和JVM最大堆内存</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 生产环境给的JVM最大堆内存越大越好，但是要小于机器的物理内存</span></span><br><span class="line">dbms.memory.heap.initial_size=5g</span><br><span class="line">dbms.memory.heap.max_size=10g</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改46行，可以认为这个是缓存，如果机器配置高，这个越大越好</span></span><br><span class="line">dbms.memory.pagecache.size=10g</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改54行，去掉改行的<span class="comment">#，可以远程通过ip访问neo4j数据库</span></span></span><br><span class="line">dbms.connectors.default_listen_address=0.0.0.0</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 默认 bolt端口是7687，http端口是7474，https关口是7473，不修改下面3项也可以</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改71行，去掉<span class="comment">#，设置http端口为7687，端口可以自定义，只要不和其他端口冲突就行</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">dbms.connector.bolt.listen_address=:7687</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改75行，去掉<span class="comment">#，设置http端口为7474，端口可以自定义，只要不和其他端口冲突就行</span></span></span><br><span class="line">dbms.connector.http.listen_address=:7474</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改79行，去掉<span class="comment">#，设置http端口为7473，端口可以自定义，只要不和其他端口冲突就行</span></span></span><br><span class="line">dbms.connector.https.listen_address=:7473</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改227行，去掉<span class="comment">#，允许从远程url来load csv</span></span></span><br><span class="line">dbms.security.allow_csv_import_from_file_urls=true</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改246行，允许使用neo4j-shell，类似于mysql 命令行之类的</span></span><br><span class="line">dbms.shell.enabled=true</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改235行，去掉<span class="comment">#，设置连接neo4j-shell的端口，一般都是localhost或者127.0.0.1，这样安全，其他地址的话，一般使用https就行</span></span></span><br><span class="line">dbms.shell.host=127.0.0.1</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改250行，去掉<span class="comment">#，设置neo4j-shell端口，端口可以自定义，只要不和其他端口冲突就行</span></span></span><br><span class="line">dbms.shell.port=1337</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改254行，设置neo4j可读可写</span></span><br><span class="line">dbms.read_only=false</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>启动，进入neo4j目录。</p>
 <blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/neo4j start</span><br></pre></td></tr></table></figure>
-</blockquote>
-<blockquote>
 <p>Active database: graph.db<br>Directories in use:<br>  home:         /root/neo4j-community-3.4.5<br>  config:       /root/neo4j-community-3.4.5/conf<br>  logs:         /root/neo4j-community-3.4.5/logs<br>  plugins:      /root/neo4j-community-3.4.5/plugins<br>  import:       NOT SET<br>  data:         /root/neo4j-community-3.4.5/data<br>  certificates: /root/neo4j-community-3.4.5/certificates<br>  run:          /root/neo4j-community-3.4.5/run<br>Starting Neo4j.<br>Started neo4j (pid 19029). It is available at <a target="_blank" rel="noopener" href="http://0.0.0.0:7474/">http://0.0.0.0:7474/</a><br>There may be a short delay until the server is ready.<br>See /root/neo4j-community-3.4.5/logs/neo4j.log for current status.</p>
 </blockquote>
 </li>
 <li><p>停止</p>
 <blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/neo4j stop</span><br></pre></td></tr></table></figure>
-</blockquote>
-<blockquote>
 <p>Stopping Neo4j.. stopped</p>
 </blockquote>
 </li>
@@ -266,8 +286,8 @@
       <i class="fa fa-chevron-left"></i> 预训练模型梳理
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/" rel="next" title="信息熵笔记">
-      信息熵笔记 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/07/20/%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/" rel="next" title="情感分析总结">
+      情感分析总结 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -341,18 +361,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/%E5%BD%92%E6%A1%A3/">
         
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -440,6 +460,61 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
