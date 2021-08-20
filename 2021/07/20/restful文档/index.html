@@ -211,7 +211,6 @@
 </li>
 </ul>
 <h4 id="二，-响应状态码"><a href="#二，-响应状态码" class="headerlink" title="二， 响应状态码"></a>二， 响应状态码</h4><p>所有API响应遵守HTTP规范，常见的HTTP状态码如下所示。</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -219,8 +218,7 @@
 <th>描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>1xx</td>
 <td>信息状态码</td>
 </tr>
@@ -240,16 +238,68 @@
 <td>5xx</td>
 <td>服务器错误码</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ol>
 <li><p>请求被正确返回</p>
 <p>其返回参数定义如下：</p>
-<p>| 参数 | 类型  | 是否必需 | 描述           |<br>| —— | ——- | ———— | ——————— |<br>| code | int64 | 是       | 正确状态码     |<br>| data | obj   | 是       | 响应的请求数据 |</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>code</td>
+<td>int64</td>
+<td>是</td>
+<td>正确状态码</td>
+</tr>
+<tr>
+<td>data</td>
+<td>obj</td>
+<td>是</td>
+<td>响应的请求数据</td>
+</tr>
+</tbody></table>
 </li>
 <li><p>请求调用失败，必须返回出错的相信信息，参数定义如下：</p>
-<p>| 参数    | 类型   | 是否必须 | 描述                                                         |<br>| ———- | ——— | ———— | —————————————————————————————— |<br>| code    | int64  | 是       | 业务错误码                                                   |<br>| message | string | 是       | 业务错误信息，与code一一对应，用于表明code的含义，应尽量简短，抽象，具有概括性和通用性。 |<br>| cause   | string | 是       | 导致此错误的原因，也可用于给接口调用者提示解决此错误的办法，相同的code可对应不同的cause |<br>| detail  | obj    | 否       | 错误详细信息，供调用方查看和展示给最终用户的信息             |</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>是否必须</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>code</td>
+<td>int64</td>
+<td>是</td>
+<td>业务错误码</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>是</td>
+<td>业务错误信息，与code一一对应，用于表明code的含义，应尽量简短，抽象，具有概括性和通用性。</td>
+</tr>
+<tr>
+<td>cause</td>
+<td>string</td>
+<td>是</td>
+<td>导致此错误的原因，也可用于给接口调用者提示解决此错误的办法，相同的code可对应不同的cause</td>
+</tr>
+<tr>
+<td>detail</td>
+<td>obj</td>
+<td>否</td>
+<td>错误详细信息，供调用方查看和展示给最终用户的信息</td>
+</tr>
+</tbody></table>
 <p>备注：</p>
 <ul>
 <li>前三位为 HTTP标准状态码，中间三位为系统内全局唯一的微服务错误码标识号，后三位为自定义状态码，应尽量抽象，具有概括性和通用性。</li>
@@ -267,8 +317,12 @@
 </ul>
 <h4 id="四，Flask-异常方案"><a href="#四，Flask-异常方案" class="headerlink" title="四，Flask 异常方案"></a>四，Flask 异常方案</h4><p>Flask内部通过继承HTTPException类来处理异常，同样，我们可以自定义自己的异常基类类（继承自HTTPException），定义好返回的错误码，请求的url，错误原因等。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">APIException</span>(<span class="params">HTTPException</span>):</span></span><br><span class="line">    code = <span class="number">500</span></span><br><span class="line">    message = <span class="string">&#x27;sorry, we made a mistake&#x27;</span></span><br><span class="line">    error_code = <span class="number">999</span></span><br><span class="line">    cause = <span class="string">&#x27;just a mistake&#x27;</span></span><br><span class="line">    detail = <span class="literal">None</span></span><br><span class="line">    dump_json = <span class="literal">False</span>  <span class="comment"># 是否dump成json串。flask_restful.Resource方式需要设置为False，原生方式需要设置为True</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, msg=<span class="literal">None</span>, code=<span class="literal">None</span>, error_code=<span class="literal">None</span>, cause=<span class="literal">None</span>, header=<span class="literal">None</span>, detail=<span class="literal">None</span></span>):</span></span><br><span class="line">        <span class="keyword">if</span> code:</span><br><span class="line">            self.code = code</span><br><span class="line">        <span class="keyword">if</span> error_code:</span><br><span class="line">            self.error_code = error_code</span><br><span class="line">        <span class="keyword">if</span> msg:</span><br><span class="line">            self.msg = msg</span><br><span class="line">        <span class="keyword">if</span> cause:</span><br><span class="line">            self.cause = cause</span><br><span class="line">        <span class="keyword">if</span> detail:</span><br><span class="line">            self.detail = detail</span><br><span class="line">        <span class="built_in">super</span>(APIException, self).__init__(msg, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_body</span>(<span class="params">self, environ=<span class="literal">None</span></span>):</span></span><br><span class="line">        body = <span class="built_in">dict</span>(</span><br><span class="line">            message=self.message,</span><br><span class="line">            code=self.error_code,</span><br><span class="line">            cause=self.cause</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">if</span> self.detail:</span><br><span class="line">            body.update(&#123;<span class="string">&quot;detail&quot;</span>: self.detail&#125;)</span><br><span class="line"></span><br><span class="line">        data = json.dumps(body) <span class="keyword">if</span> self.dump_json <span class="keyword">else</span> body</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_headers</span>(<span class="params">self, environ=<span class="literal">None</span></span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;Get a list of headers.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> [(<span class="string">&#x27;Content-Type&#x27;</span>, <span class="string">&#x27;application/json&#x27;</span>)]</span><br></pre></td></tr></table></figure>
+
+
+
 <p>定义好基类之后，派生出各种各样的异常类，自由定义各种状态码的错误及对应的错误信息，出现该异常后，抛出异常。比如：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotFound</span>(<span class="params">APIException</span>):</span></span><br><span class="line">    code = <span class="number">404</span></span><br><span class="line">    message = <span class="string">&#x27;the resource are not found&#x27;</span></span><br><span class="line">    error_code = <span class="number">1001</span></span><br></pre></td></tr></table></figure>
+
 <p>目前定义的派生类有：</p>
 <ul>
 <li>Success  </li>
@@ -282,8 +336,10 @@
 </ul>
 <p>在程序中使用。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@input_bp.route(<span class="params"><span class="string">&#x27;/input&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">input_m</span>():</span></span><br><span class="line">    d = request.get_json()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;file_id&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> d <span class="keyword">or</span> <span class="string">&quot;op_type&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> d:</span><br><span class="line">        <span class="keyword">return</span> ParameterException(message=<span class="string">&#x27;file_id 和 op_type两个参数不能为空&#x27;</span>).get_body()</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
 <p>虽然我们可以在可能出错的地方，继承自己的异常类，然后抛出，但是并不是所有的异常我们都能提前预知。比如参数错误等异常，我们可以提前预知并处理好，但是如果出现逻辑问题等提前没法感知的异常，就不是我们能够控制并处理的。所以我们还需要全局捕获所有异常。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 全局错误AOP处理</span></span><br><span class="line"><span class="meta">@app.errorhandler(<span class="params">Exception</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">framework_error</span>(<span class="params">e</span>):</span></span><br><span class="line">    api_logger.error(<span class="string">&quot;error info: %s&quot;</span> % e) <span class="comment"># 对错误进行日志记录</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(e, APIException):</span><br><span class="line">        <span class="keyword">return</span> e</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(e, HTTPException):</span><br><span class="line">        code = e.code</span><br><span class="line">        msg = e.description</span><br><span class="line">        error_code = <span class="number">1007</span></span><br><span class="line">        <span class="keyword">return</span> APIException(msg, code, error_code)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> app.config[<span class="string">&#x27;DEBUG&#x27;</span>]:</span><br><span class="line">            <span class="keyword">return</span> ServerError().get_body()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> e</span><br></pre></td></tr></table></figure>
+
 <p>如此，Flask中出现的所有异常皆可处理了，保证程序的健壮性。co</p>
 <h4 id="五，-Sanic异常方案"><a href="#五，-Sanic异常方案" class="headerlink" title="五， Sanic异常方案"></a>五， Sanic异常方案</h4><p>可以理解sanic为flask的升级版，采用协程机制，并发与效率都比flask高，用法基本上与flask一致。</p>
 <p>与flask不同的是：</p>
@@ -292,12 +348,16 @@
 <li>全局错误AOP处理机制不同，sanic通过添加异常处理函数的方式实现。</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyResponse</span>(<span class="params">HTTPResponse</span>):</span></span><br><span class="line">    code = <span class="number">500</span></span><br><span class="line">    message = <span class="string">&#x27;sorry, we made a mistake&#x27;</span></span><br><span class="line">    error_code = <span class="number">999</span></span><br><span class="line">    cause = <span class="literal">None</span></span><br><span class="line">    detail = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, message=<span class="literal">None</span>, code=<span class="literal">None</span>, error_code=<span class="literal">None</span>, cause=<span class="literal">None</span>, detail=<span class="literal">None</span></span>):</span></span><br><span class="line">        <span class="keyword">if</span> code:</span><br><span class="line">            self.code = code</span><br><span class="line">        <span class="keyword">if</span> error_code:</span><br><span class="line">            self.error_code = error_code</span><br><span class="line">        <span class="keyword">if</span> message:</span><br><span class="line">            self.message = message</span><br><span class="line">        <span class="keyword">if</span> cause <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            self.cause = cause</span><br><span class="line">        <span class="keyword">if</span> detail <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            self.detail = detail</span><br><span class="line">        <span class="built_in">super</span>(MyResponse, self).__init__(body=self.get_body(), status=self.code)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_body</span>(<span class="params">self</span>):</span></span><br><span class="line">        body = <span class="built_in">dict</span>(</span><br><span class="line">            message=self.message,</span><br><span class="line">            code=self.error_code</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.cause <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            body.update(<span class="built_in">dict</span>(cause=self.cause))</span><br><span class="line">        <span class="keyword">if</span> self.detail <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            body.update(&#123;<span class="string">&quot;detail&quot;</span>: self.detail&#125;)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> json_dumps(body)</span><br></pre></td></tr></table></figure>
+
 <p>至于各种派生的错误类，与flask一致。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Success</span>(<span class="params">MyResponse</span>):</span></span><br><span class="line">    code = <span class="number">200</span></span><br><span class="line">    message = <span class="string">&#x27;OK&#x27;</span></span><br><span class="line">    local_code = <span class="string">&quot;000&quot;</span></span><br><span class="line">    error_code = <span class="number">99999</span></span><br></pre></td></tr></table></figure>
+
 <p>全局异常处理。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">server_error_handler</span>(<span class="params">request, exception</span>):</span></span><br><span class="line">    logger.error(msg=traceback.format_exc())  <span class="comment"># 记录错误日志</span></span><br><span class="line">    <span class="keyword">return</span> ServerError(message=<span class="built_in">repr</span>(exception), cause=traceback.format_exc())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.error_handler.add(Exception, server_error_handler)</span><br></pre></td></tr></table></figure>
+
 <p>发生系统异常后，这里统一使用ServerError返回。ServerError是自己定义的继承自MyResponse的异常类。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ServerError</span>(<span class="params">MyResponse</span>):</span></span><br><span class="line">    code = <span class="number">500</span></span><br><span class="line">    message = <span class="string">&#x27;something happen&#x27;</span></span><br><span class="line">    local_code = <span class="string">&quot;000&quot;</span></span><br><span class="line">    error_code = <span class="number">99999</span></span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -406,7 +466,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

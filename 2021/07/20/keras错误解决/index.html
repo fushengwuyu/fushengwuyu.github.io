@@ -192,10 +192,14 @@
 
       
         <h4 id="1-ensorflow-python-framework-errors-impl-FailedPreconditionError-Error-while-reading-resource-variable-softmax-kernel-from-Container-localhost-This-could-mean-that-the-variable-was-uninitialized-Not-found-Resource-localhost-softmax-kernel-N10tensorflow3VarE-does-not-exist"><a href="#1-ensorflow-python-framework-errors-impl-FailedPreconditionError-Error-while-reading-resource-variable-softmax-kernel-from-Container-localhost-This-could-mean-that-the-variable-was-uninitialized-Not-found-Resource-localhost-softmax-kernel-N10tensorflow3VarE-does-not-exist" class="headerlink" title="1. ensorflow.python.framework.errors_impl.FailedPreconditionError: Error while reading resource variable softmax/kernel from Container: localhost. This could mean that the variable was uninitialized. Not found: Resource localhost/softmax/kernel/N10tensorflow3VarE does not exist."></a>1. ensorflow.python.framework.errors_impl.FailedPreconditionError: Error while reading resource variable softmax/kernel from Container: localhost. This could mean that the variable was uninitialized. Not found: Resource localhost/softmax/kernel/N10tensorflow3VarE does not exist.</h4><p>​    最近在使用flask部署keras服务的时候。遇到改错误，看错误，感觉是变量没有初始化，百度各种资料，成功找到解决办法。</p>
-<p>​     creating a reference to the session that is used for loading the models and then to set it to be used by keras in each request</p>
+<p>​     creating a reference to the session that is used for loading the models and then to set it to be used by keras in each request</p>
 <p>​    在加载模型之前，创建session。并在模型调用predict的时候，设置同样的session。保证整个项目使用模型使用同一个session。成功解决问题。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from tensorflow.python.keras.backend import set_session</span><br><span class="line">from tensorflow.python.keras.models import load_model</span><br><span class="line"></span><br><span class="line">tf_config = some_custom_config</span><br><span class="line">sess = tf.Session(config=tf_config)</span><br><span class="line">graph = tf.get_default_graph()</span><br><span class="line"></span><br><span class="line"># IMPORTANT: models have to be loaded AFTER SETTING THE SESSION for keras! </span><br><span class="line"># Otherwise, their weights will be unavailable in the threads after the session there has been set</span><br><span class="line">set_session(sess)</span><br><span class="line">model = load_model(...)</span><br></pre></td></tr></table></figure>
-<p>在调用的时候，如下设置。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">global sess</span><br><span class="line">global graph</span><br><span class="line">with graph.as_default():</span><br><span class="line">    set_session(sess)</span><br><span class="line">    model.predict(...)</span><br></pre></td></tr></table></figure></p>
+
+<p>在调用的时候，如下设置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">global sess</span><br><span class="line">global graph</span><br><span class="line">with graph.as_default():</span><br><span class="line">    set_session(sess)</span><br><span class="line">    model.predict(...)</span><br></pre></td></tr></table></figure>
+
+
 <p>参考：</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensorflow/issues/28287">https://github.com/tensorflow/tensorflow/issues/28287</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.datalearner.com/blog/1051572578207468">https://www.datalearner.com/blog/1051572578207468</a></p>
@@ -312,7 +316,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

@@ -239,22 +239,18 @@
 <p>P(患者1天前体检发现脾动脉瘤)</p>
 <p>P(患者1天前体检发现皮动脉瘤)</p>
 <p>P(患者1天前体检发现劈动脉瘤)</p>
-<h5 id="2-2-学术界进展"><a href="#2-2-学术界进展" class="headerlink" title="2.2 学术界进展"></a>2.2 学术界进展</h5></blockquote>
-</li>
+</blockquote>
+<h5 id="2-2-学术界进展"><a href="#2-2-学术界进展" class="headerlink" title="2.2 学术界进展"></a>2.2 学术界进展</h5></li>
 <li><p>基于序列标注的纠错</p>
 <blockquote>
 <p>《 Alibaba at IJCNLP-2017 Task 1: Embedding Grammatical Features<br>into LSTMs for Chinese Grammatical Error Diagnosis Task 》</p>
 </blockquote>
 <p>利用序列标注模型 + 人工提取特征进行错误位置的标注</p>
 <p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577068913235.png" alt="1577068913235"></p>
+<pre><code>                 2017年IJCNLP举办的CGED比赛中阿里团队提出的Top1方案
+</code></pre>
+<p>成绩： P：0.36， R： 0.21， F1：0.27</p>
 </li>
-</ul>
-</li>
-</ul>
-<pre><code>                     2017年IJCNLP举办的CGED比赛中阿里团队提出的Top1方案
-
-成绩： P：0.36， R： 0.21， F1：0.27
-</code></pre><ul>
 <li><p>基于NMT的纠错</p>
 <blockquote>
 <p>《 Youdao’s Winning Solution to the NLPCC-2018 Task 2 Challenge: A Neural<br>Machine Translation Approach to Chinese Grammatical Error Correction 》</p>
@@ -264,15 +260,18 @@
 <p>成绩： P： 0.34， R：0.18， F0.5： 0.29</p>
 </li>
 </ul>
+</li>
+</ul>
 <h5 id="2-3-评价指标"><a href="#2-3-评价指标" class="headerlink" title="2.3 评价指标"></a>2.3 评价指标</h5><ul>
 <li><p>过纠率 / 误报率</p>
 <p>$FAR = \frac{正确句子被纠错的个数}{正确句子的个数}$</p>
 </li>
 <li><p>召回率</p>
-<script type="math/tex; mode=display">R = \frac{错误句子被改正的句子数}{错误的句子总数}</script></li>
+<p>$$R = \frac{错误句子被改正的句子数}{错误的句子总数}$$</p>
+</li>
 <li><p>纠错目标</p>
 <p>被改正的句子数 &gt;&gt; 被改错的句子数</p>
-<p>​                       <script type="math/tex">K * R >> (1 - K) * FAR</script></p>
+<p>​                       $$K * R &gt;&gt; (1 - K) * FAR$$</p>
 <p>目标在于尽可能的提高召回率R。</p>
 </li>
 </ul>
@@ -289,14 +288,11 @@
 <li><p>基于规则的错误检测</p>
 <ul>
 <li><p>拼音匹配： 适合实体错误检测，比如疾病，药品等实体，需要维护拼音-实体隐射字典</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577071517262.png" alt="1577071517262" style="zoom:80%;" /></p>
-</li>
+<img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577071517262.png" alt="1577071517262" style="zoom:80%;" /></li>
 <li><p>拼音编辑距离：1.  检测所有编辑距离小于阈值的路径 2. 最优路径选取（最小拼音编辑距离， 最长字符匹配）3. 语言模型 + 规则联合筛选</p>
 </li>
 </ul>
 </li>
-</ul>
-<ul>
 <li><p>单双向2gram检测</p>
 <p>当前词与上下文组成的2gram词频很低，认为有错</p>
 <p>基于假设： 正确表述发生的频次要远远大于错误表述发生的次数</p>
@@ -320,8 +316,6 @@
 </li>
 </ul>
 </li>
-</ul>
-<ul>
 <li><p>基于word2vec-cbow改造的音字混合受限字表示语言模型检测算法</p>
 <p>基于CSLM的中文拼写检测：《Chinese Spelling Errors Detection Based on  CSLM,2015》</p>
 <p>主要特征：</p>
@@ -371,17 +365,15 @@
 <li>4gram-LM概率差值：候选替换后橘子越通顺分数越高</li>
 </ul>
 <p>一级排序大致流程如下：</p>
-</li>
-</ul>
-<p>  <img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581916837380.png" alt="1581916837380"></p>
-<p>  例如：甲状腺==姐姐==该怎么治疗？ -&gt;==结节  0.99==</p>
+<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581916837380.png" alt="1581916837380"></p>
+<p>例如：甲状腺==姐姐==该怎么治疗？ -&gt;==结节  0.99==</p>
 <ul>
 <li>频次： 55 -&gt; 94</li>
 <li>编辑距离：2</li>
 <li>拼音jaccard距离：0</li>
 <li>语言模型概率：-21.9 -&gt; -8.6</li>
 </ul>
-<ul>
+</li>
 <li><p>二级排序</p>
 <p>模型：xgboost</p>
 <p>作用：分数超过设定阈值且是Top1作为最终候选</p>
@@ -409,7 +401,7 @@
 <ul>
 <li>频次 ：20 -&gt; 1688</li>
 <li>切词：红\癍\狼疮 (1\1\2) -&gt; 红斑狼疮 (4)</li>
-<li>nn语言模型:癍 (<0.001) -> 斑 (0.979)</li>
+<li>nn语言模型:癍 (&lt;0.001) -&gt; 斑 (0.979)</li>
 <li>4gram语言模型:-19.2 -&gt; -10.6</li>
 <li>PMI:红癍(0.33) -&gt;红斑(9.7)</li>
 </ul>
@@ -523,8 +515,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/" rel="prev" title="信息熵笔记">
-      <i class="fa fa-chevron-left"></i> 信息熵笔记
+    <a href="/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/" rel="prev" title="信息熵">
+      <i class="fa fa-chevron-left"></i> 信息熵
     </a></div>
       <div class="post-nav-item">
     <a href="/2021/07/20/vim%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="next" title="vim常用命令总结">
@@ -613,7 +605,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

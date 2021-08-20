@@ -223,8 +223,8 @@
 <ul>
 <li><p>三元组：$G=(E, R, S)$</p>
 <ul>
-<li>$E={e<em>{1}, e</em>{2}, … e_{n}}$ 是知识库中实体集合。</li>
-<li>$R={r<em>{1}, r</em>{2}, … r_{n}}$ 是知识库中的关系集合。</li>
+<li>$E={e_{1}, e_{2}, … e_{n}}$ 是知识库中实体集合。</li>
+<li>$R={r_{1}, r_{2}, … r_{n}}$ 是知识库中的关系集合。</li>
 <li>$S ={ r | r \in E × R × E}$ 代表知识库中三元组集合</li>
 </ul>
 </li>
@@ -263,7 +263,8 @@
 <li><p>体系结构</p>
 <p> 知识图谱的体系结构指构建模式。如下图所示。</p>
 <pre><code>![1577761955307](./1577761955307.png)
-</code></pre><ul>
+</code></pre>
+<ul>
 <li>自顶向下(top-down)：先定义本体与数据模式，再将实体加入到知识库。例如：Freebase。</li>
 <li>自底向上(bottom-up)：从一些开放链路数据中提取实体，选择置信度较高的实体加入知识库，最后再构建本体模式。目前，大多数采用自底向上的模式构建知识图谱，典型的有Google的Knowledge Vault。</li>
 </ul>
@@ -272,8 +273,10 @@
 </li>
 </ul>
 <h4 id="2-大规模知识库"><a href="#2-大规模知识库" class="headerlink" title="2. 大规模知识库"></a>2. 大规模知识库</h4><h5 id="2-1-开放链接知识库"><a href="#2-1-开放链接知识库" class="headerlink" title="2.1 开放链接知识库"></a>2.1 开放链接知识库</h5><ul>
-<li>Freebase：Metaweb(创建)-&gt;Google（收购）。Freebase在人工构建的基础上，融合了维基百科、IMDB、Flick等语料库。截止2014年底，Freebase包含6800万实体，10亿条关系信息，24亿条事实三元组信息。2015年6月，Freebase整体移入WikiData。</li>
-<li>Wikidata：维基媒体基金会主持的一个自由的协作式多语言辅助知识库。Wikidata中的数据主要以文档的形式进行存储，目前已包含了超过1 700万个文档。其中的每个文档都有一个主题或一个管理页面，且被唯一的数字标识。</li>
+<li><p>Freebase：Metaweb(创建)-&gt;Google（收购）。Freebase在人工构建的基础上，融合了维基百科、IMDB、Flick等语料库。截止2014年底，Freebase包含6800万实体，10亿条关系信息，24亿条事实三元组信息。2015年6月，Freebase整体移入WikiData。</p>
+</li>
+<li><p>Wikidata：维基媒体基金会主持的一个自由的协作式多语言辅助知识库。Wikidata中的数据主要以文档的形式进行存储，目前已包含了超过1 700万个文档。其中的每个文档都有一个主题或一个管理页面，且被唯一的数字标识。</p>
+</li>
 <li><p>DBpedia：DBpedia[18]是由德国莱比锡大学和曼海姆大学的科研人员创建的多语言综合型知识库，在LOD项目中处于最核心的地位。截止至2014年年底，DBpedia中的事实三元组 数量已经超过了30亿条。</p>
 </li>
 <li><p>YAGO：YAGO[19]是由德国马普所(max planck institute，MPI)的科研人员构建的综合型知识库。YAGO整合了维基百科、WordNet以及GeoNames等数据源。2012年发布的第二版本，包含了超过1000万的实体以及超过1.2亿的事实。</p>
@@ -282,7 +285,8 @@
 <h5 id="2-2-垂直行业知识库"><a href="#2-2-垂直行业知识库" class="headerlink" title="2.2 垂直行业知识库"></a>2.2 垂直行业知识库</h5><ul>
 <li><p>IMDB：关于电影、演员、电视节目的知识库。截止到2012年2月，IMDB共收集了2 132 383部作品资料和4 530 159名人物资料。</p>
 <pre><code>  MusicBrainz：一个结构化的音乐维基百科，致力于收藏所有的音乐元数据，并向大众用户开放。
-</code></pre></li>
+</code></pre>
+</li>
 <li><p>ConceptNet：语义知识网络。与链路数据和Google知识图谱相比，ConceptNet更加侧重与词与词的关系。ConceptNet完全免费开放，并支持多种语言。</p>
 </li>
 </ul>
@@ -329,13 +333,9 @@
 </li>
 </ul>
 </li>
-</ul>
-<ul>
 <li><p>属性抽取</p>
 <p>针对实体而言，通过属性形成对实体的完整刻画。实体的属性抽取可以转化为关系抽取问题。</p>
 </li>
-</ul>
-<ul>
 <li><p>事件抽取</p>
 <p>事件抽取指从自然语言中抽取出用户感兴趣的事件信息，并以结构化的形式呈现出来。事件指发生的事件，通常具有时间、地点、参与者等属性。事件的发生可能因为一个动作的产生或者系统状态的改变。一般地，事件抽取任务包含的子任务有:</p>
 <ul>
@@ -361,7 +361,8 @@
 </li>
 </ul>
 <h5 id="3-2-知识表示"><a href="#3-2-知识表示" class="headerlink" title="3.2 知识表示"></a>3.2 知识表示</h5><pre><code> 知识表示主要有两种：基于离散符号的知识表示和基于连续向量的知识表示方法
-</code></pre><p>​    基于离散符号化的表示方法可以很有效的将数据结构化，节点对应着三元组的头实体和尾实体，边对应着三元组的关系。但是它并不能在计算机中表达相应的语义层面的信息，也不能进行语义计算。</p>
+</code></pre>
+<p>​    基于离散符号化的表示方法可以很有效的将数据结构化，节点对应着三元组的头实体和尾实体，边对应着三元组的关系。但是它并不能在计算机中表达相应的语义层面的信息，也不能进行语义计算。</p>
 <ul>
 <li><p>基于离散符号的知识表示</p>
 <p>随着语义网的发展，早期web的标准语言HTML和XML无法适应语义网对知识表示的要求，W3C提出了新的标准语言：RDF、RDFS和OWL</p>
@@ -397,6 +398,8 @@
 <li><p>属性的全称限定声明：声明一个属性是全称限定的。例如：</p>
 <blockquote>
 <p>exp:Person owl:allValuesFrom exp:Woman </p>
+</blockquote>
+<blockquote>
 <p>exp:Person owl:onProperty exp:hasMother</p>
 </blockquote>
 <p>   上诉说明exp:haMother在主语exp:Person类的条件下，宾语的取值只能来自于exp:Women类。</p>
@@ -434,13 +437,12 @@
 <li><p>转移距离模型（Translation Distance Model）</p>
 <p>transD模型的主要思想是讲衡量向量化的知识图谱中三元组的合理性问题，转化为衡量头实体和尾实体的距离问题。核心在于如何设计得分函数，得分函数通常被设计成利用关系把头实体转移到尾实体的合理性的函数。</p>
 <p>TransE受到词向量中平移不变性的启发，把实体和关系表示成向量，对某一个具体的关系(h, r, t)，把关系的向量表示解释成头实体的向量到尾实体的向量的转移向量，即满足关系$h+r \approx t$关系。</p>
-<script type="math/tex; mode=display">
-vec(Rome)+vec(is-capital-of) \approx vec(Italy)</script></li>
+<p>$$<br>vec(Rome)+vec(is-capital-of) \approx vec(Italy)<br>$$</p>
+</li>
 <li><p>语义匹配模型（Semantic Matching Models）</p>
 <p>语义匹配模型更加注重挖掘向量化后的实体和关系的潜在语义，该方向上的模型主要是RESCAL以及它的延伸模型。</p>
-<p>在RESCAL模型中，知识库中的三元组(h,r,t)集合被表示为一个三阶张量，该张量可以分解为一个核心张量和一个因子矩阵，核心张量中的每个二维矩阵切片代表一个关系，因子矩阵中的每一行代表一个实体。三阶张量中的值表示对应三元组成立的概率，如果概率大于某个阈值，则三元组成立，否则不成立。其得分函数如下：</p>
-<script type="math/tex; mode=display">
-f_{r}(h,t)=h^{T}M_{r}t=\sum_{i=0}^{d-1}\sum_{j=0}^{d-1}[M_{r}]_{ij}\cdot[h]_{i}\cdot[r]_{j}</script></li>
+<p>在RESCAL模型中，知识库中的三元组(h,r,t)集合被表示为一个三阶张量，该张量可以分解为一个核心张量和一个因子矩阵，核心张量中的每个二维矩阵切片代表一个关系，因子矩阵中的每一行代表一个实体。三阶张量中的值表示对应三元组成立的概率，如果概率大于某个阈值，则三元组成立，否则不成立。其得分函数如下：<br>$$<br>f_{r}(h,t)=h^{T}M_{r}t=\sum_{i=0}^{d-1}\sum_{j=0}^{d-1}[M_{r}]<em>{ij}\cdot[h]</em>{i}\cdot[r]_{j}<br>$$</p>
+</li>
 <li><p>考虑附加信息的模型</p>
 <p>除了仅仅依靠知识图谱中的三元组构造KG embedding的模型，还有一些模型考虑额外的附加信息进行提升。</p>
 <p>通常考虑的附加信息有：实体类型、关系路劲、文本描述、逻辑规则等。</p>
@@ -488,7 +490,7 @@ f_{r}(h,t)=h^{T}M_{r}t=\sum_{i=0}^{d-1}\sum_{j=0}^{d-1}[M_{r}]_{ij}\cdot[h]_{i}\
 <p>分块是从给定的知识库中的所有实体对中，选出潜在匹配的记录对作为候选项，尽可能的缩小候选项，减少数据量、</p>
 <p>Hash函数的分块</p>
 <ul>
-<li><p>给定记录$x$，$hash(x)=h<em>{i}$ 则x映射到关键字$h</em>{i}$ 绑定的块$C_{i}$ 上。</p>
+<li><p>给定记录$x$，$hash(x)=h_{i}$ 则x映射到关键字$h_{i}$ 绑定的块$C_{i}$ 上。</p>
 </li>
 <li><p>近邻分块</p>
 <p>canopy聚类、排序邻居算法、Red-Blue Set Cover等</p>
@@ -499,12 +501,10 @@ f_{r}(h,t)=h^{T}M_{r}t=\sum_{i=0}^{d-1}\sum_{j=0}^{d-1}[M_{r}]_{ij}\cdot[h]_{i}\
 <p>负载均衡 (Load Balance)来保证所有块中的实体数目相当,从而保证分块对性能的提升程度。最简单的方法是多次Map-Reduce操作。</p>
 </li>
 <li><p>记录链接</p>
-<p>假定两个实体$X={x<em>{0}, x</em>{1},…,x<em>{n}} ，Y={y</em>{0}, y<em>{1},…,y</em>{n}}$ ，$x_{i}$是实体X第$i$个属性的值。</p>
+<p>假定两个实体$X={x_{0}, x_{1},…,x_{n}} ，Y={y_{0}, y_{1},…,y_{n}}$ ，$x_{i}$是实体X第$i$个属性的值。</p>
 <ul>
 <li><p>属性相似度</p>
-<p>综合单个属性相似度得到属性相似度向量：</p>
-<script type="math/tex; mode=display">
-[sim(x_{1},y_{1}),sim(x_{2},y_{2}),...,sim(x_{n},y_{n})]</script><p>属性相似度的计算方式通常有以下几类：</p>
+<p>综合单个属性相似度得到属性相似度向量：<br>$$<br>[sim(x_{1},y_{1}),sim(x_{2},y_{2}),…,sim(x_{n},y_{n})]<br>$$<br>属性相似度的计算方式通常有以下几类：</p>
 <ul>
 <li>编辑距离：最小编辑距离(Levenstein)、Wagner and Fisher Distance、Edit Distance with affine gaps</li>
 <li>集合相似度计算：Dice系数、Jaccard系数</li>
@@ -517,13 +517,11 @@ f_{r}(h,t)=h^{T}M_{r}t=\sum_{i=0}^{d-1}\sum_{j=0}^{d-1}[M_{r}]_{ij}\cdot[h]_{i}\
 <li><p>聚合</p>
 <ul>
 <li><p>加权平均</p>
-<p>对相似度向量各个分量加权求和，得到最终的实体相似度:</p>
-<script type="math/tex; mode=display">
-S = w_{1}\ast sim(x_{1}, y_{1}) +...+w_{n} \ast sim(x_{n}, y_{n})</script></li>
+<p>对相似度向量各个分量加权求和，得到最终的实体相似度:<br>$$<br>S = w_{1}\ast sim(x_{1}, y_{1}) +…+w_{n} \ast sim(x_{n}, y_{n})<br>$$</p>
+</li>
 <li><p>规则</p>
-<p>可以为每个相似度分量设置一个阈值，若果超过改阈值则将两实体融合。</p>
-<script type="math/tex; mode=display">
-sim(x_{1}, y_{1}) >T_{1} and(or) ... sim(x_{n}, y_{n}) >T_{n}</script></li>
+<p>可以为每个相似度分量设置一个阈值，若果超过改阈值则将两实体融合。<br>$$<br>sim(x_{1}, y_{1}) &gt;T_{1} and(or) … sim(x_{n}, y_{n}) &gt;T_{n}<br>$$</p>
+</li>
 <li><p>分类器</p>
 <p>常用的分类模型，但存在最大问题在于如何生成训练集合。</p>
 </li>
@@ -722,7 +720,7 @@ sim(x_{1}, y_{1}) >T_{1} and(or) ... sim(x_{n}, y_{n}) >T_{n}</script></li>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
