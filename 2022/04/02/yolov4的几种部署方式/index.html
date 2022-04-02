@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="YoloV4模型部署 针对yolov4的不同应用场景，这里提供几种部署方式。  opencv onnx TensorRT triton server  1. opencv针对原始的darknet模型，可以直接使用opencv加载，opencv针对yolo做了一定的硬件加速。加载代码如下： 1234567891011121314151617181920212223242526272829303132">
+<meta property="og:type" content="article">
+<meta property="og:title" content="yolov4的几种部署方式">
+<meta property="og:url" content="http://example.com/2022/04/02/yolov4%E7%9A%84%E5%87%A0%E7%A7%8D%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:site_name" content="浮生物语的博客">
+<meta property="og:description" content="YoloV4模型部署 针对yolov4的不同应用场景，这里提供几种部署方式。  opencv onnx TensorRT triton server  1. opencv针对原始的darknet模型，可以直接使用opencv加载，opencv针对yolo做了一定的硬件加速。加载代码如下： 1234567891011121314151617181920212223242526272829303132">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-04-02T09:57:26.546Z">
+<meta property="article:author" content="sunshine">
+<meta property="article:tag" content="tensorrt">
+<meta property="article:tag" content="onnx">
+<meta property="article:tag" content="yolov4">
+<meta property="article:tag" content="部署">
+<meta property="article:tag" content="opencv">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/04/02/yolov4%E7%9A%84%E5%87%A0%E7%A7%8D%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>yolov4的几种部署方式 | 浮生物语的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">浮生物语的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404.html/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/02/yolov4%E7%9A%84%E5%87%A0%E7%A7%8D%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="sunshine">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="浮生物语的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          yolov4的几种部署方式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-02 00:00:00 / 修改时间：17:57:26" itemprop="dateCreated datePublished" datetime="2022-04-02T00:00:00+08:00">2022-04-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url" rel="index"><span itemprop="name">运维</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>YoloV4模型部署</p>
+<p>针对yolov4的不同应用场景，这里提供几种部署方式。</p>
+<ul>
+<li>opencv</li>
+<li>onnx</li>
+<li>TensorRT</li>
+<li>triton server</li>
+</ul>
+<h3 id="1-opencv"><a href="#1-opencv" class="headerlink" title="1. opencv"></a>1. opencv</h3><p>针对原始的darknet模型，可以直接使用opencv加载，opencv针对yolo做了一定的硬件加速。加载代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ObjectRecognition</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,</span></span></span><br><span class="line"><span class="params"><span class="function">                 label_path,</span></span></span><br><span class="line"><span class="params"><span class="function">                 config_path,</span></span></span><br><span class="line"><span class="params"><span class="function">                 weights_path,</span></span></span><br><span class="line"><span class="params"><span class="function">                 upload_url,</span></span></span><br><span class="line"><span class="params"><span class="function">                 model_name=<span class="string">&#x27;fire&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 confidence_thre=<span class="number">0.5</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 nms_thre=<span class="number">0.3</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 alert_label=<span class="literal">None</span></span>):</span></span><br><span class="line">        self.alert_label = alert_label <span class="keyword">if</span> alert_label <span class="keyword">else</span> []</span><br><span class="line">        self.confidence_thre = confidence_thre</span><br><span class="line">        self.nms_thre = nms_thre</span><br><span class="line">        self.upload_url = upload_url.rstrip(<span class="string">&#x27;/&#x27;</span>) + <span class="string">&quot;/&quot;</span></span><br><span class="line">        self.model_name = model_name</span><br><span class="line">        self.net = self.load_model(config_path, weights_path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 加载类别标签文件</span></span><br><span class="line">        self.LABELS = <span class="built_in">open</span>(label_path).read().strip().split(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line">        self.nclass = <span class="built_in">len</span>(self.LABELS)</span><br><span class="line">        <span class="comment"># 获取YOLO输出层的名字</span></span><br><span class="line">        ln = self.net.getLayerNames()</span><br><span class="line">        self.ln = [ln[i[<span class="number">0</span>] - <span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> self.net.getUnconnectedOutLayers()]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">upload_image</span>(<span class="params">self, img</span>):</span></span><br><span class="line">        file_name = <span class="string">&quot;recognized_&#123;&#125;.jpg&quot;</span>.<span class="built_in">format</span>(<span class="built_in">int</span>(time.time()))</span><br><span class="line">        img_dir = <span class="string">&quot;/&quot;</span>.join([self.model_name, datetime.now().strftime(<span class="string">&quot;%Y%m&quot;</span>)])</span><br><span class="line">        data = cv2.imencode(<span class="string">&quot;.jpg&quot;</span>, img)[<span class="number">1</span>].tobytes()</span><br><span class="line">        files = [</span><br><span class="line">            (<span class="string">&#x27;file&#x27;</span>, (file_name, data, <span class="string">&#x27;image/png&#x27;</span>))</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        result = requests.post(self.upload_url + img_dir, files=files)</span><br><span class="line">        <span class="keyword">if</span> result.status_code == <span class="number">200</span>:</span><br><span class="line">            path = img_dir + <span class="string">&quot;/&quot;</span> + file_name</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            path = <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> path</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">load_model</span>(<span class="params">self, config_path, weights_path</span>):</span></span><br><span class="line">        <span class="comment"># 加载模型配置和权重文件</span></span><br><span class="line">        net = cv2.dnn.readNetFromDarknet(config_path, weights_path)</span><br><span class="line">        <span class="keyword">return</span> net</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">detect</span>(<span class="params">self, img</span>):</span></span><br><span class="line">        s = time.time()</span><br><span class="line">        <span class="comment"># 为每个类别的边界框随机匹配相应颜色</span></span><br><span class="line">        np.random.seed(<span class="number">42</span>)</span><br><span class="line">        COLORS = np.random.randint(<span class="number">0</span>, <span class="number">255</span>, size=(self.nclass, <span class="number">3</span>), dtype=<span class="string">&#x27;uint8&#x27;</span>)</span><br><span class="line">        <span class="comment"># 载入图片并获取其维度</span></span><br><span class="line">        (H, W) = img.shape[:<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将图片构建成一个blob，设置图片尺寸，然后执行一次</span></span><br><span class="line">        <span class="comment"># YOLO前馈网络计算，最终获取边界框和相应概率 216</span></span><br><span class="line">        blob = cv2.dnn.blobFromImage(img, <span class="number">1</span> / <span class="number">255.0</span>, (<span class="number">416</span>, <span class="number">416</span>), swapRB=<span class="literal">True</span>, crop=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">        self.net.setInput(blob)</span><br><span class="line"></span><br><span class="line">        layerOutputs = self.net.forward(self.ln)</span><br><span class="line"></span><br><span class="line">        end = time.time()</span><br><span class="line">        <span class="comment"># 初始化边界框，置信度（概率）以及类别</span></span><br><span class="line">        boxes = []</span><br><span class="line">        confidences = []</span><br><span class="line">        classIDs = []</span><br><span class="line">        <span class="comment"># 迭代每个输出层，总共三个</span></span><br><span class="line">        <span class="keyword">for</span> output <span class="keyword">in</span> layerOutputs:</span><br><span class="line">            <span class="comment"># 迭代每个检测</span></span><br><span class="line">            <span class="keyword">for</span> detection <span class="keyword">in</span> output:</span><br><span class="line">                <span class="comment"># 提取类别ID和置信度</span></span><br><span class="line">                scores = detection[<span class="number">5</span>:]</span><br><span class="line">                classID = np.argmax(scores)</span><br><span class="line">                confidence = scores[classID]</span><br><span class="line">                <span class="comment"># 只保留置信度大于某值的边界框</span></span><br><span class="line">                <span class="keyword">if</span> confidence &gt; self.confidence_thre:</span><br><span class="line">                    <span class="comment"># 将边界框的坐标还原至与原图片相匹配，记住YOLO返回的是</span></span><br><span class="line">                    <span class="comment"># 边界框的中心坐标以及边界框的宽度和高度</span></span><br><span class="line">                    box = detection[<span class="number">0</span>:<span class="number">4</span>] * np.array([W, H, W, H])</span><br><span class="line">                    (centerX, centerY, width, height) = box.astype(<span class="string">&quot;int&quot;</span>)</span><br><span class="line">                    <span class="comment"># 计算边界框的左上角位置</span></span><br><span class="line">                    x = <span class="built_in">int</span>(centerX - (width / <span class="number">2</span>))</span><br><span class="line">                    y = <span class="built_in">int</span>(centerY - (height / <span class="number">2</span>))</span><br><span class="line">                    <span class="comment"># 更新边界框，置信度（概率）以及类别</span></span><br><span class="line">                    boxes.append([x, y, <span class="built_in">int</span>(width), <span class="built_in">int</span>(height)])</span><br><span class="line">                    confidences.append(<span class="built_in">float</span>(confidence))</span><br><span class="line">                    classIDs.append(classID)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 使用非极大值抑制方法抑制弱、重叠边界框</span></span><br><span class="line">        idxs = cv2.dnn.NMSBoxes(boxes, confidences, self.confidence_thre, self.nms_thre)</span><br><span class="line">        loc = []</span><br><span class="line">        flag = <span class="literal">False</span></span><br><span class="line">        <span class="comment"># 确保至少一个边界框</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(idxs) &gt; <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 迭代每个边界框</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> idxs.flatten():</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> classIDs[i] <span class="keyword">in</span> self.alert_label:</span><br><span class="line">                    flag = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 提取边界框的坐标</span></span><br><span class="line">                    (x, y) = (boxes[i][<span class="number">0</span>], boxes[i][<span class="number">1</span>])</span><br><span class="line">                    (w, h) = (boxes[i][<span class="number">2</span>], boxes[i][<span class="number">3</span>])</span><br><span class="line">                    <span class="comment"># 绘制边界框以及在左上角添加类别标签和置信度</span></span><br><span class="line">                    color = [<span class="built_in">int</span>(c) <span class="keyword">for</span> c <span class="keyword">in</span> COLORS[classIDs[i]]]</span><br><span class="line">                    cv2.rectangle(img, (x, y), (x + w, y + h), color, <span class="number">2</span>)</span><br><span class="line">                    text = <span class="string">&#x27;&#123;&#125;: &#123;:.3f&#125;&#x27;</span>.<span class="built_in">format</span>(self.LABELS[classIDs[i]], confidences[i])</span><br><span class="line">                    (text_w, text_h), baseline = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.5</span>, <span class="number">2</span>)</span><br><span class="line">                    cv2.rectangle(img, (x, y - text_h - baseline), (x + text_w, y), color, -<span class="number">1</span>)</span><br><span class="line">                    cv2.putText(img, text, (x, y - <span class="number">5</span>), cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.5</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>), <span class="number">2</span>)</span><br><span class="line">                    loc.append([x, y, w, h])</span><br><span class="line">            m = time.time()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> flag:</span><br><span class="line">                <span class="comment"># 上传至云端文件服务器</span></span><br><span class="line">                img_path = self.upload_image(img)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                img_path = <span class="string">&quot;&quot;</span></span><br><span class="line">            e = time.time()</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;检测时间&quot;</span>, m-s, <span class="string">&#x27;上传时间&#x27;</span>, e-m, <span class="string">&quot;整体时间&quot;</span>, e-s)</span><br><span class="line">            <span class="keyword">return</span> img_path, flag</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span>, flag</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="2-onnx"><a href="#2-onnx" class="headerlink" title="2. onnx"></a>2. onnx</h3><p>针对有GPU的环境，可以统一将darknet转化为onnx格式，可使用转化工具：</p>
+<p>对于转化之后的onnx文件，可尝试用如下方式加载预测：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> onnxruntime</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ObjectRecognition</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,</span></span></span><br><span class="line"><span class="params"><span class="function">                 label_path,</span></span></span><br><span class="line"><span class="params"><span class="function">                 onnx_path,</span></span></span><br><span class="line"><span class="params"><span class="function">                 upload_url=<span class="string">&#x27;http://192.168.0.15:8080/ai/upload/&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 model_name=<span class="string">&#x27;fire&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 confidence_thre=<span class="number">0.5</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 nms_thre=<span class="number">0.3</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 alert_label=<span class="literal">None</span></span>):</span></span><br><span class="line">        self.alert_label = alert_label <span class="keyword">if</span> alert_label <span class="keyword">else</span> []</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 加载类别标签文件</span></span><br><span class="line">        self.class_names = <span class="built_in">open</span>(label_path).read().strip().split(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">        self.confidence_thre = confidence_thre</span><br><span class="line">        self.nms_thre = nms_thre</span><br><span class="line">        self.upload_url = upload_url.rstrip(<span class="string">&#x27;/&#x27;</span>) + <span class="string">&quot;/&quot;</span></span><br><span class="line">        self.model_name = model_name</span><br><span class="line">        self.session = onnxruntime.InferenceSession(onnx_path)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">upload_image</span>(<span class="params">self, img</span>):</span></span><br><span class="line">        file_name = <span class="string">&quot;recognized_&#123;&#125;.jpg&quot;</span>.<span class="built_in">format</span>(<span class="built_in">int</span>(time.time()))</span><br><span class="line">        img_dir = <span class="string">&quot;/&quot;</span>.join([self.model_name, datetime.now().strftime(<span class="string">&quot;%Y%m&quot;</span>)])</span><br><span class="line">        data = cv2.imencode(<span class="string">&quot;.jpg&quot;</span>, img)[<span class="number">1</span>].tobytes()</span><br><span class="line">        files = [</span><br><span class="line">            (<span class="string">&#x27;file&#x27;</span>, (file_name, data, <span class="string">&#x27;image/png&#x27;</span>))</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        result = requests.post(self.upload_url + img_dir, files=files)</span><br><span class="line">        <span class="keyword">if</span> result.status_code == <span class="number">200</span>:</span><br><span class="line">            path = img_dir + <span class="string">&quot;/&quot;</span> + file_name</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            path = <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> path</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">detect</span>(<span class="params">self, img</span>):</span></span><br><span class="line">        IN_IMAGE_H = self.session.get_inputs()[<span class="number">0</span>].shape[<span class="number">2</span>]</span><br><span class="line">        IN_IMAGE_W = self.session.get_inputs()[<span class="number">0</span>].shape[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Input</span></span><br><span class="line">        resized = cv2.resize(img, (IN_IMAGE_W, IN_IMAGE_H), interpolation=cv2.INTER_LINEAR)</span><br><span class="line">        img_in = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)</span><br><span class="line">        img_in = np.transpose(img_in, (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)).astype(np.float32)</span><br><span class="line">        img_in = np.expand_dims(img_in, axis=<span class="number">0</span>)</span><br><span class="line">        img_in /= <span class="number">255.0</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Shape of the network input: &quot;</span>, img_in.shape)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Compute</span></span><br><span class="line">        input_name = self.session.get_inputs()[<span class="number">0</span>].name</span><br><span class="line"></span><br><span class="line">        outputs = self.session.run(<span class="literal">None</span>, &#123;input_name: img_in&#125;)</span><br><span class="line"></span><br><span class="line">        boxes = self.post_processing(<span class="number">0.4</span>, <span class="number">0.6</span>, outputs)</span><br><span class="line"></span><br><span class="line">        img_path, flag = self.plot_boxes(img, boxes[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">return</span> img_path, flag</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post_processing</span>(<span class="params">self, conf_thresh, nms_thresh, output</span>):</span></span><br><span class="line">        <span class="comment"># [batch, num, 1, 4]</span></span><br><span class="line">        box_array = output[<span class="number">0</span>]</span><br><span class="line">        <span class="comment"># [batch, num, num_classes]</span></span><br><span class="line">        confs = output[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        t1 = time.time()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">type</span>(box_array).__name__ != <span class="string">&#x27;ndarray&#x27;</span>:</span><br><span class="line">            box_array = box_array.cpu().detach().numpy()</span><br><span class="line">            confs = confs.cpu().detach().numpy()</span><br><span class="line"></span><br><span class="line">        num_classes = confs.shape[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># [batch, num, 4]</span></span><br><span class="line">        box_array = box_array[:, :, <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># [batch, num, num_classes] --&gt; [batch, num]</span></span><br><span class="line">        max_conf = np.<span class="built_in">max</span>(confs, axis=<span class="number">2</span>)</span><br><span class="line">        max_id = np.argmax(confs, axis=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        t2 = time.time()</span><br><span class="line"></span><br><span class="line">        bboxes_batch = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(box_array.shape[<span class="number">0</span>]):</span><br><span class="line"></span><br><span class="line">            argwhere = max_conf[i] &gt; conf_thresh</span><br><span class="line">            l_box_array = box_array[i, argwhere, :]</span><br><span class="line">            l_max_conf = max_conf[i, argwhere]</span><br><span class="line">            l_max_id = max_id[i, argwhere]</span><br><span class="line"></span><br><span class="line">            bboxes = []</span><br><span class="line">            <span class="comment"># nms for each class</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(num_classes):</span><br><span class="line"></span><br><span class="line">                cls_argwhere = l_max_id == j</span><br><span class="line">                ll_box_array = l_box_array[cls_argwhere, :]</span><br><span class="line">                ll_max_conf = l_max_conf[cls_argwhere]</span><br><span class="line">                ll_max_id = l_max_id[cls_argwhere]</span><br><span class="line"></span><br><span class="line">                keep = self.nms_cpu(ll_box_array, ll_max_conf, nms_thresh)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (keep.size &gt; <span class="number">0</span>):</span><br><span class="line">                    ll_box_array = ll_box_array[keep, :]</span><br><span class="line">                    ll_max_conf = ll_max_conf[keep]</span><br><span class="line">                    ll_max_id = ll_max_id[keep]</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(ll_box_array.shape[<span class="number">0</span>]):</span><br><span class="line">                        bboxes.append(</span><br><span class="line">                            [ll_box_array[k, <span class="number">0</span>], ll_box_array[k, <span class="number">1</span>], ll_box_array[k, <span class="number">2</span>], ll_box_array[k, <span class="number">3</span>],</span><br><span class="line">                             ll_max_conf[k],</span><br><span class="line">                             ll_max_conf[k], ll_max_id[k]])</span><br><span class="line"></span><br><span class="line">            bboxes_batch.append(bboxes)</span><br><span class="line"></span><br><span class="line">        t3 = time.time()</span><br><span class="line">        <span class="keyword">return</span> bboxes_batch</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nms_cpu</span>(<span class="params">self, boxes, confs, nms_thresh=<span class="number">0.5</span>, min_mode=<span class="literal">False</span></span>):</span></span><br><span class="line">        <span class="comment"># print(boxes.shape)</span></span><br><span class="line">        x1 = boxes[:, <span class="number">0</span>]</span><br><span class="line">        y1 = boxes[:, <span class="number">1</span>]</span><br><span class="line">        x2 = boxes[:, <span class="number">2</span>]</span><br><span class="line">        y2 = boxes[:, <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">        areas = (x2 - x1) * (y2 - y1)</span><br><span class="line">        order = confs.argsort()[::-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        keep = []</span><br><span class="line">        <span class="keyword">while</span> order.size &gt; <span class="number">0</span>:</span><br><span class="line">            idx_self = order[<span class="number">0</span>]</span><br><span class="line">            idx_other = order[<span class="number">1</span>:]</span><br><span class="line"></span><br><span class="line">            keep.append(idx_self)</span><br><span class="line"></span><br><span class="line">            xx1 = np.maximum(x1[idx_self], x1[idx_other])</span><br><span class="line">            yy1 = np.maximum(y1[idx_self], y1[idx_other])</span><br><span class="line">            xx2 = np.minimum(x2[idx_self], x2[idx_other])</span><br><span class="line">            yy2 = np.minimum(y2[idx_self], y2[idx_other])</span><br><span class="line"></span><br><span class="line">            w = np.maximum(<span class="number">0.0</span>, xx2 - xx1)</span><br><span class="line">            h = np.maximum(<span class="number">0.0</span>, yy2 - yy1)</span><br><span class="line">            inter = w * h</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> min_mode:</span><br><span class="line">                over = inter / np.minimum(areas[order[<span class="number">0</span>]], areas[order[<span class="number">1</span>:]])</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                over = inter / (areas[order[<span class="number">0</span>]] + areas[order[<span class="number">1</span>:]] - inter)</span><br><span class="line"></span><br><span class="line">            inds = np.where(over &lt;= nms_thresh)[<span class="number">0</span>]</span><br><span class="line">            order = order[inds + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> np.array(keep)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">plot_boxes</span>(<span class="params">self, img, boxes</span>):</span></span><br><span class="line">        COLORS = np.random.randint(<span class="number">0</span>, <span class="number">255</span>, size=(<span class="built_in">len</span>(self.class_names), <span class="number">3</span>), dtype=<span class="string">&#x27;uint8&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        width = img.shape[<span class="number">1</span>]</span><br><span class="line">        height = img.shape[<span class="number">0</span>]</span><br><span class="line">        flag = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(boxes)):</span><br><span class="line"></span><br><span class="line">            box = boxes[i]</span><br><span class="line">            x1 = <span class="built_in">int</span>(box[<span class="number">0</span>] * width)</span><br><span class="line">            y1 = <span class="built_in">int</span>(box[<span class="number">1</span>] * height)</span><br><span class="line">            x2 = <span class="built_in">int</span>(box[<span class="number">2</span>] * width)</span><br><span class="line">            y2 = <span class="built_in">int</span>(box[<span class="number">3</span>] * height)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(box) &gt;= <span class="number">7</span> <span class="keyword">and</span> self.class_names:</span><br><span class="line">                cls_conf = box[<span class="number">5</span>]</span><br><span class="line">                cls_id = box[<span class="number">6</span>]</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> cls_id <span class="keyword">in</span> self.alert_label:</span><br><span class="line">                    flag = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">                color = [<span class="built_in">int</span>(c) <span class="keyword">for</span> c <span class="keyword">in</span> COLORS[cls_id]]</span><br><span class="line">                text = <span class="string">&#x27;&#123;&#125;: &#123;:.3f&#125;&#x27;</span>.<span class="built_in">format</span>(self.class_names[cls_id], cls_conf)</span><br><span class="line">                img = cv2.putText(img, text, (x1, y1 - <span class="number">5</span>), cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.5</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>), <span class="number">2</span>)</span><br><span class="line">            img = cv2.rectangle(img, (x1, y1), (x2, y2), color, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># cv2.imwrite(&#x27;predictions_onnx.jpg&#x27;, img)</span></span><br><span class="line">        <span class="keyword">if</span> flag:</span><br><span class="line">            <span class="comment"># 上传至云端文件服务器</span></span><br><span class="line">            img_path = self.upload_image(img)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            img_path = <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> img_path, flag</span><br></pre></td></tr></table></figure>
+<h3 id="3-triton-server"><a href="#3-triton-server" class="headerlink" title="3. triton server"></a>3. triton server</h3><p>具体的triton部署方式参考：<a target="_blank" rel="noopener" href="https://fushengwuyu.github.io/2021/08/19/nvidia%20triton%20%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B/">NVIDIA triton 服务部署与测试</a></p>
+<h3 id="4-tensorRt"><a href="#4-tensorRt" class="headerlink" title="4. tensorRt"></a>4. tensorRt</h3><p>可以利用TensorRT自带的转换工具，轻松将onnx模型转为TensorRT模型。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/src/tensorrt/bin/trtexec --onnx=/sdk/sunshine/trained_model/yolov4/onnx/helmet/yolov4_helmet_1_3_608_608_static.onnx --explicitBatch --saveEngine=yolov4_helmet_1_3_608_608_static.trt</span><br></pre></td></tr></table></figure>
+<p>如果想要转化为半精度，在后面添加参数<code>--fp16</code>即可</p>
+<p>加载预测TensorRT模型，可使用如下方式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorrt <span class="keyword">as</span> trt</span><br><span class="line"><span class="keyword">import</span> pycuda.driver <span class="keyword">as</span> cuda</span><br><span class="line"><span class="keyword">import</span> pycuda.autoinit</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">TRT_LOGGER = trt.Logger()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HostDeviceMem</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, host_mem, device_mem</span>):</span></span><br><span class="line">        self.host = host_mem</span><br><span class="line">        self.device = device_mem</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Host:\n&quot;</span> + <span class="built_in">str</span>(self.host) + <span class="string">&quot;\nDevice:\n&quot;</span> + <span class="built_in">str</span>(self.device)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.__str__()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TRTModelPredict</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, engine_path, shape=(<span class="params"><span class="number">608</span>, <span class="number">608</span></span>)</span>):</span></span><br><span class="line">        shape = (<span class="number">1</span>, <span class="number">3</span>, shape[<span class="number">0</span>], shape[<span class="number">1</span>])</span><br><span class="line">        self.engine = self.get_engine(engine_path)</span><br><span class="line">        self.context = self.engine.create_execution_context()</span><br><span class="line"></span><br><span class="line">        self.buffers = self.allocate_buffers(self.engine, <span class="number">1</span>)</span><br><span class="line">        self.context.set_binding_shape(<span class="number">0</span>, shape)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">allocate_buffers</span>(<span class="params">self, engine, batch_size</span>):</span></span><br><span class="line">        inputs = []</span><br><span class="line">        outputs = []</span><br><span class="line">        bindings = []</span><br><span class="line">        stream = cuda.Stream()</span><br><span class="line">        <span class="keyword">for</span> binding <span class="keyword">in</span> engine:</span><br><span class="line"></span><br><span class="line">            size = trt.volume(engine.get_binding_shape(binding)) * batch_size</span><br><span class="line">            dims = engine.get_binding_shape(binding)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># in case batch dimension is -1 (dynamic)</span></span><br><span class="line">            <span class="keyword">if</span> dims[<span class="number">0</span>] &lt; <span class="number">0</span>:</span><br><span class="line">                size *= -<span class="number">1</span></span><br><span class="line"></span><br><span class="line">            dtype = trt.nptype(engine.get_binding_dtype(binding))</span><br><span class="line">            <span class="comment"># Allocate host and device buffers</span></span><br><span class="line">            host_mem = cuda.pagelocked_empty(size, dtype)</span><br><span class="line">            device_mem = cuda.mem_alloc(host_mem.nbytes)</span><br><span class="line">            <span class="comment"># Append the device buffer to device bindings.</span></span><br><span class="line">            bindings.append(<span class="built_in">int</span>(device_mem))</span><br><span class="line">            <span class="comment"># Append to the appropriate list.</span></span><br><span class="line">            <span class="keyword">if</span> engine.binding_is_input(binding):</span><br><span class="line">                inputs.append(HostDeviceMem(host_mem, device_mem))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                outputs.append(HostDeviceMem(host_mem, device_mem))</span><br><span class="line">        <span class="keyword">return</span> inputs, outputs, bindings, stream</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_engine</span>(<span class="params">self, engine_path</span>):</span></span><br><span class="line">        <span class="comment"># If a serialized engine exists, use it instead of building an engine.</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Reading engine from file &#123;&#125;&quot;</span>.<span class="built_in">format</span>(engine_path))</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(engine_path, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f, trt.Runtime(TRT_LOGGER) <span class="keyword">as</span> runtime:</span><br><span class="line">            <span class="keyword">return</span> runtime.deserialize_cuda_engine(f.read())</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">do_inference</span>(<span class="params">self, img_in</span>):</span></span><br><span class="line"></span><br><span class="line">        inputs, outputs, bindings, stream = self.buffers</span><br><span class="line">        inputs[<span class="number">0</span>].host = img_in</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>):</span><br><span class="line">            <span class="comment"># Transfer input data to the GPU.</span></span><br><span class="line">            [cuda.memcpy_htod_async(inp.device, inp.host, stream) <span class="keyword">for</span> inp <span class="keyword">in</span> inputs]</span><br><span class="line">            <span class="comment"># Run inference.</span></span><br><span class="line">            self.context.execute_async(bindings=bindings, stream_handle=stream.handle)</span><br><span class="line">            <span class="comment"># Transfer predictions back from the GPU.</span></span><br><span class="line">            [cuda.memcpy_dtoh_async(out.host, out.device, stream) <span class="keyword">for</span> out <span class="keyword">in</span> outputs]</span><br><span class="line">            <span class="comment"># Synchronize the stream</span></span><br><span class="line">            stream.synchronize()</span><br><span class="line">        <span class="comment"># Return only the host outputs.</span></span><br><span class="line">        <span class="keyword">return</span> [out.host <span class="keyword">for</span> out <span class="keyword">in</span> outputs]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Hat</span>(<span class="params">TRTModelPredict</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, label_path, engine_path, shape=(<span class="params"><span class="number">608</span>, <span class="number">608</span></span>), upload_url=<span class="string">&#x27;http://192.168.0.15:8080/ai/upload/&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                 model_name=<span class="string">&#x27;fire&#x27;</span>, alert_label=<span class="literal">None</span></span>):</span></span><br><span class="line">        self.shape = shape</span><br><span class="line">        self.alert_label = alert_label <span class="keyword">if</span> alert_label <span class="keyword">else</span> []</span><br><span class="line">        self.class_names = <span class="built_in">open</span>(label_path).read().strip().split(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line">        self.model_name = model_name</span><br><span class="line">        self.upload_url = upload_url.rstrip(<span class="string">&#x27;/&#x27;</span>) + <span class="string">&quot;/&quot;</span></span><br><span class="line">        <span class="built_in">super</span>(Hat, self).__init__(engine_path, shape)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pre_process</span>(<span class="params">self, image_src</span>):</span></span><br><span class="line">        resized = cv2.resize(image_src, self.shape, interpolation=cv2.INTER_LINEAR)</span><br><span class="line">        img_in = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)</span><br><span class="line">        img_in = np.transpose(img_in, (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)).astype(np.float32)</span><br><span class="line">        img_in = np.expand_dims(img_in, axis=<span class="number">0</span>)</span><br><span class="line">        img_in /= <span class="number">255.0</span></span><br><span class="line">        img_in = np.ascontiguousarray(img_in)</span><br><span class="line">        <span class="keyword">return</span> img_in</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post_processing</span>(<span class="params">self, conf_thresh, nms_thresh, output</span>):</span></span><br><span class="line">        box_array = output[<span class="number">0</span>]</span><br><span class="line">        <span class="comment"># [batch, num, num_classes]</span></span><br><span class="line">        confs = output[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">type</span>(box_array).__name__ != <span class="string">&#x27;ndarray&#x27;</span>:</span><br><span class="line">            box_array = box_array.cpu().detach().numpy()</span><br><span class="line">            confs = confs.cpu().detach().numpy()</span><br><span class="line"></span><br><span class="line">        num_classes = confs.shape[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># [batch, num, 4]</span></span><br><span class="line">        box_array = box_array[:, :, <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># [batch, num, num_classes] --&gt; [batch, num]</span></span><br><span class="line">        max_conf = np.<span class="built_in">max</span>(confs, axis=<span class="number">2</span>)</span><br><span class="line">        max_id = np.argmax(confs, axis=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        bboxes_batch = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(box_array.shape[<span class="number">0</span>]):</span><br><span class="line"></span><br><span class="line">            argwhere = max_conf[i] &gt; conf_thresh</span><br><span class="line">            l_box_array = box_array[i, argwhere, :]</span><br><span class="line">            l_max_conf = max_conf[i, argwhere]</span><br><span class="line">            l_max_id = max_id[i, argwhere]</span><br><span class="line"></span><br><span class="line">            bboxes = []</span><br><span class="line">            <span class="comment"># nms for each class</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(num_classes):</span><br><span class="line"></span><br><span class="line">                cls_argwhere = l_max_id == j</span><br><span class="line">                ll_box_array = l_box_array[cls_argwhere, :]</span><br><span class="line">                ll_max_conf = l_max_conf[cls_argwhere]</span><br><span class="line">                ll_max_id = l_max_id[cls_argwhere]</span><br><span class="line"></span><br><span class="line">                keep = self.nms_cpu(ll_box_array, ll_max_conf, nms_thresh)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (keep.size &gt; <span class="number">0</span>):</span><br><span class="line">                    ll_box_array = ll_box_array[keep, :]</span><br><span class="line">                    ll_max_conf = ll_max_conf[keep]</span><br><span class="line">                    ll_max_id = ll_max_id[keep]</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(ll_box_array.shape[<span class="number">0</span>]):</span><br><span class="line">                        bboxes.append(</span><br><span class="line">                            [ll_box_array[k, <span class="number">0</span>], ll_box_array[k, <span class="number">1</span>], ll_box_array[k, <span class="number">2</span>], ll_box_array[k, <span class="number">3</span>],</span><br><span class="line">                             ll_max_conf[k],</span><br><span class="line">                             ll_max_conf[k], ll_max_id[k]])</span><br><span class="line"></span><br><span class="line">            bboxes_batch.append(bboxes)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> bboxes_batch</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nms_cpu</span>(<span class="params">self, boxes, confs, nms_thresh=<span class="number">0.5</span>, min_mode=<span class="literal">False</span></span>):</span></span><br><span class="line">        <span class="comment"># print(boxes.shape)</span></span><br><span class="line">        x1 = boxes[:, <span class="number">0</span>]</span><br><span class="line">        y1 = boxes[:, <span class="number">1</span>]</span><br><span class="line">        x2 = boxes[:, <span class="number">2</span>]</span><br><span class="line">        y2 = boxes[:, <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">        areas = (x2 - x1) * (y2 - y1)</span><br><span class="line">        order = confs.argsort()[::-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        keep = []</span><br><span class="line">        <span class="keyword">while</span> order.size &gt; <span class="number">0</span>:</span><br><span class="line">            idx_self = order[<span class="number">0</span>]</span><br><span class="line">            idx_other = order[<span class="number">1</span>:]</span><br><span class="line"></span><br><span class="line">            keep.append(idx_self)</span><br><span class="line"></span><br><span class="line">            xx1 = np.maximum(x1[idx_self], x1[idx_other])</span><br><span class="line">            yy1 = np.maximum(y1[idx_self], y1[idx_other])</span><br><span class="line">            xx2 = np.minimum(x2[idx_self], x2[idx_other])</span><br><span class="line">            yy2 = np.minimum(y2[idx_self], y2[idx_other])</span><br><span class="line"></span><br><span class="line">            w = np.maximum(<span class="number">0.0</span>, xx2 - xx1)</span><br><span class="line">            h = np.maximum(<span class="number">0.0</span>, yy2 - yy1)</span><br><span class="line">            inter = w * h</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> min_mode:</span><br><span class="line">                over = inter / np.minimum(areas[order[<span class="number">0</span>]], areas[order[<span class="number">1</span>:]])</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                over = inter / (areas[order[<span class="number">0</span>]] + areas[order[<span class="number">1</span>:]] - inter)</span><br><span class="line"></span><br><span class="line">            inds = np.where(over &lt;= nms_thresh)[<span class="number">0</span>]</span><br><span class="line">            order = order[inds + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> np.array(keep)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">detect</span>(<span class="params">self, img</span>):</span></span><br><span class="line">        img_in = self.pre_process(img)</span><br><span class="line">        trt_outputs = self.do_inference(img_in)</span><br><span class="line">        trt_outputs[<span class="number">0</span>] = trt_outputs[<span class="number">0</span>].reshape(<span class="number">1</span>, -<span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>)</span><br><span class="line">        trt_outputs[<span class="number">1</span>] = trt_outputs[<span class="number">1</span>].reshape(<span class="number">1</span>, -<span class="number">1</span>, <span class="built_in">len</span>(self.class_names))</span><br><span class="line"></span><br><span class="line">        boxes = self.post_processing(<span class="number">0.4</span>, <span class="number">0.6</span>, trt_outputs)</span><br><span class="line">        <span class="keyword">return</span> self.plot_boxes(img, boxes[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">plot_boxes</span>(<span class="params">self, img, boxes</span>):</span></span><br><span class="line">        COLORS = np.random.randint(<span class="number">0</span>, <span class="number">255</span>, size=(<span class="built_in">len</span>(self.class_names), <span class="number">3</span>), dtype=<span class="string">&#x27;uint8&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        width = img.shape[<span class="number">1</span>]</span><br><span class="line">        height = img.shape[<span class="number">0</span>]</span><br><span class="line">        flag = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(boxes)):</span><br><span class="line"></span><br><span class="line">            box = boxes[i]</span><br><span class="line">            x1 = <span class="built_in">int</span>(box[<span class="number">0</span>] * width)</span><br><span class="line">            y1 = <span class="built_in">int</span>(box[<span class="number">1</span>] * height)</span><br><span class="line">            x2 = <span class="built_in">int</span>(box[<span class="number">2</span>] * width)</span><br><span class="line">            y2 = <span class="built_in">int</span>(box[<span class="number">3</span>] * height)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(box) &gt;= <span class="number">7</span> <span class="keyword">and</span> self.class_names:</span><br><span class="line">                cls_conf = box[<span class="number">5</span>]</span><br><span class="line">                cls_id = box[<span class="number">6</span>]</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> cls_id <span class="keyword">in</span> self.alert_label:</span><br><span class="line">                    flag = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">                color = [<span class="built_in">int</span>(c) <span class="keyword">for</span> c <span class="keyword">in</span> COLORS[cls_id]]</span><br><span class="line">                text = <span class="string">&#x27;&#123;&#125;: &#123;:.3f&#125;&#x27;</span>.<span class="built_in">format</span>(self.class_names[cls_id], cls_conf)</span><br><span class="line">                img = cv2.putText(img, text, (x1, y1 - <span class="number">5</span>), cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.5</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>), <span class="number">2</span>)</span><br><span class="line">            img = cv2.rectangle(img, (x1, y1), (x2, y2), color, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># cv2.imwrite(&#x27;predictions_onnx.jpg&#x27;, img)</span></span><br><span class="line">        <span class="keyword">if</span> flag:</span><br><span class="line">            <span class="comment"># 上传至云端文件服务器</span></span><br><span class="line">            img_path = self.upload_image(img)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            img_path = <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> img_path, flag</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">upload_image</span>(<span class="params">self, img</span>):</span></span><br><span class="line">        file_name = <span class="string">&quot;recognized_&#123;&#125;.jpg&quot;</span>.<span class="built_in">format</span>(<span class="built_in">int</span>(time.time()))</span><br><span class="line">        img_dir = <span class="string">&quot;/&quot;</span>.join([self.model_name, datetime.now().strftime(<span class="string">&quot;%Y%m&quot;</span>)])</span><br><span class="line">        data = cv2.imencode(<span class="string">&quot;.jpg&quot;</span>, img)[<span class="number">1</span>].tobytes()</span><br><span class="line">        files = [</span><br><span class="line">            (<span class="string">&#x27;file&#x27;</span>, (file_name, data, <span class="string">&#x27;image/png&#x27;</span>))</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        result = requests.post(self.upload_url + img_dir, files=files)</span><br><span class="line">        <span class="keyword">if</span> result.status_code == <span class="number">200</span>:</span><br><span class="line">            path = img_dir + <span class="string">&quot;/&quot;</span> + file_name</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            path = <span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> path</span><br></pre></td></tr></table></figure>
+<h3 id="性能对比"><a href="#性能对比" class="headerlink" title="性能对比"></a>性能对比</h3><p>使用安全帽模型，测试对比三种预测方式的情况，性能如下。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>模型格式</th>
+<th>预测时间</th>
+<th>预测置信度</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>opencv</td>
+<td>0.3789951801300049</td>
+<td>0.533</td>
+<td></td>
+</tr>
+<tr>
+<td>onnx</td>
+<td>0.44134068489074707</td>
+<td>0.425</td>
+<td></td>
+</tr>
+<tr>
+<td>TensorRT</td>
+<td>0.12151765823364258</td>
+<td>0.423</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>opencv的速度居然比onnx还快，离谱。仔细检查后发现，jetson上面装的是onnxruntime而不是onnxruntime-gpu，初步怀疑是并没有用上GPU加速。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/tensorrt/" rel="tag"># tensorrt</a>
+              <a href="/tags/onnx/" rel="tag"># onnx</a>
+              <a href="/tags/yolov4/" rel="tag"># yolov4</a>
+              <a href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag"># 部署</a>
+              <a href="/tags/opencv/" rel="tag"># opencv</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/09/pytorch2tensorrt/" rel="prev" title="pytorch2tensorrt全流程">
+      <i class="fa fa-chevron-left"></i> pytorch2tensorrt全流程
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-opencv"><span class="nav-number">1.</span> <span class="nav-text">1. opencv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-onnx"><span class="nav-number">2.</span> <span class="nav-text">2. onnx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-triton-server"><span class="nav-number">3.</span> <span class="nav-text">3. triton server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-tensorRt"><span class="nav-number">4.</span> <span class="nav-text">4. tensorRt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94"><span class="nav-number">5.</span> <span class="nav-text">性能对比</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">sunshine</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fushengwuyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fushengwuyu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/2303153523@qq.com" title="E-Mail → 2303153523@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sunshine</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
