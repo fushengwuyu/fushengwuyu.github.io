@@ -452,7 +452,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-20 11:33:17" itemprop="dateModified" datetime="2021-08-20T11:33:17+08:00">2021-08-20</time>
+                <time title="修改时间：2022-05-24 16:15:22" itemprop="dateModified" datetime="2022-05-24T16:15:22+08:00">2022-05-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -487,7 +487,7 @@
 <li><p>解压</p>
 </li>
 <li><p>在pycharm的安装目录的pycharm.sh加入已下内容</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210618150122742.png" alt="image-20210618150122742"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/image-20210618150122742.png" alt="image-20210618150122742"></p>
 </li>
 </ul>
 </li>
@@ -496,12 +496,12 @@
 <li><p>下载插件：链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1scwJQySV333_g086NQodVw">https://pan.baidu.com/s/1scwJQySV333_g086NQodVw</a>  密码: pth0</p>
 </li>
 <li><p>从本地安装插件，不解压，直接选择压缩包</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210618150328562.png" alt="image-20210618150328562"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/image-20210618150328562.png" alt="image-20210618150328562"></p>
 </li>
-<li><p><code>help-&gt;Eval Reset </code> </p>
+<li><p><code>help-&gt;Eval Reset</code> </p>
 </li>
 </ul>
-<p>​     <img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/image-20210618150625417.png" alt="image-20210618150625417"></p>
+<p>​     <img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/image-20210618150625417.png" alt="image-20210618150625417"></p>
 <p>每次启动ide，会自动重置试用时间。达到无限激活的功能。</p>
 </li>
 </ol>
@@ -557,7 +557,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-20 11:33:31" itemprop="dateModified" datetime="2021-08-20T11:33:31+08:00">2021-08-20</time>
+                <time title="修改时间：2022-05-24 16:16:29" itemprop="dateModified" datetime="2022-05-24T16:16:29+08:00">2022-05-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -584,38 +584,42 @@
 <ul>
 <li><p>训练nlu模型</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>训练core模型</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/stories/number_story.md</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>一起训练两个模型</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 </ul>
 <h4 id="1-2-启动rasa"><a href="#1-2-启动rasa" class="headerlink" title="1.2 启动rasa"></a>1.2 启动rasa</h4><ul>
 <li><p>不额外独立nlu服务</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml </span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml </span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>启动额外nlu服务</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml --enable-api -m models/nlu-20190515-144445.tar.gz </span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml --enable-api -m models/nlu-20190515-144445.tar.gz </span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>单独启动nlu服务</p>
 <blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa run --enable-api -m models/nlu-20190515-144445.tar.gz</span><br></pre></td></tr></table></figure></blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa run --enable-api -m models/nlu-20190515-144445.tar.gz</span><br></pre></td></tr></table></figure>
+</blockquote>
 </li>
 <li><p>调用第三方模型服务</p>
 <blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa run --enable-api --log-file out.log --endpoints my_endpoints.yml</span><br></pre></td></tr></table></figure>
-
 <p>在my_endpoints.yml中配置rasa模型的url</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">models:</span><br><span class="line">  url: http:<span class="comment">//my-server.com/models/2019-1222.tar.gz</span></span><br><span class="line">  wait_time_between_pulls: <span class="number">10</span>   # [optional](default: <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
-
-<p>rasa模型还可以存放在<a target="_blank" rel="noopener" href="https://aws.amazon.com/s3/">S3</a> , <a target="_blank" rel="noopener" href="https://cloud.google.com/storage/">GCS</a> and <a target="_blank" rel="noopener" href="https://azure.microsoft.com/services/storage/">Azure Storage</a> 云盘中，同样远程调用，这里不多赘述。</p>
+<p>rasa模型还可以存放在<a target="_blank" rel="noopener" href="https://aws.amazon.com/s3/">S3</a> , <a target="_blank" rel="noopener" href="https://cloud.google.com/storage/">GCS</a> and <a target="_blank" rel="noopener" href="https://azure.microsoft.com/services/storage/">Azure Storage</a> 云盘中，同样远程调用，这里不多赘述。</p>
 <p><a target="_blank" rel="noopener" href="https://rasa.com/docs/rasa/user-guide/configuring-http-api/">https://rasa.com/docs/rasa/user-guide/configuring-http-api/</a></p>
 </blockquote>
 </li>
@@ -623,14 +627,11 @@
 <p>nlu服务开启后，post方式调用</p>
 <p>post <a target="_blank" rel="noopener" href="http://localhost:5005/model/parse">http://localhost:5005/model/parse</a></p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">input:</span><br><span class="line">&#123;<span class="attr">&quot;text&quot;</span>: <span class="string">&quot;明天成都的天气如何&quot;</span>&#125;</span><br><span class="line">output:</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;intent&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;request_weather&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.5547698674</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;entities&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;entity&quot;</span>: <span class="string">&quot;date_time&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;明天&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;start&quot;</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">&quot;end&quot;</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">&quot;extractor&quot;</span>: <span class="string">&quot;MitieEntityExtractor&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;entity&quot;</span>: <span class="string">&quot;address&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;成都&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;start&quot;</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">&quot;end&quot;</span>: <span class="number">4</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">&quot;extractor&quot;</span>: <span class="string">&quot;MitieEntityExtractor&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;intent_ranking&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;request_weather&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.5547698674</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;affirm&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0898880708</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;deny&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.078563989</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;thanks&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.072717722</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;goodbye&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0726876305</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;greet&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0697155938</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;whattodo&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0443638481</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;whoareyou&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0172932785</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;text&quot;</span>: <span class="string">&quot;明天成都的天气如何&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <h4 id="1-3-启动action"><a href="#1-3-启动action" class="headerlink" title="1.3 启动action"></a>1.3 启动action</h4><blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run actions --port 5055 --actions actions --debug</span><br></pre></td></tr></table></figure>
 </blockquote>
-<h3 id="2-NLU"><a href="#2-NLU" class="headerlink" title="2. NLU"></a>2. NLU</h3><p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1590138247599.png" alt="1590138247599"></p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1590138270872.png" alt="1590138270872"></p>
+<h3 id="2-NLU"><a href="#2-NLU" class="headerlink" title="2. NLU"></a>2. NLU</h3><p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1590138247599.png" alt="1590138247599"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1590138270872.png" alt="1590138270872"></p>
 <h4 id="2-1-数据格式"><a href="#2-1-数据格式" class="headerlink" title="2.1 数据格式"></a>2.1 数据格式</h4><p>rasa支持markdown和json两种数据格式，同时提供了相互转化的命令。</p>
 <p>nlu训练数据包含四个部分：</p>
 <ul>
@@ -651,7 +652,6 @@
 </ul>
 <h4 id="2-2-数据转化"><a href="#2-2-数据转化" class="headerlink" title="2.2 数据转化"></a>2.2 数据转化</h4><p>rasa提供了json和markdown格式的转化命令</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">usage: rasa data convert nlu [-h] [-v] [-vv] [--quiet] --data DATA --out OUT</span><br><span class="line">                             [-l LANGUAGE] -f &#123;json,md&#125;</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --help            show this help message and exit</span><br><span class="line">  --data DATA           Path to the file or directory containing Rasa NLU</span><br><span class="line">                        data. (default: None)</span><br><span class="line">  --out OUT             File where to save training data in Rasa format.</span><br><span class="line">                        (default: None)</span><br><span class="line">  -l LANGUAGE, --language LANGUAGE</span><br><span class="line">                        Language of data. (default: en)</span><br><span class="line">  -f &#123;json,md&#125;, --format &#123;json,md&#125;</span><br><span class="line">                        Output format the training data should be converted</span><br><span class="line">                        into. (default: None)</span><br><span class="line"></span><br><span class="line">Python Logging Options:</span><br><span class="line">  -v, --verbose         Be verbose. Sets logging level to INFO. (default:</span><br><span class="line">                        None)</span><br><span class="line">  -vv, --debug          Print lots of debugging statements. Sets logging level</span><br><span class="line">                        to DEBUG. (default: None)</span><br><span class="line">  --quiet               Be quiet! Sets logging level to WARNING. (default:</span><br><span class="line">                        None)</span><br></pre></td></tr></table></figure>
-
 <p>example：</p>
 <blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa data convert nlu --data M3-training_dataset_1564317234.json --out M3-training_dataset_1564317234.md -f md</span><br></pre></td></tr></table></figure>
@@ -674,7 +674,6 @@
 <p>备注2：用户可以直接像core发送请求，不经过nlu模块。参数格式：/intent{“entityName”: “entityValue”, …}</p>
 <blockquote>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;sender&quot;</span>: <span class="string">&quot;kkkkkkk&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;message&quot;</span>: <span class="string">&quot;/search_treat&#123;\&quot;disease\&quot;:\&quot;丛集性头痛\&quot;, \&quot;sure\&quot;:\&quot;丛集性头痛\&quot;&#125;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;recipient_id&quot;: &quot;kkkkkkk&quot;,</span><br><span class="line">        &quot;text&quot;: &quot;丛集性头痛的简介：从集性头痛(clusterheadaches)亦称偏头痛性神经痛、组胺性头痛、岩神经痛、蝶腭神经痛、Horton头痛等，.病员在某个时期内突然出现一系列的剧烈头痛。一般无前兆，疼痛多见于一侧眼眶或(及)额颞部，可伴同侧眼结膜充血、流泪、眼睑水肿或鼻塞、流涕，有时出现瞳孔缩小、垂睑、脸红、颊肿等症状。头痛多为非搏动性剧痛。病人坐立不安或前俯后仰地摇动，部分病员用拳击头部以缓解疼痛。&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;recipient_id&quot;: &quot;kkkkkkk&quot;,</span><br><span class="line">        &quot;text&quot;: &quot;丛集性头痛的治疗方式有：药物治疗、支持性治疗&quot;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 </blockquote>
 
@@ -839,7 +838,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-20 11:24:42" itemprop="dateModified" datetime="2021-08-20T11:24:42+08:00">2021-08-20</time>
+                <time title="修改时间：2022-05-24 16:13:37" itemprop="dateModified" datetime="2022-05-24T16:13:37+08:00">2022-05-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -894,27 +893,29 @@
 <p>P(患者1天前体检发现脾动脉瘤)</p>
 <p>P(患者1天前体检发现皮动脉瘤)</p>
 <p>P(患者1天前体检发现劈动脉瘤)</p>
-</blockquote>
-<h5 id="2-2-学术界进展"><a href="#2-2-学术界进展" class="headerlink" title="2.2 学术界进展"></a>2.2 学术界进展</h5></li>
+<h5 id="2-2-学术界进展"><a href="#2-2-学术界进展" class="headerlink" title="2.2 学术界进展"></a>2.2 学术界进展</h5></blockquote>
+</li>
 <li><p>基于序列标注的纠错</p>
 <blockquote>
 <p>《 Alibaba at IJCNLP-2017 Task 1: Embedding Grammatical Features<br>into LSTMs for Chinese Grammatical Error Diagnosis Task 》</p>
 </blockquote>
 <p>利用序列标注模型 + 人工提取特征进行错误位置的标注</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577068913235.png" alt="1577068913235"></p>
-<pre><code>                 2017年IJCNLP举办的CGED比赛中阿里团队提出的Top1方案
-</code></pre>
-<p>成绩： P：0.36， R： 0.21， F1：0.27</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1577068913235.png" alt="1577068913235"></p>
 </li>
+</ul>
+</li>
+</ul>
+<pre><code>                     2017年IJCNLP举办的CGED比赛中阿里团队提出的Top1方案
+
+成绩： P：0.36， R： 0.21， F1：0.27
+</code></pre><ul>
 <li><p>基于NMT的纠错</p>
 <blockquote>
 <p>《 Youdao’s Winning Solution to the NLPCC-2018 Task 2 Challenge: A Neural<br>Machine Translation Approach to Chinese Grammatical Error Correction 》</p>
 </blockquote>
 <p>利用模型将错误语句翻译成正确语句，利用transformer模型完成端到端的纠错过程</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577069217626.png" alt="1577069217626"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1577069217626.png" alt="1577069217626"></p>
 <p>成绩： P： 0.34， R：0.18， F0.5： 0.29</p>
-</li>
-</ul>
 </li>
 </ul>
 <h5 id="2-3-评价指标"><a href="#2-3-评价指标" class="headerlink" title="2.3 评价指标"></a>2.3 评价指标</h5><ul>
@@ -922,11 +923,10 @@
 <p>$FAR = \frac{正确句子被纠错的个数}{正确句子的个数}$</p>
 </li>
 <li><p>召回率</p>
-<p>$$R = \frac{错误句子被改正的句子数}{错误的句子总数}$$</p>
-</li>
+<script type="math/tex; mode=display">R = \frac{错误句子被改正的句子数}{错误的句子总数}</script></li>
 <li><p>纠错目标</p>
 <p>被改正的句子数 &gt;&gt; 被改错的句子数</p>
-<p>​                       $$K * R &gt;&gt; (1 - K) * FAR$$</p>
+<p>​                       <script type="math/tex">K * R >> (1 - K) * FAR</script></p>
 <p>目标在于尽可能的提高召回率R。</p>
 </li>
 </ul>
@@ -938,20 +938,23 @@
 <li>结合电子病历，绝大部分错误都是替换错误，同音字，同行字等。</li>
 </ul>
 <h4 id="3-平安文本纠错方案"><a href="#3-平安文本纠错方案" class="headerlink" title="3. 平安文本纠错方案"></a>3. 平安文本纠错方案</h4><p>​    平安人寿问答纠错模块结构如下图所示。其基本流程包括错误检测、候选召回、候选排序、候选筛选。</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577070846118.png" alt="1577070846118"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1577070846118.png" alt="1577070846118"></p>
 <h5 id="3-1-错误检测"><a href="#3-1-错误检测" class="headerlink" title="3.1 错误检测"></a>3.1 错误检测</h5><ul>
 <li><p>基于规则的错误检测</p>
 <ul>
 <li><p>拼音匹配： 适合实体错误检测，比如疾病，药品等实体，需要维护拼音-实体隐射字典</p>
-<img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577071517262.png" alt="1577071517262" style="zoom:80%;" /></li>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1577071517262.png" alt="1577071517262" style="zoom:80%;" /></p>
+</li>
 <li><p>拼音编辑距离：1.  检测所有编辑距离小于阈值的路径 2. 最优路径选取（最小拼音编辑距离， 最长字符匹配）3. 语言模型 + 规则联合筛选</p>
 </li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p>单双向2gram检测</p>
 <p>当前词与上下文组成的2gram词频很低，认为有错</p>
 <p>基于假设： 正确表述发生的频次要远远大于错误表述发生的次数</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1577072025140.png" alt="yu1577072025140"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1577072025140.png" alt="yu1577072025140"></p>
 </li>
 <li><p>基于神经网络语言模型的错误检测 </p>
 <p>核心思想：</p>
@@ -966,11 +969,13 @@
 <li><p>传统的语言模型把预测字MASK，没有预测字的信息，可以改为引入当前字的混淆字信息（如：相似的字音和字形字）。</p>
 </li>
 <li><p>传统语言模型会直接预测字表，比如字表大小是3800，预测结果会直接得到3800个字的概率分布，其中大多是无用信息，且容易引发维度灾问题。可以通过将预测字约束在近音、近形和混淆字表里，提高效率和正确字与错误中字的区分度。</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581907503895.png" alt="1581907503895"></p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581907667130.png" alt="1581907667130"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581907503895.png" alt="1581907503895"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581907667130.png" alt="1581907667130"></p>
 </li>
 </ul>
 </li>
+</ul>
+<ul>
 <li><p>基于word2vec-cbow改造的音字混合受限字表示语言模型检测算法</p>
 <p>基于CSLM的中文拼写检测：《Chinese Spelling Errors Detection Based on  CSLM,2015》</p>
 <p>主要特征：</p>
@@ -979,14 +984,14 @@
 <li>去掉前后鼻音和翘舌音,并利用混淆音集映射的方式来提高模型对谐音错误的识别性能。</li>
 <li>预测字表受限于近音字、近形字和混淆字表中。</li>
 </ul>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581908381943.png" alt="1581908381943"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581908381943.png" alt="1581908381943"></p>
 </li>
 </ul>
 <h5 id="3-2-候选召回"><a href="#3-2-候选召回" class="headerlink" title="3.2 候选召回"></a>3.2 候选召回</h5><ul>
 <li><p>近音字候选召回</p>
 <p>选择近音字作为候选字，构造一个近音字字典。大规模的基础字典，使得在存储和读取速度方面收到了极大的调整。</p>
 <p>字典存储构架如下：</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581911102435.png" alt="1581911102435"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581911102435.png" alt="1581911102435"></p>
 <p>关键技术：</p>
 <ul>
 <li>减低存储空间：<ol>
@@ -1020,15 +1025,17 @@
 <li>4gram-LM概率差值：候选替换后橘子越通顺分数越高</li>
 </ul>
 <p>一级排序大致流程如下：</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581916837380.png" alt="1581916837380"></p>
-<p>例如：甲状腺==姐姐==该怎么治疗？ -&gt;==结节  0.99==</p>
+</li>
+</ul>
+<p>  <img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581916837380.png" alt="1581916837380"></p>
+<p>  例如：甲状腺==姐姐==该怎么治疗？ -&gt;==结节  0.99==</p>
 <ul>
 <li>频次： 55 -&gt; 94</li>
 <li>编辑距离：2</li>
 <li>拼音jaccard距离：0</li>
 <li>语言模型概率：-21.9 -&gt; -8.6</li>
 </ul>
-</li>
+<ul>
 <li><p>二级排序</p>
 <p>模型：xgboost</p>
 <p>作用：分数超过设定阈值且是Top1作为最终候选</p>
@@ -1051,18 +1058,18 @@
 </ul>
 </li>
 </ol>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581918099275.png" alt="1581918099275"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581918099275.png" alt="1581918099275"></p>
 <p>例子：==红癍狼仓==常见症状有哪些?   ==红斑狼疮==</p>
 <ul>
 <li>频次 ：20 -&gt; 1688</li>
 <li>切词：红\癍\狼疮 (1\1\2) -&gt; 红斑狼疮 (4)</li>
-<li>nn语言模型:癍 (&lt;0.001) -&gt; 斑 (0.979)</li>
+<li>nn语言模型:癍 (<0.001) -> 斑 (0.979)</li>
 <li>4gram语言模型:-19.2 -&gt; -10.6</li>
 <li>PMI:红癍(0.33) -&gt;红斑(9.7)</li>
 </ul>
 </li>
 </ul>
-<h5 id="3-4-整体架构"><a href="#3-4-整体架构" class="headerlink" title="3.4 整体架构"></a>3.4 整体架构</h5><p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581918508852.png" alt="1581918508852"></p>
+<h5 id="3-4-整体架构"><a href="#3-4-整体架构" class="headerlink" title="3.4 整体架构"></a>3.4 整体架构</h5><p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581918508852.png" alt="1581918508852"></p>
 <p>​    特性：</p>
 <ul>
 <li><p>pipline串联，热插拔</p>
@@ -1126,7 +1133,7 @@
 </li>
 </ul>
 <p>模型架构如图1所示：</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581923079272.png" alt="1581923079272"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581923079272.png" alt="1581923079272"></p>
 <p>​    可以看到，在FASPell中，DAE由BERT中的掩码语言模型（MLM）来充当，而解码器使用了置信度-相似度解码器(CSD)。</p>
 <h5 id="4-3-CSD解码器"><a href="#4-3-CSD解码器" class="headerlink" title="4.3 CSD解码器"></a>4.3 CSD解码器</h5><p>​    CSD主要结合DAE的置信度和字符相似度，置信度直接由DAE给出，暂且不谈，这里详细说明字符相似度。</p>
 <ol>
@@ -1140,11 +1147,11 @@
 </li>
 </ul>
 <p>以午和牛，田和由为例：</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581929776094.png" alt="1581929776094"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581929776094.png" alt="1581929776094"></p>
 </li>
 <li><p>训练CSD</p>
 <p>CSD的训练阶段，利用训练集文本通过MLM输出的矩阵，逐行绘制置信度-字符相似度散点图，确定能将FP和 TP分开的最佳分界曲线。</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1581930742369.png" alt="1581930742369"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581930742369.png" alt="1581930742369"></p>
 <p>​    如上图所示，红点代表正确检测并正确纠正的样本，蓝色圆圈代表正确检测但纠正错误的样本，叉叉代表错误检测的样本。图一并没有过滤候选集；图二倾向于错误检测性能，大部分正确检测的候选集保留了下来；图三更加倾向于错误纠正，FASPell采用此种曲线；图四采用加权确定阈值的方式来确定曲线$（0.8×confidence+0.2×similarity&lt;0.8）$。</p>
 <p>​    在训练阶段，我们的目标在于确定一条合适的曲线，供于推理阶段使用。</p>
 </li>
@@ -1307,7 +1314,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-20 11:25:17" itemprop="dateModified" datetime="2021-08-20T11:25:17+08:00">2021-08-20</time>
+                <time title="修改时间：2022-05-24 15:46:24" itemprop="dateModified" datetime="2022-05-24T15:46:24+08:00">2022-05-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1331,10 +1338,9 @@
 
       
           <h4 id="1-last3embedding"><a href="#1-last3embedding" class="headerlink" title="1. last3embedding"></a>1. last3embedding</h4><p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45839693/article/details/109378849">https://blog.csdn.net/weixin_45839693/article/details/109378849</a></p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/20210805103133-image-20210805103132616.png" alt="image-20210805103132616"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/20220524154620-image-20220524154619601.png" alt="image-20220524154619601"></p>
 <p>模型比较简单，就是将最后3层的cls取出来拼接在一起，接dense即可。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, inputs</span>):</span></span><br><span class="line">    x = self.bert_layer(inputs, output_hidden_states=<span class="literal">True</span>)</span><br><span class="line">    hiden_states = x.hidden_states</span><br><span class="line">    pooled_output = x.pooled_output</span><br><span class="line">    tensor = torch.cat([hidden_states[-<span class="number">1</span>][:,<span class="number">0</span>],hidden_states[-<span class="number">2</span>][:,<span class="number">0</span>],hidden_states[-<span class="number">3</span>][:,<span class="number">0</span>],pooled_output, dim=<span class="number">1</span>)</span><br><span class="line">    drop_out_l = self.drop_out(tensor)</span><br><span class="line">    Dense_l = self.liner_layer(drop_out_l)</span><br><span class="line">    outputs = self.soft_max(Dense_l)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <p>改进：</p>
 <ul>
 <li><p>接lstm</p>
@@ -1518,7 +1524,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-20 11:26:32" itemprop="dateModified" datetime="2021-08-20T11:26:32+08:00">2021-08-20</time>
+                <time title="修改时间：2022-05-24 16:08:15" itemprop="dateModified" datetime="2022-05-24T16:08:15+08:00">2022-05-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1542,6 +1548,7 @@
 
       
           <p>summary Table</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -1552,7 +1559,8 @@
 <th>亮点</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>ELMO</td>
 <td>BiLM</td>
 <td>Bi-LSTM</td>
@@ -1657,8 +1665,10 @@
 <td>双向</td>
 <td>排列语言模型+双注意力机制+Transformer</td>
 </tr>
-</tbody></table>
-<h5 id="1-word2vec"><a href="#1-word2vec" class="headerlink" title="1. word2vec"></a>1. word2vec</h5><h5 id="2-ELMo"><a href="#2-ELMo" class="headerlink" title="2. ELMo"></a>2. ELMo</h5><p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1583220450290.png" alt="1583220450290"></p>
+</tbody>
+</table>
+</div>
+<h5 id="1-word2vec"><a href="#1-word2vec" class="headerlink" title="1. word2vec"></a>1. word2vec</h5><h5 id="2-ELMo"><a href="#2-ELMo" class="headerlink" title="2. ELMo"></a>2. ELMo</h5><p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583220450290.png" alt="1583220450290"></p>
 <ul>
 <li><p>要点</p>
 <ul>
@@ -1674,7 +1684,7 @@
 </li>
 <li><p>为什么不能用BiLSTM构建双向语言模型</p>
 <p>如果采用BiLSTM构建双向语言模型，会造成标签泄露的问题。因此ELMo前向和后向的LSTM参数独立，共享词向量，拼接构造语言模型。</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1583461295578.png" alt="1583461295578"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583461295578.png" alt="1583461295578"></p>
 </li>
 </ul>
 <h5 id="3-GPT1-0-GPT2-0-OpenAI"><a href="#3-GPT1-0-GPT2-0-OpenAI" class="headerlink" title="3. GPT1.0/GPT2.0(OpenAI)"></a>3. GPT1.0/GPT2.0(OpenAI)</h5><ul>
@@ -1686,22 +1696,22 @@
 </li>
 </ul>
 </li>
-<li><p>GPT2.0要点</p>
-<ul>
+<li>GPT2.0要点<ul>
 <li>不针对特定模型的精调过程：GPT2.0认为预训练中已经包含了许多特定任务所需的信息。</li>
 <li>生成式任务效果比较好，使用了覆盖更广、质量更好的数据。</li>
 </ul>
 </li>
-<li><p>缺点</p>
-<ul>
+<li>缺点<ul>
 <li>依然为单向的自回归语言模型，没有编码上下文的特征表示。</li>
 </ul>
 </li>
 </ul>
 <h5 id="4-BERT（重点介绍）"><a href="#4-BERT（重点介绍）" class="headerlink" title="4. BERT（重点介绍）"></a>4. BERT（重点介绍）</h5><ul>
 <li><p>Transformer</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1583486843525.png" alt="1583486843525"></p>
-<p>$ Attention(Q,K,V) = softmax(\frac{QK^{T}}{\sqrt{d_{k}}})V$</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583486843525.png" alt="1583486843525"></p>
+</li>
+</ul>
+<p>  $ Attention(Q,K,V) = softmax(\frac{QK^{T}}{\sqrt{d_{k}}})V$</p>
 <ol>
 <li><p>Multi-Head Attention和Scaled Dot-Product Attention</p>
 <p>本质上是self attention通过attention mask动态编码变长序列，解决长依赖、无位置偏差、可并行计算。</p>
@@ -1731,9 +1741,7 @@
 </li>
 <li><p>Positional Encoding</p>
 <p>Position Encoding是可学习的，编码范围不受限制。</p>
-<p>$$PE_{(pos,2i)}=sin(pos/10000^{2i/d_{model}})$$</p>
-<p>$$PE_{(pos,2i+1)}=cos(pos/10000^{2i/d_{model}})$$</p>
-<ul>
+<script type="math/tex; mode=display">PE_{(pos,2i)}=sin(pos/10000^{2i/d_{model}})</script><script type="math/tex; mode=display">PE_{(pos,2i+1)}=cos(pos/10000^{2i/d_{model}})</script><ul>
 <li>为什么引入$sin$和$cos$建模Position Encoding？<ol>
 <li>为了使得模型实现相对位置的学习，两个位置pos和pos+k的位置编码是固定间距k的线性变化。</li>
 <li>可以证明，间隔为k的任意两个位置编码的欧式距离是恒等的，只与k有关。</li>
@@ -1742,7 +1750,7 @@
 </ul>
 </li>
 </ol>
-</li>
+<ul>
 <li><p>BERT为什么如此有效？</p>
 <ol>
 <li>引入Masked Language Model（MLM）预训练目标，能够获取上下文相关的双向特征表示</li>
@@ -1781,7 +1789,9 @@
 </ul>
 <h5 id="5-BERT改进系列模型"><a href="#5-BERT改进系列模型" class="headerlink" title="5. BERT改进系列模型"></a>5. BERT改进系列模型</h5><h6 id="5-1-改进生成任务"><a href="#5-1-改进生成任务" class="headerlink" title="5.1 改进生成任务"></a>5.1 改进生成任务</h6><ol>
 <li><p>MASS</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1583723052606.png" alt="1583723052606"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583723052606.png" alt="1583723052606"></p>
+</li>
+</ol>
 <ul>
 <li><p>统一预训练框架：通过类似于Seq2Seq的框架，在预训练阶段统一了BERT和LM模型</p>
 </li>
@@ -1790,9 +1800,8 @@
 <li><p>当k=1或者n时，MASS的概率形式分别和BERT中的MLM以及GPT中标准的LM一致（k为mask的连续片段长度）</p>
 </li>
 </ul>
-</li>
-<li><p>UNILM</p>
-<ul>
+<ol>
+<li>UNILM<ul>
 <li>统一预训练模型框架：直接从mask矩阵角度统一BERT和LM</li>
 <li>3个Attention Mask矩阵：LM、MLM、Seq2Seq LM</li>
 <li>UNILM中的LM并不是传统的LM模型，任需通过引入[MASK]实现。</li>
@@ -1809,21 +1818,23 @@
 </ul>
 </li>
 <li><p>ERNIE（THU）</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1583731675001.png" alt="1583731675001"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583731675001.png" alt="1583731675001"></p>
+</li>
+</ol>
 <ul>
 <li>基于BERT预训练原生模型，讲文本中的实体对齐到外部的知识图谱，并通过知识嵌入得到实体向量作为ERNIR的输入。</li>
 <li>由于语言表征的预训练过程和知识表征过程有很大的不同，会产生两个独立的向量空间，为解决这个问题，在有实体输入的位置，将实体向量和文本表示通过非线性变换进行融合，以融合词汇、句法和知识信息。</li>
 <li>引入改进的预训练目标Denoising entity auto-encoder(DEA)：要求模型能够根据给定的实体序列和文本序列来预测对应的实体。</li>
 </ul>
-</li>
-</ol>
 <h6 id="5-3-引入多任务机制"><a href="#5-3-引入多任务机制" class="headerlink" title="5.3 引入多任务机制"></a>5.3 引入多任务机制</h6><p>​    多任务学习是指同时学习多个相关任务，让这些任务在学习过程中共享知识，利用多个任务之间的相关性来改善模型在每个任务的性能和泛华能力。</p>
 <ol>
 <li><p>MTDNN（微软）：在下游任务中引入多任务学习机制</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1583732461374.png" alt="1583732461374"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583732461374.png" alt="1583732461374"></p>
 </li>
 <li><p>ERNIE 2.0（百度）</p>
-<p><img src="https://gitee.com/fushengwuyu1993/images/raw/master/imgs/1583735200104.png" alt="1583735200104"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583735200104.png" alt="1583735200104"></p>
+</li>
+</ol>
 <ul>
 <li>MTDNN是在下游任务引入多任务机制的，而ERNIE2.0是在预训练引入多任务学习（与先验知识库进行交互），使模型能够从不同的任务中学到更多的语言知识。</li>
 <li>构建多个层次的任务全面捕捉训练预料中的词法、结构、语义的潜在知识。主要包含3个方面的任务：<ul>
@@ -1834,8 +1845,6 @@
 </li>
 <li>主要的方式是构建增量学习模型，通过多任务学习持续更新预训练模型，这种连续交替的学习范式不会使模型忘记之前学到的语言知识。</li>
 </ul>
-</li>
-</ol>
 <h6 id="5-4-改进mask策略"><a href="#5-4-改进mask策略" class="headerlink" title="5.4 改进mask策略"></a>5.4 改进mask策略</h6><p>​    原生BERT模型：按照subword维度进行mask，然后预测，局部的语言模型，缺乏全局建模的能力。</p>
 <ul>
 <li>BERT WWM(google)：进行whole word维度进行mask。</li>
@@ -1871,8 +1880,9 @@
 <li>融合Transformer-XL的优点处理长文本。</li>
 </ul>
 <ol>
-<li><p>排列语言模型（Permutation LM，PLM）</p>
-</li>
+<li>排列语言模型（Permutation LM，PLM）</li>
+</ol>
+<ol>
 <li><p>Two-Stream Self-Attention</p>
 </li>
 <li><p>融入Transformer-XL</p>
