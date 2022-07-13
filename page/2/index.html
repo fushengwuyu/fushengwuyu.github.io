@@ -167,6 +167,96 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/keras%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="sunshine">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="浮生物语的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/20/keras%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3/" class="post-title-link" itemprop="url">keras+python web 遇到的问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-20 00:00:00" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-20 11:27:48" itemprop="dateModified" datetime="2021-08-20T11:27:48+08:00">2021-08-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url" rel="index"><span itemprop="name">运维</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="1-ensorflow-python-framework-errors-impl-FailedPreconditionError-Error-while-reading-resource-variable-softmax-kernel-from-Container-localhost-This-could-mean-that-the-variable-was-uninitialized-Not-found-Resource-localhost-softmax-kernel-N10tensorflow3VarE-does-not-exist"><a href="#1-ensorflow-python-framework-errors-impl-FailedPreconditionError-Error-while-reading-resource-variable-softmax-kernel-from-Container-localhost-This-could-mean-that-the-variable-was-uninitialized-Not-found-Resource-localhost-softmax-kernel-N10tensorflow3VarE-does-not-exist" class="headerlink" title="1. ensorflow.python.framework.errors_impl.FailedPreconditionError: Error while reading resource variable softmax/kernel from Container: localhost. This could mean that the variable was uninitialized. Not found: Resource localhost/softmax/kernel/N10tensorflow3VarE does not exist."></a>1. ensorflow.python.framework.errors_impl.FailedPreconditionError: Error while reading resource variable softmax/kernel from Container: localhost. This could mean that the variable was uninitialized. Not found: Resource localhost/softmax/kernel/N10tensorflow3VarE does not exist.</h4><p>​    最近在使用flask部署keras服务的时候。遇到改错误，看错误，感觉是变量没有初始化，百度各种资料，成功找到解决办法。</p>
+<p>​     creating a reference to the session that is used for loading the models and then to set it to be used by keras in each request</p>
+<p>​    在加载模型之前，创建session。并在模型调用predict的时候，设置同样的session。保证整个项目使用模型使用同一个session。成功解决问题。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from tensorflow.python.keras.backend import set_session</span><br><span class="line">from tensorflow.python.keras.models import load_model</span><br><span class="line"></span><br><span class="line">tf_config = some_custom_config</span><br><span class="line">sess = tf.Session(config=tf_config)</span><br><span class="line">graph = tf.get_default_graph()</span><br><span class="line"></span><br><span class="line"># IMPORTANT: models have to be loaded AFTER SETTING THE SESSION for keras! </span><br><span class="line"># Otherwise, their weights will be unavailable in the threads after the session there has been set</span><br><span class="line">set_session(sess)</span><br><span class="line">model = load_model(...)</span><br></pre></td></tr></table></figure>
+
+<p>在调用的时候，如下设置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">global sess</span><br><span class="line">global graph</span><br><span class="line">with graph.as_default():</span><br><span class="line">    set_session(sess)</span><br><span class="line">    model.predict(...)</span><br></pre></td></tr></table></figure>
+
+
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensorflow/issues/28287">https://github.com/tensorflow/tensorflow/issues/28287</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.datalearner.com/blog/1051572578207468">https://www.datalearner.com/blog/1051572578207468</a></p>
+<h4 id="2-XLA-GPU"><a href="#2-XLA-GPU" class="headerlink" title="2. XLA_GPU"></a>2. XLA_GPU</h4><p>参考：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/53696654/why-keras-does-not-see-my-gpu-while-tensorflow-does?r=SearchResults">https://stackoverflow.com/questions/53696654/why-keras-does-not-see-my-gpu-while-tensorflow-does?r=SearchResults</a></p>
+<p>解决办法：</p>
+<blockquote>
+<p>sudo chmod -R a+r /usr/local/cuda*</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/l4t_docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1489,420 +1579,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E6%A2%B3%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="sunshine">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="浮生物语的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/20/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E6%A2%B3%E7%90%86/" class="post-title-link" itemprop="url">预训练模型梳理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-20 00:00:00" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-24 16:08:15" itemprop="dateModified" datetime="2022-05-24T16:08:15+08:00">2022-05-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>summary Table</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>语言模型</th>
-<th>特征抽取</th>
-<th>上下文表征</th>
-<th>亮点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ELMO</td>
-<td>BiLM</td>
-<td>Bi-LSTM</td>
-<td>单向</td>
-<td>2个单向语言模型拼接</td>
-</tr>
-<tr>
-<td>ULMFiT</td>
-<td>LM</td>
-<td>AWD-LSTM</td>
-<td>单向</td>
-<td>引入逐层解冻fine-tune中的灾难性问题</td>
-</tr>
-<tr>
-<td>SiATL</td>
-<td>LM</td>
-<td>LSTM</td>
-<td>单向</td>
-<td>引入逐层解冻+辅助LM解决fine-tune中的灾难性问题</td>
-</tr>
-<tr>
-<td>GPT1.0</td>
-<td>LM</td>
-<td>Transformer</td>
-<td>单向</td>
-<td>统一下游任务框架，验证Transformer在LM中的强大</td>
-</tr>
-<tr>
-<td>GPT2.0</td>
-<td>LM</td>
-<td>Transformer</td>
-<td>单向</td>
-<td>没有特定的fine-tune流程，生成任务取得好的结果</td>
-</tr>
-<tr>
-<td>BERT</td>
-<td>MLM</td>
-<td>Transformer</td>
-<td>双向</td>
-<td>MLM获取上下文相关的双向特征表示</td>
-</tr>
-<tr>
-<td>MASS</td>
-<td>LM+MLM</td>
-<td>Transformer</td>
-<td>单向/双向</td>
-<td>改进BERT生成任务：统一为类seq2seq的预训练模型</td>
-</tr>
-<tr>
-<td>UNILM</td>
-<td>LM+MLM+S2SLM</td>
-<td>Transformer</td>
-<td>单向/双向</td>
-<td>改进BERT生成任务，直接从mask矩阵的角度出发</td>
-</tr>
-<tr>
-<td>ENRIE1.0</td>
-<td>MLM（BPE）</td>
-<td>Transformer</td>
-<td>双向</td>
-<td>引入知识：3种MASK策略（BPE）预测短语和实体</td>
-</tr>
-<tr>
-<td>ENRIE</td>
-<td>MLM+DEA</td>
-<td>Transformer</td>
-<td>双向</td>
-<td>引入知识：讲实体向量和文本表示相融合</td>
-</tr>
-<tr>
-<td>MTDNN</td>
-<td>MLM</td>
-<td>Transformer</td>
-<td>双向</td>
-<td>引入多任务学习：在下游阶段</td>
-</tr>
-<tr>
-<td>ENRIE2.0</td>
-<td>MLM+Multi-Task</td>
-<td>Transformer</td>
-<td>双向</td>
-<td>引入多任务学习：在预训练阶段，连续增量学习</td>
-</tr>
-<tr>
-<td>SpanBERT</td>
-<td>MLM+SPO</td>
-<td>Transformer</td>
-<td>双向</td>
-<td>不需要按照边界信息进行mask</td>
-</tr>
-<tr>
-<td>RoBERTa</td>
-<td>MLM</td>
-<td>Transformer</td>
-<td>双向</td>
-<td>精细调参，舍弃NSP</td>
-</tr>
-<tr>
-<td>XLNet</td>
-<td>PLM</td>
-<td>Transformer-XL</td>
-<td>双向</td>
-<td>排列语言模型+双注意力机制+Transformer</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h5 id="1-word2vec"><a href="#1-word2vec" class="headerlink" title="1. word2vec"></a>1. word2vec</h5><h5 id="2-ELMo"><a href="#2-ELMo" class="headerlink" title="2. ELMo"></a>2. ELMo</h5><p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583220450290.png" alt="1583220450290"></p>
-<ul>
-<li><p>要点</p>
-<ul>
-<li>引入双向语言模型，2个单向的语言模型（向前和向后）的集成。</li>
-<li>通过保存预训练好的2层BiLSTM，通过特征集成或finetune应用于下游任务。</li>
-</ul>
-</li>
-<li><p>缺陷</p>
-<ul>
-<li>本质上是自回归语言模型，只能获取单向特征表示，不能同时获取上下文。</li>
-<li>LSTM不能解决长距离依赖问题。</li>
-</ul>
-</li>
-<li><p>为什么不能用BiLSTM构建双向语言模型</p>
-<p>如果采用BiLSTM构建双向语言模型，会造成标签泄露的问题。因此ELMo前向和后向的LSTM参数独立，共享词向量，拼接构造语言模型。</p>
-<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583461295578.png" alt="1583461295578"></p>
-</li>
-</ul>
-<h5 id="3-GPT1-0-GPT2-0-OpenAI"><a href="#3-GPT1-0-GPT2-0-OpenAI" class="headerlink" title="3. GPT1.0/GPT2.0(OpenAI)"></a>3. GPT1.0/GPT2.0(OpenAI)</h5><ul>
-<li><p>GPT1.0要点</p>
-<ul>
-<li><p>相比ELMo，将LSTM替换成了transformer，首次将Transformer应用与预训练模型。</p>
-</li>
-<li><p>finetune阶段引入语言模型辅助目标，解决finetune过程中的灾难性遗忘问题。</p>
-</li>
-</ul>
-</li>
-<li>GPT2.0要点<ul>
-<li>不针对特定模型的精调过程：GPT2.0认为预训练中已经包含了许多特定任务所需的信息。</li>
-<li>生成式任务效果比较好，使用了覆盖更广、质量更好的数据。</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>依然为单向的自回归语言模型，没有编码上下文的特征表示。</li>
-</ul>
-</li>
-</ul>
-<h5 id="4-BERT（重点介绍）"><a href="#4-BERT（重点介绍）" class="headerlink" title="4. BERT（重点介绍）"></a>4. BERT（重点介绍）</h5><ul>
-<li><p>Transformer</p>
-<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583486843525.png" alt="1583486843525"></p>
-</li>
-</ul>
-<p>  $ Attention(Q,K,V) = softmax(\frac{QK^{T}}{\sqrt{d_{k}}})V$</p>
-<ol>
-<li><p>Multi-Head Attention和Scaled Dot-Product Attention</p>
-<p>本质上是self attention通过attention mask动态编码变长序列，解决长依赖、无位置偏差、可并行计算。</p>
-<ul>
-<li><p>为什么是缩放点积，而不是点积模型？</p>
-<p>当输入信息的维度较高时，点积模型的值通常有较大方差，从而导致softmax函数的梯度较小，因此缩放点积模型可以较好的解决这一问题。</p>
-</li>
-<li><p>为什么是双线性点积模型（经过线性变换$Q \ne K$）?</p>
-<p>双线性点积模型，引入非对称性，根据健壮性（Attention mask对角线元素不一定是最大的，也就是说当前位置对自身的注意力得分不一定最高）。</p>
-</li>
-<li><p>相较与加性模型，点积模型具备哪些优势？</p>
-<p>常用的attention机制有加性模型和点积模型，理论上两者的复杂度差不多，但是点积模型在实现上可以更好的利用矩阵乘积，从而效率更高。</p>
-</li>
-<li><p>多头机制为什么有效？</p>
-<ul>
-<li>类似于CNN中的通过多通道机制进行特征选择</li>
-<li>Transformer中先通过切头（split），再分别进行Scale-Product Attention，可以使进行点积计算的维度d不会太大，同时缩小attention mask矩阵。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Position-wise Feed-Forward Networks</p>
-<ul>
-<li>FFN将每个位置的Multi-Head Attention结果隐射到一个更大的特征空间，然后使用ReLU引入非线性进行筛选，最后恢复原始维度。</li>
-<li>Transformer放弃LSTM之后，FFN中的ReLU成为了一个主要的提供非线性变换的单元。</li>
-</ul>
-</li>
-<li><p>Positional Encoding</p>
-<p>Position Encoding是可学习的，编码范围不受限制。</p>
-<script type="math/tex; mode=display">PE_{(pos,2i)}=sin(pos/10000^{2i/d_{model}})</script><script type="math/tex; mode=display">PE_{(pos,2i+1)}=cos(pos/10000^{2i/d_{model}})</script><ul>
-<li>为什么引入$sin$和$cos$建模Position Encoding？<ol>
-<li>为了使得模型实现相对位置的学习，两个位置pos和pos+k的位置编码是固定间距k的线性变化。</li>
-<li>可以证明，间隔为k的任意两个位置编码的欧式距离是恒等的，只与k有关。</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<ul>
-<li><p>BERT为什么如此有效？</p>
-<ol>
-<li>引入Masked Language Model（MLM）预训练目标，能够获取上下文相关的双向特征表示</li>
-<li>引入Next Sentence Prediction（NSP）预训练目标，擅长处理句子或段落的匹配任务。</li>
-<li>引入强大的特征抽取机制。<ul>
-<li>Muti-Head self attention：多头机制类似于多通道特征抽取</li>
-<li>self attention通过attention mask动态编码变长序列，解决长距离依赖、可并行计算</li>
-<li>Feed-forward ：非线性层级特征</li>
-<li>Layer Norm &amp; Residuals：加速训练，使深度网络更加健壮。</li>
-</ul>
-</li>
-</ol>
-<ul>
-<li>BERT 通过不同的迁移学习应用与下游任务，BERT擅长处理NLU任务。</li>
-<li>BERT通过MLM解决了深层BiLSTM构建双向模型中存在的‘标签泄露’问题，也就是‘see itself’。</li>
-</ul>
-</li>
-<li><p>BERT的优缺点？</p>
-<ul>
-<li>优点：能够获取上下文相关的双向特征表示</li>
-<li>缺点：<ul>
-<li>生成任务表现不佳</li>
-<li>采取独立性假设：没有考虑预测[MASK]之间的相关性，是对语言模型联合概率的有偏估计（不是密度估计）。</li>
-<li>输入噪声[MASJ]，造成预训练-finetune两阶段之间的差异。</li>
-<li>无法处理文档级别的NLP任务，只适合句子和段落级别的任务。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>BERT基于‘字输入’还是‘词输入’好?(中文)</p>
-<ol>
-<li>如果基于’词输入‘，可能会出现’OOV‘问题，增大标签空间，需要利用更多预料去学习标签分布来拟合模型</li>
-<li>随着Transformer特征抽取能力加强，分词不再成为必要，词级别的特征学习可以纳入内部特征进行表示学习。</li>
-</ol>
-</li>
-</ul>
-<h5 id="5-BERT改进系列模型"><a href="#5-BERT改进系列模型" class="headerlink" title="5. BERT改进系列模型"></a>5. BERT改进系列模型</h5><h6 id="5-1-改进生成任务"><a href="#5-1-改进生成任务" class="headerlink" title="5.1 改进生成任务"></a>5.1 改进生成任务</h6><ol>
-<li><p>MASS</p>
-<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583723052606.png" alt="1583723052606"></p>
-</li>
-</ol>
-<ul>
-<li><p>统一预训练框架：通过类似于Seq2Seq的框架，在预训练阶段统一了BERT和LM模型</p>
-</li>
-<li><p>Encoder中理解unmasked tokens；Decoder中需要预测连续的[mask]tokens，获取更多的语言信息；Decoder从Encoder中抽取更多信息</p>
-</li>
-<li><p>当k=1或者n时，MASS的概率形式分别和BERT中的MLM以及GPT中标准的LM一致（k为mask的连续片段长度）</p>
-</li>
-</ul>
-<ol>
-<li>UNILM<ul>
-<li>统一预训练模型框架：直接从mask矩阵角度统一BERT和LM</li>
-<li>3个Attention Mask矩阵：LM、MLM、Seq2Seq LM</li>
-<li>UNILM中的LM并不是传统的LM模型，任需通过引入[MASK]实现。</li>
-</ul>
-</li>
-</ol>
-<h6 id="5-2-引入知识"><a href="#5-2-引入知识" class="headerlink" title="5.2 引入知识"></a>5.2 引入知识</h6><ol>
-<li><p>ERNIE1.0(百度)</p>
-<p>在预训练阶段引入知识（预先识别出的实体），引入三种[MASK]策略</p>
-<ul>
-<li>Basci-Level Masking：和BERT一样，对subword进行mask，无法获取高层次的语义。</li>
-<li>Phrase-Level Masking：mask连续短语。</li>
-<li>Entity-Level Masking：mask实体。</li>
-</ul>
-</li>
-<li><p>ERNIE（THU）</p>
-<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583731675001.png" alt="1583731675001"></p>
-</li>
-</ol>
-<ul>
-<li>基于BERT预训练原生模型，讲文本中的实体对齐到外部的知识图谱，并通过知识嵌入得到实体向量作为ERNIR的输入。</li>
-<li>由于语言表征的预训练过程和知识表征过程有很大的不同，会产生两个独立的向量空间，为解决这个问题，在有实体输入的位置，将实体向量和文本表示通过非线性变换进行融合，以融合词汇、句法和知识信息。</li>
-<li>引入改进的预训练目标Denoising entity auto-encoder(DEA)：要求模型能够根据给定的实体序列和文本序列来预测对应的实体。</li>
-</ul>
-<h6 id="5-3-引入多任务机制"><a href="#5-3-引入多任务机制" class="headerlink" title="5.3 引入多任务机制"></a>5.3 引入多任务机制</h6><p>​    多任务学习是指同时学习多个相关任务，让这些任务在学习过程中共享知识，利用多个任务之间的相关性来改善模型在每个任务的性能和泛华能力。</p>
-<ol>
-<li><p>MTDNN（微软）：在下游任务中引入多任务学习机制</p>
-<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583732461374.png" alt="1583732461374"></p>
-</li>
-<li><p>ERNIE 2.0（百度）</p>
-<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583735200104.png" alt="1583735200104"></p>
-</li>
-</ol>
-<ul>
-<li>MTDNN是在下游任务引入多任务机制的，而ERNIE2.0是在预训练引入多任务学习（与先验知识库进行交互），使模型能够从不同的任务中学到更多的语言知识。</li>
-<li>构建多个层次的任务全面捕捉训练预料中的词法、结构、语义的潜在知识。主要包含3个方面的任务：<ul>
-<li>词法层面，word-aware任务：捕捉词汇层面的信息，如英文大小写预测。</li>
-<li>结构层面，structure-aware任务：捕捉句法层次的信息，如句子顺序问题、句子距离问题。</li>
-<li>语义层面，semantic-aware任务：捕捉语义方面的问题，如语义逻辑关系预测（因果，假设，递进，转折）。</li>
-</ul>
-</li>
-<li>主要的方式是构建增量学习模型，通过多任务学习持续更新预训练模型，这种连续交替的学习范式不会使模型忘记之前学到的语言知识。</li>
-</ul>
-<h6 id="5-4-改进mask策略"><a href="#5-4-改进mask策略" class="headerlink" title="5.4 改进mask策略"></a>5.4 改进mask策略</h6><p>​    原生BERT模型：按照subword维度进行mask，然后预测，局部的语言模型，缺乏全局建模的能力。</p>
-<ul>
-<li>BERT WWM(google)：进行whole word维度进行mask。</li>
-<li>ERNIE系列：建模词、短语、实体的完整语义：通过先验知识将知识（短语、词、实体）进行整体mask；引入外部知识，按照entity维度进行mask，然后进行预测。</li>
-<li>Span Bert：不需要按照先验的词、实体、短语等边界信息进行mask，而是采取随机mask<ul>
-<li><strong>采用Span Masking</strong>：根据几何分布，随机选择一段空间长度，之后再根据均匀分布随机选择起始位置，最后按照长度mask，通过采样，平均被遮盖长度是3.8个词的长度。</li>
-<li><strong>引入Span Boundary Objective</strong>：新的预训练目标旨在使被mask的Span 边界的词向量能学习到 Span中被mask的部分；新的预训练目标和MLM一起使用；</li>
-</ul>
-</li>
-</ul>
-<h6 id="5-5-精调"><a href="#5-5-精调" class="headerlink" title="5.5 精调"></a>5.5 精调</h6><ol>
-<li>RoBERTa(FaceBook)<ul>
-<li>丢弃NSP，效果更好</li>
-<li>动态改变mask策略，把数据复制10份，然后统一进行随机mask</li>
-<li>对学习率的峰值和warm-up跟新步数做出调整</li>
-<li>在更长序列上训练，不对序列进行截断，使用全长度序列</li>
-</ul>
-</li>
-</ol>
-<h5 id="6-XLNet"><a href="#6-XLNet" class="headerlink" title="6. XLNet"></a>6. XLNet</h5><h6 id="6-1-提出的背景"><a href="#6-1-提出的背景" class="headerlink" title="6.1 提出的背景"></a>6.1 提出的背景</h6><ul>
-<li>对于ELMO、GPT等预训练模型都是基于传统的语言模型（自回归语言模型AR），自回归语言模型天然适合处理生成任务，但是无法对双向上下文进行表征。</li>
-<li>自编码语言模型（AE）虽然可以实现双向上下文表征，但是：<ul>
-<li>BERT系列模型引入独立性假设，没有考虑预测[mask]之间的相关性。</li>
-<li>MLM预训练目标的设置造成预训练过程和生成过程不一致。</li>
-<li>预训练时的[mask]噪声在finetune阶段不会出现，造成两阶段不匹配问题。</li>
-</ul>
-</li>
-</ul>
-<h6 id="6-2-核心机制分析"><a href="#6-2-核心机制分析" class="headerlink" title="6.2 核心机制分析"></a>6.2 核心机制分析</h6><ul>
-<li>使用自回归语言模型，为解决双向上下文问题，引入了排列语言模型PLM</li>
-<li>PLM在预测时需要target的位置信息，此为引入了Two-Stream：Content流编码到当前时刻的所有内容，而Query流只能参考之前的历史信息以及当前要预测的位置信息。</li>
-<li>为解决计算量过大的问题，采取随机采样语言排列+只预测1个句子后面的1/k的词。</li>
-<li>融合Transformer-XL的优点处理长文本。</li>
-</ul>
-<ol>
-<li>排列语言模型（Permutation LM，PLM）</li>
-</ol>
-<ol>
-<li><p>Two-Stream Self-Attention</p>
-</li>
-<li><p>融入Transformer-XL</p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1972,7 +1648,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1985,7 +1661,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
