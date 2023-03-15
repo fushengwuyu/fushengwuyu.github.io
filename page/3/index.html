@@ -167,6 +167,377 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%BA%A0%E9%94%99%E8%B0%83%E7%A0%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="sunshine">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="浮生物语的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/20/%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%BA%A0%E9%94%99%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">中文文本纠错调研</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-20 00:00:00" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-24 16:13:37" itemprop="dateModified" datetime="2022-05-24T16:13:37+08:00">2022-05-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="1-常见的中文错误类型"><a href="#1-常见的中文错误类型" class="headerlink" title="1. 常见的中文错误类型"></a>1. 常见的中文错误类型</h4><ul>
+<li><p>发音错误， 特点：音近，发音不标准， 原因：地方发音，语言转化。 - 灰机</p>
+</li>
+<li><p>拼写错误：特点： 正确词语错误使用， 原因： 输入法导致-拼音、五笔、手写 - 眼睛蛇</p>
+</li>
+<li><p>语法，知识错误： 特点：逻辑错误，多字、少字，乱序 - 女性患病前列腺炎</p>
+</li>
+</ul>
+<h4 id="2-研究现状"><a href="#2-研究现状" class="headerlink" title="2. 研究现状"></a>2. 研究现状</h4><h5 id="2-1-通用纠错项目"><a href="#2-1-通用纠错项目" class="headerlink" title="2.1 通用纠错项目"></a>2.1 通用纠错项目</h5><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/shibing624/pycorrector">https://github.com/shibing624/pycorrector</a></p>
+</blockquote>
+<ul>
+<li><p>错误检测</p>
+<ul>
+<li>常用字典匹配： 切词后不再常用字典中认为有错</li>
+<li>统计语言模型：某个字的似然概率低于句子的平均值</li>
+<li>混淆字典匹配：example - 国藉 -&gt; 国籍</li>
+</ul>
+</li>
+<li><p>候选召回</p>
+<ul>
+<li>近音字替换（拼音）： 藉\ji -&gt; 籍， 集， 寄。。。</li>
+<li>近形字替换（五笔）： 藉 -&gt; 籍，藕，箱</li>
+</ul>
+</li>
+<li><p>候选排序</p>
+<ul>
+<li><p>语言模型计算句子概率，取概率超过原句子切最大的</p>
+<blockquote>
+<p>P(患者1天前体检发现脾动脉瘤)</p>
+<p>P(患者1天前体检发现皮动脉瘤)</p>
+<p>P(患者1天前体检发现劈动脉瘤)</p>
+<h5 id="2-2-学术界进展"><a href="#2-2-学术界进展" class="headerlink" title="2.2 学术界进展"></a>2.2 学术界进展</h5></blockquote>
+</li>
+<li><p>基于序列标注的纠错</p>
+<blockquote>
+<p>《 Alibaba at IJCNLP-2017 Task 1: Embedding Grammatical Features<br>into LSTMs for Chinese Grammatical Error Diagnosis Task 》</p>
+</blockquote>
+<p>利用序列标注模型 + 人工提取特征进行错误位置的标注</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1577068913235.png" alt="1577068913235"></p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>                     2017年IJCNLP举办的CGED比赛中阿里团队提出的Top1方案
+
+成绩： P：0.36， R： 0.21， F1：0.27
+</code></pre><ul>
+<li><p>基于NMT的纠错</p>
+<blockquote>
+<p>《 Youdao’s Winning Solution to the NLPCC-2018 Task 2 Challenge: A Neural<br>Machine Translation Approach to Chinese Grammatical Error Correction 》</p>
+</blockquote>
+<p>利用模型将错误语句翻译成正确语句，利用transformer模型完成端到端的纠错过程</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1577069217626.png" alt="1577069217626"></p>
+<p>成绩： P： 0.34， R：0.18， F0.5： 0.29</p>
+</li>
+</ul>
+<h5 id="2-3-评价指标"><a href="#2-3-评价指标" class="headerlink" title="2.3 评价指标"></a>2.3 评价指标</h5><ul>
+<li><p>过纠率 / 误报率</p>
+<p>$FAR = \frac{正确句子被纠错的个数}{正确句子的个数}$</p>
+</li>
+<li><p>召回率</p>
+<script type="math/tex; mode=display">R = \frac{错误句子被改正的句子数}{错误的句子总数}</script></li>
+<li><p>纠错目标</p>
+<p>被改正的句子数 &gt;&gt; 被改错的句子数</p>
+<p>​                       <script type="math/tex">K * R >> (1 - K) * FAR</script></p>
+<p>目标在于尽可能的提高召回率R。</p>
+</li>
+</ul>
+<h5 id="2-4-存在的问题"><a href="#2-4-存在的问题" class="headerlink" title="2.4 存在的问题"></a>2.4 存在的问题</h5><p>​    公司目前纠错现状，还存在一下问题。</p>
+<ul>
+<li>缺乏标注语料，难以展开基于深度学习的监督学习</li>
+<li>纠错强调实时性，对内存和实效性要求很高，线上纠错不得超过10ms/句，导致大规模字典和复杂模型无法线上使用</li>
+<li>纠错要求高准确性，宁愿牺牲召回也必须保证高准确度，防止过纠（把正确的词改错），过纠率不得高于0.2%</li>
+<li>结合电子病历，绝大部分错误都是替换错误，同音字，同行字等。</li>
+</ul>
+<h4 id="3-平安文本纠错方案"><a href="#3-平安文本纠错方案" class="headerlink" title="3. 平安文本纠错方案"></a>3. 平安文本纠错方案</h4><p>​    平安人寿问答纠错模块结构如下图所示。其基本流程包括错误检测、候选召回、候选排序、候选筛选。</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1577070846118.png" alt="1577070846118"></p>
+<h5 id="3-1-错误检测"><a href="#3-1-错误检测" class="headerlink" title="3.1 错误检测"></a>3.1 错误检测</h5><ul>
+<li><p>基于规则的错误检测</p>
+<ul>
+<li><p>拼音匹配： 适合实体错误检测，比如疾病，药品等实体，需要维护拼音-实体隐射字典</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1577071517262.png" alt="1577071517262" style="zoom:80%;" /></p>
+</li>
+<li><p>拼音编辑距离：1.  检测所有编辑距离小于阈值的路径 2. 最优路径选取（最小拼音编辑距离， 最长字符匹配）3. 语言模型 + 规则联合筛选</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>单双向2gram检测</p>
+<p>当前词与上下文组成的2gram词频很低，认为有错</p>
+<p>基于假设： 正确表述发生的频次要远远大于错误表述发生的次数</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1577072025140.png" alt="yu1577072025140"></p>
+</li>
+<li><p>基于神经网络语言模型的错误检测 </p>
+<p>核心思想：</p>
+<ul>
+<li>通过完形填空的方式预测候选字的概率分布</li>
+<li>如果原字的概率不在topK或者top1比值操作阈值则认为有错</li>
+</ul>
+<p>改进措施：</p>
+<ul>
+<li><p>传统的语言模型从左到右，单向，只利用上文，改为双向模型，利用上下文信息。</p>
+</li>
+<li><p>传统的语言模型把预测字MASK，没有预测字的信息，可以改为引入当前字的混淆字信息（如：相似的字音和字形字）。</p>
+</li>
+<li><p>传统语言模型会直接预测字表，比如字表大小是3800，预测结果会直接得到3800个字的概率分布，其中大多是无用信息，且容易引发维度灾问题。可以通过将预测字约束在近音、近形和混淆字表里，提高效率和正确字与错误中字的区分度。</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581907503895.png" alt="1581907503895"></p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581907667130.png" alt="1581907667130"></p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>基于word2vec-cbow改造的音字混合受限字表示语言模型检测算法</p>
+<p>基于CSLM的中文拼写检测：《Chinese Spelling Errors Detection Based on  CSLM,2015》</p>
+<p>主要特征：</p>
+<ul>
+<li>带入预测字及上下文拼音、五笔特征</li>
+<li>去掉前后鼻音和翘舌音,并利用混淆音集映射的方式来提高模型对谐音错误的识别性能。</li>
+<li>预测字表受限于近音字、近形字和混淆字表中。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581908381943.png" alt="1581908381943"></p>
+</li>
+</ul>
+<h5 id="3-2-候选召回"><a href="#3-2-候选召回" class="headerlink" title="3.2 候选召回"></a>3.2 候选召回</h5><ul>
+<li><p>近音字候选召回</p>
+<p>选择近音字作为候选字，构造一个近音字字典。大规模的基础字典，使得在存储和读取速度方面收到了极大的调整。</p>
+<p>字典存储构架如下：</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581911102435.png" alt="1581911102435"></p>
+<p>关键技术：</p>
+<ul>
+<li>减低存储空间：<ol>
+<li>利用Trie树降低信息冗余</li>
+<li>利用经典结合CSR压缩稀疏矩阵</li>
+<li>使用词典间的关联信息回复2gram同音字典</li>
+</ol>
+</li>
+<li>提高读取速度：Trie树、CSR技术的高效索引。</li>
+</ul>
+</li>
+<li><p>字、音编辑距离召回</p>
+<p>使用编辑距离作为是否召回的依据。</p>
+</li>
+<li><p>混淆词集</p>
+</li>
+<li><p>疾病口语词</p>
+</li>
+</ul>
+<h5 id="3-3-候选排序"><a href="#3-3-候选排序" class="headerlink" title="3.3 候选排序"></a>3.3 候选排序</h5><p>​    针对候选词的排序主要由二级排序来实现。</p>
+<ul>
+<li><p>一级排序</p>
+<p>模型：逻辑回归LR</p>
+<p>作用：二级排序比较耗时，通过一级排序初筛出TopK进入下一级</p>
+<p>要求：正类召回率高，运行速度快</p>
+<p>特征：</p>
+<ul>
+<li>频次比值：候选频次越高分数越高</li>
+<li>编辑距离：编辑距离越小分数越高</li>
+<li>拼音jaccard距离：拼音相近分数越高</li>
+<li>4gram-LM概率差值：候选替换后橘子越通顺分数越高</li>
+</ul>
+<p>一级排序大致流程如下：</p>
+</li>
+</ul>
+<p>  <img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581916837380.png" alt="1581916837380"></p>
+<p>  例如：甲状腺==姐姐==该怎么治疗？ -&gt;==结节  0.99==</p>
+<ul>
+<li>频次： 55 -&gt; 94</li>
+<li>编辑距离：2</li>
+<li>拼音jaccard距离：0</li>
+<li>语言模型概率：-21.9 -&gt; -8.6</li>
+</ul>
+<ul>
+<li><p>二级排序</p>
+<p>模型：xgboost</p>
+<p>作用：分数超过设定阈值且是Top1作为最终候选</p>
+<p>要求：正类准确率高</p>
+<p>特征：</p>
+<ol>
+<li>局部特征<ul>
+<li>切词变化：短语个数、含错别字片段长度等</li>
+<li>PMI变化：最小值、最值</li>
+<li>频次变化：频次变化、2gram频次变化</li>
+<li>4gram语言模型变化</li>
+<li>形音变化：拼音韵母变化、jccard距离、五笔变化</li>
+<li>其他：停用词\错别字位置、候选来源等等</li>
+</ul>
+</li>
+<li>全局特征<ul>
+<li>Cbow-LM</li>
+<li>LSTM-Attention-LM</li>
+<li>BERT-LM</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581918099275.png" alt="1581918099275"></p>
+<p>例子：==红癍狼仓==常见症状有哪些?   ==红斑狼疮==</p>
+<ul>
+<li>频次 ：20 -&gt; 1688</li>
+<li>切词：红\癍\狼疮 (1\1\2) -&gt; 红斑狼疮 (4)</li>
+<li>nn语言模型:癍 (<0.001) -> 斑 (0.979)</li>
+<li>4gram语言模型:-19.2 -&gt; -10.6</li>
+<li>PMI:红癍(0.33) -&gt;红斑(9.7)</li>
+</ul>
+</li>
+</ul>
+<h5 id="3-4-整体架构"><a href="#3-4-整体架构" class="headerlink" title="3.4 整体架构"></a>3.4 整体架构</h5><p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581918508852.png" alt="1581918508852"></p>
+<p>​    特性：</p>
+<ul>
+<li><p>pipline串联，热插拔</p>
+</li>
+<li><p>子模块均遵循检测-召回-排序流程</p>
+</li>
+<li><p>规则+模型混用</p>
+</li>
+<li><p>离线+在线</p>
+</li>
+</ul>
+<p>在线方案：</p>
+<ul>
+<li>低延迟、低复杂度</li>
+<li>高速1ms-3ms/句</li>
+<li>用于线上实时预测</li>
+</ul>
+<p>离线方案：</p>
+<ul>
+<li>大规模、复杂模型</li>
+<li>低速200ms-500ms/句</li>
+<li>用于构造在线模型，训练数据</li>
+</ul>
+<h5 id="3-5-总结与改进"><a href="#3-5-总结与改进" class="headerlink" title="3.5 总结与改进"></a>3.5 总结与改进</h5><ol>
+<li>优点：<ul>
+<li>无监督，方便将该方法迁移到其他垂直领域，只需要重新无监督挖掘数据</li>
+<li>系统架构方便插拔特殊编写纠错子模块</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>很难迁移到通用领域</li>
+<li>Pipline导致错误逐级传递</li>
+<li>Pipline链越长，耗时越长</li>
+</ul>
+</li>
+<li>改进思路<ul>
+<li>强化上下文/全局的语义理解</li>
+<li>训练预料去噪处理</li>
+<li>端到端算法，如NMT（神经机器翻译）</li>
+<li>语法错误（多字少字乱序）</li>
+</ul>
+</li>
+</ol>
+<h4 id="4-爱奇艺文本纠错方案"><a href="#4-爱奇艺文本纠错方案" class="headerlink" title="4. 爱奇艺文本纠错方案"></a>4. 爱奇艺文本纠错方案</h4><p>《FASPell: A Fast, Adaptable, Simple, Powerful Chinese Spell Checker Based On DAE-Decoder Paradigm》</p>
+<h5 id="4-1-背景"><a href="#4-1-背景" class="headerlink" title="4.1 背景"></a>4.1 背景</h5><p>​    大部分的中文拼写检查模型都使用用一个范式，即讲每个汉字的固定相似字符集（混淆集或困惑集）作为候选项，然后使用过滤器选择最佳候选项作为错字的替换字符。这种设计面临着两个主要瓶颈：</p>
+<ul>
+<li><p>稀疏的中文拼写检查数据上的过拟合问题。</p>
+<p>​    由于中文拼写检查数据需要乏味繁冗的专业人力工作，因为一直资源不足。为了防止模型的过拟合，        Wang等人（2018）提出了一种自动方法来生成伪拼写检查数据。 但是，当生成的数据达到40k句子时，其拼写检查模型的精度不再提高。 Zhao等人（2017）使用了大量的语言学规则来过滤候选项，但结果却比我们的表现差，尽管我们的模型没有利用任何语言学知识。</p>
+</li>
+<li><p>困惑集的使用带来的汉字字符相似度利用上的不灵活性和不充分性问题。</p>
+<p>​    困惑集因为是固定的，因此并非在任何语境、场景下都能包含正确候选项（一个比较极端的例子是，如果困惑集按照繁体中文制定，那么繁体中文的 “體”和“休”肯定不在困惑集的同一组相似字符中，但是在简体中文中对应的“体”和“休”缺是相似字符，如果错误文本中是把“休”写成了“体”，那么繁体中文困惑集下就无法检出，必须专门再制定一个简体困惑集才可以），这会极大降低检测的召回率（不灵活性问题）；另外，困惑集中的字符的相似性的信息有损失，没有得到充分利用，因为一个字符在困惑集中相似字符是无差别对待的，然而事实上每两个字符间的相似度明显是有差别的，因此会影响检测的精确率（不充分性）。</p>
+</li>
+</ul>
+<h5 id="4-2-设计"><a href="#4-2-设计" class="headerlink" title="4.2 设计"></a>4.2 设计</h5><p>​    FASPell提出通过设计中文拼写检查范式来避免传统模型的两个瓶颈。FASPell利用seq2seq的思想，包括去噪自编码器（DAE）和解码器。</p>
+<ul>
+<li><p>编码器DAE</p>
+<p>DAE通过利用无监督预训练方法（BERT），减少了监督学习中所需的中文拼写检查数据量（&lt;10000个句子）。DAE可以将错误文本修改为正确文本的可能候选矩阵，解码器只需要在这个矩阵中寻求最佳候选项作为输出。DAE因为可以在大规模正常预料数据上无监督训练，而仅在中文拼写检测数据上做fine-tune，避免了过拟合问题。此外，只要DAE足够强大，所有语境上可能的候选字符都可以出现，且候选字符是根据上下文即时生成的，避免了困惑集带来的不灵活性。</p>
+</li>
+<li><p>解码器CSD</p>
+<p>CSD巧妙的将预训练模型的置信度和字相似度结合起来，作为候选集的评价标准，消除困惑集的使用。CSD根据量化的字符相似度和DAE给出的符合语境的置信度来过滤出正确的替换字符，如此，字符相似性上的细微差别信息都可以得到充分利用。</p>
+</li>
+</ul>
+<p>模型架构如图1所示：</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581923079272.png" alt="1581923079272"></p>
+<p>​    可以看到，在FASPell中，DAE由BERT中的掩码语言模型（MLM）来充当，而解码器使用了置信度-相似度解码器(CSD)。</p>
+<h5 id="4-3-CSD解码器"><a href="#4-3-CSD解码器" class="headerlink" title="4.3 CSD解码器"></a>4.3 CSD解码器</h5><p>​    CSD主要结合DAE的置信度和字符相似度，置信度直接由DAE给出，暂且不谈，这里详细说明字符相似度。</p>
+<ol>
+<li><p>字符相似度</p>
+<ul>
+<li><p>字音</p>
+<p>采用中日韩统一表意文字（CJK）语言中的汉语发音，尽管目前只是对中文文本检错纠错，但是实验证明考虑诸如粤语、日语音读、韩语、越南语的汉字发音对提高拼写检查的性能是有帮助的，而过去的方法均只考虑了普通话拼音。</p>
+</li>
+<li><p>字形</p>
+<p>采用Unicode标准的IDS表征，它可以准确的扫描汉字中各个笔画和他们的布局方式，这使得即使相同笔画和笔画顺序的汉字之间也拥有不为1的相似度。</p>
+</li>
+</ul>
+<p>以午和牛，田和由为例：</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581929776094.png" alt="1581929776094"></p>
+</li>
+<li><p>训练CSD</p>
+<p>CSD的训练阶段，利用训练集文本通过MLM输出的矩阵，逐行绘制置信度-字符相似度散点图，确定能将FP和 TP分开的最佳分界曲线。</p>
+<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1581930742369.png" alt="1581930742369"></p>
+<p>​    如上图所示，红点代表正确检测并正确纠正的样本，蓝色圆圈代表正确检测但纠正错误的样本，叉叉代表错误检测的样本。图一并没有过滤候选集；图二倾向于错误检测性能，大部分正确检测的候选集保留了下来；图三更加倾向于错误纠正，FASPell采用此种曲线；图四采用加权确定阈值的方式来确定曲线$（0.8×confidence+0.2×similarity&lt;0.8）$。</p>
+<p>​    在训练阶段，我们的目标在于确定一条合适的曲线，供于推理阶段使用。</p>
+</li>
+<li><p>推理</p>
+<p>在推理阶段，逐行根据分界线过滤掉FP得到TP结果，然后将每行的结果取并集得到最终替换结果。以上面架构图为例片，句子首先通过fine-tune训练好的MLM模型，得到的候选字符矩阵通过CSD进行解码过滤，第一行候选项中只有“主”字没有被CSD过滤掉，第二行只有“著”字未被过滤掉，其它行候选项均被分界线过滤清除，得到最终输出结果，即“苦”字被替换为为“著”，“丰”被替换为“主”。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2367,7 +2738,7 @@ sim(x_{1}, y_{1}) >T_{1} and(or) ... sim(x_{n}, y_{n}) >T_{n}</script></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2380,7 +2751,7 @@ sim(x_{1}, y_{1}) >T_{1} and(or) ... sim(x_{n}, y_{n}) >T_{n}</script></li>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">58</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -2415,7 +2786,7 @@ sim(x_{1}, y_{1}) >T_{1} and(or) ... sim(x_{n}, y_{n}) >T_{n}</script></li>
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
