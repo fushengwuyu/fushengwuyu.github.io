@@ -21,12 +21,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="summary Table     模型 语言模型 特征抽取 上下文表征 亮点     ELMO BiLM Bi-LSTM 单向 2个单向语言模型拼接   ULMFiT LM AWD-LSTM 单向 引入逐层解冻fine-tune中的灾难性问题   SiATL LM LSTM 单向 引入逐层解冻+辅助LM解决fine-tune中的灾难性问题   GPT1.0 LM Transformer 单向 统">
+  <meta name="description" content="summary Table    模型 语言模型 特征抽取 上下文表征 亮点    ELMO BiLM Bi-LSTM 单向 2个单向语言模型拼接   ULMFiT LM AWD-LSTM 单向 引入逐层解冻fine-tune中的灾难性问题   SiATL LM LSTM 单向 引入逐层解冻+辅助LM解决fine-tune中的灾难性问题   GPT1.0 LM Transformer 单向 统一下">
 <meta property="og:type" content="article">
 <meta property="og:title" content="预训练模型梳理">
 <meta property="og:url" content="http://example.com/2021/07/20/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E6%A2%B3%E7%90%86/index.html">
 <meta property="og:site_name" content="浮生物语的博客">
-<meta property="og:description" content="summary Table     模型 语言模型 特征抽取 上下文表征 亮点     ELMO BiLM Bi-LSTM 单向 2个单向语言模型拼接   ULMFiT LM AWD-LSTM 单向 引入逐层解冻fine-tune中的灾难性问题   SiATL LM LSTM 单向 引入逐层解冻+辅助LM解决fine-tune中的灾难性问题   GPT1.0 LM Transformer 单向 统">
+<meta property="og:description" content="summary Table    模型 语言模型 特征抽取 上下文表征 亮点    ELMO BiLM Bi-LSTM 单向 2个单向语言模型拼接   ULMFiT LM AWD-LSTM 单向 引入逐层解冻fine-tune中的灾难性问题   SiATL LM LSTM 单向 引入逐层解冻+辅助LM解决fine-tune中的灾难性问题   GPT1.0 LM Transformer 单向 统一下">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583220450290.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583461295578.png">
@@ -244,7 +244,6 @@
 
       
         <p>summary Table</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -255,8 +254,7 @@
 <th>亮点</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>ELMO</td>
 <td>BiLM</td>
 <td>Bi-LSTM</td>
@@ -361,9 +359,7 @@
 <td>双向</td>
 <td>排列语言模型+双注意力机制+Transformer</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h5 id="1-word2vec"><a href="#1-word2vec" class="headerlink" title="1. word2vec"></a>1. word2vec</h5><h5 id="2-ELMo"><a href="#2-ELMo" class="headerlink" title="2. ELMo"></a>2. ELMo</h5><p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583220450290.png" alt="1583220450290"></p>
 <ul>
 <li><p>要点</p>
@@ -392,12 +388,14 @@
 </li>
 </ul>
 </li>
-<li>GPT2.0要点<ul>
+<li><p>GPT2.0要点</p>
+<ul>
 <li>不针对特定模型的精调过程：GPT2.0认为预训练中已经包含了许多特定任务所需的信息。</li>
 <li>生成式任务效果比较好，使用了覆盖更广、质量更好的数据。</li>
 </ul>
 </li>
-<li>缺点<ul>
+<li><p>缺点</p>
+<ul>
 <li>依然为单向的自回归语言模型，没有编码上下文的特征表示。</li>
 </ul>
 </li>
@@ -405,9 +403,7 @@
 <h5 id="4-BERT（重点介绍）"><a href="#4-BERT（重点介绍）" class="headerlink" title="4. BERT（重点介绍）"></a>4. BERT（重点介绍）</h5><ul>
 <li><p>Transformer</p>
 <p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583486843525.png" alt="1583486843525"></p>
-</li>
-</ul>
-<p>  $ Attention(Q,K,V) = softmax(\frac{QK^{T}}{\sqrt{d_{k}}})V$</p>
+<p>$ Attention(Q,K,V) = softmax(\frac{QK^{T}}{\sqrt{d_{k}}})V$</p>
 <ol>
 <li><p>Multi-Head Attention和Scaled Dot-Product Attention</p>
 <p>本质上是self attention通过attention mask动态编码变长序列，解决长依赖、无位置偏差、可并行计算。</p>
@@ -437,7 +433,9 @@
 </li>
 <li><p>Positional Encoding</p>
 <p>Position Encoding是可学习的，编码范围不受限制。</p>
-<script type="math/tex; mode=display">PE_{(pos,2i)}=sin(pos/10000^{2i/d_{model}})</script><script type="math/tex; mode=display">PE_{(pos,2i+1)}=cos(pos/10000^{2i/d_{model}})</script><ul>
+<p>$$PE_{(pos,2i)}=sin(pos/10000^{2i/d_{model}})$$</p>
+<p>$$PE_{(pos,2i+1)}=cos(pos/10000^{2i/d_{model}})$$</p>
+<ul>
 <li>为什么引入$sin$和$cos$建模Position Encoding？<ol>
 <li>为了使得模型实现相对位置的学习，两个位置pos和pos+k的位置编码是固定间距k的线性变化。</li>
 <li>可以证明，间隔为k的任意两个位置编码的欧式距离是恒等的，只与k有关。</li>
@@ -446,7 +444,7 @@
 </ul>
 </li>
 </ol>
-<ul>
+</li>
 <li><p>BERT为什么如此有效？</p>
 <ol>
 <li>引入Masked Language Model（MLM）预训练目标，能够获取上下文相关的双向特征表示</li>
@@ -486,8 +484,6 @@
 <h5 id="5-BERT改进系列模型"><a href="#5-BERT改进系列模型" class="headerlink" title="5. BERT改进系列模型"></a>5. BERT改进系列模型</h5><h6 id="5-1-改进生成任务"><a href="#5-1-改进生成任务" class="headerlink" title="5.1 改进生成任务"></a>5.1 改进生成任务</h6><ol>
 <li><p>MASS</p>
 <p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583723052606.png" alt="1583723052606"></p>
-</li>
-</ol>
 <ul>
 <li><p>统一预训练框架：通过类似于Seq2Seq的框架，在预训练阶段统一了BERT和LM模型</p>
 </li>
@@ -496,8 +492,9 @@
 <li><p>当k=1或者n时，MASS的概率形式分别和BERT中的MLM以及GPT中标准的LM一致（k为mask的连续片段长度）</p>
 </li>
 </ul>
-<ol>
-<li>UNILM<ul>
+</li>
+<li><p>UNILM</p>
+<ul>
 <li>统一预训练模型框架：直接从mask矩阵角度统一BERT和LM</li>
 <li>3个Attention Mask矩阵：LM、MLM、Seq2Seq LM</li>
 <li>UNILM中的LM并不是传统的LM模型，任需通过引入[MASK]实现。</li>
@@ -515,13 +512,13 @@
 </li>
 <li><p>ERNIE（THU）</p>
 <p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583731675001.png" alt="1583731675001"></p>
-</li>
-</ol>
 <ul>
 <li>基于BERT预训练原生模型，讲文本中的实体对齐到外部的知识图谱，并通过知识嵌入得到实体向量作为ERNIR的输入。</li>
 <li>由于语言表征的预训练过程和知识表征过程有很大的不同，会产生两个独立的向量空间，为解决这个问题，在有实体输入的位置，将实体向量和文本表示通过非线性变换进行融合，以融合词汇、句法和知识信息。</li>
 <li>引入改进的预训练目标Denoising entity auto-encoder(DEA)：要求模型能够根据给定的实体序列和文本序列来预测对应的实体。</li>
 </ul>
+</li>
+</ol>
 <h6 id="5-3-引入多任务机制"><a href="#5-3-引入多任务机制" class="headerlink" title="5.3 引入多任务机制"></a>5.3 引入多任务机制</h6><p>​    多任务学习是指同时学习多个相关任务，让这些任务在学习过程中共享知识，利用多个任务之间的相关性来改善模型在每个任务的性能和泛华能力。</p>
 <ol>
 <li><p>MTDNN（微软）：在下游任务中引入多任务学习机制</p>
@@ -529,8 +526,6 @@
 </li>
 <li><p>ERNIE 2.0（百度）</p>
 <p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1583735200104.png" alt="1583735200104"></p>
-</li>
-</ol>
 <ul>
 <li>MTDNN是在下游任务引入多任务机制的，而ERNIE2.0是在预训练引入多任务学习（与先验知识库进行交互），使模型能够从不同的任务中学到更多的语言知识。</li>
 <li>构建多个层次的任务全面捕捉训练预料中的词法、结构、语义的潜在知识。主要包含3个方面的任务：<ul>
@@ -541,6 +536,8 @@
 </li>
 <li>主要的方式是构建增量学习模型，通过多任务学习持续更新预训练模型，这种连续交替的学习范式不会使模型忘记之前学到的语言知识。</li>
 </ul>
+</li>
+</ol>
 <h6 id="5-4-改进mask策略"><a href="#5-4-改进mask策略" class="headerlink" title="5.4 改进mask策略"></a>5.4 改进mask策略</h6><p>​    原生BERT模型：按照subword维度进行mask，然后预测，局部的语言模型，缺乏全局建模的能力。</p>
 <ul>
 <li>BERT WWM(google)：进行whole word维度进行mask。</li>
@@ -576,9 +573,8 @@
 <li>融合Transformer-XL的优点处理长文本。</li>
 </ul>
 <ol>
-<li>排列语言模型（Permutation LM，PLM）</li>
-</ol>
-<ol>
+<li><p>排列语言模型（Permutation LM，PLM）</p>
+</li>
 <li><p>Two-Stream Self-Attention</p>
 </li>
 <li><p>融入Transformer-XL</p>
@@ -604,8 +600,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/20/tensorflow%20serving/" rel="prev" title="tensorflow serving 总结文档">
-      <i class="fa fa-chevron-left"></i> tensorflow serving 总结文档
+    <a href="/2021/07/20/%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/" rel="prev" title="情感分析总结">
+      <i class="fa fa-chevron-left"></i> 情感分析总结
     </a></div>
       <div class="post-nav-item">
     <a href="/2021/07/20/%E5%B8%B8%E8%A7%81%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC/" rel="next" title="常见安装脚本">

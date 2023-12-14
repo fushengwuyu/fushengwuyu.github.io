@@ -240,6 +240,7 @@
 <p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/20220524154620-image-20220524154619601.png" alt="image-20220524154619601"></p>
 <p>模型比较简单，就是将最后3层的cls取出来拼接在一起，接dense即可。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, inputs</span>):</span></span><br><span class="line">    x = self.bert_layer(inputs, output_hidden_states=<span class="literal">True</span>)</span><br><span class="line">    hiden_states = x.hidden_states</span><br><span class="line">    pooled_output = x.pooled_output</span><br><span class="line">    tensor = torch.cat([hidden_states[-<span class="number">1</span>][:,<span class="number">0</span>],hidden_states[-<span class="number">2</span>][:,<span class="number">0</span>],hidden_states[-<span class="number">3</span>][:,<span class="number">0</span>],pooled_output, dim=<span class="number">1</span>)</span><br><span class="line">    drop_out_l = self.drop_out(tensor)</span><br><span class="line">    Dense_l = self.liner_layer(drop_out_l)</span><br><span class="line">    outputs = self.soft_max(Dense_l)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 <p>改进：</p>
 <ul>
 <li><p>接lstm</p>
@@ -266,12 +267,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/07/20/%E5%B8%B8%E8%A7%81%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC/" rel="prev" title="常见安装脚本">
-      <i class="fa fa-chevron-left"></i> 常见安装脚本
+    <a href="/2021/07/20/tensorflow%20serving/" rel="prev" title="tensorflow serving 总结文档">
+      <i class="fa fa-chevron-left"></i> tensorflow serving 总结文档
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/07/20/%E4%BF%A1%E6%81%AF%E7%86%B5/" rel="next" title="信息熵">
-      信息熵 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/07/20/%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E6%A2%B3%E7%90%86/" rel="next" title="预训练模型梳理">
+      预训练模型梳理 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
