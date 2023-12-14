@@ -167,6 +167,171 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/19/nvidia%20triton%20%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="sunshine">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="浮生物语的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/19/nvidia%20triton%20%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">NVIDIA triton 服务部署与测试</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-19 00:00:00" itemprop="dateCreated datePublished" datetime="2021-08-19T00:00:00+08:00">2021-08-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-28 18:29:02" itemprop="dateModified" datetime="2021-09-28T18:29:02+08:00">2021-09-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="1-triton-server"><a href="#1-triton-server" class="headerlink" title="1. triton server"></a>1. triton server</h4><ol>
+<li><p>安装triton服务</p>
+<ul>
+<li><p>x86</p>
+<ol>
+<li><p>拉去镜像</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull nvcr.io/nvidia/tritonserver:21.07-py3</span><br></pre></td></tr></table></figure></li>
+<li><p>运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --rm -p8000:8000 -p8001:8001 -p8002:8002 -v /home/sunshine/infer/:/models nvcr.io/nvidia/tritonserver:21.07-py3 tritonserver --model-repository=/models --strict-model-config=false</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>jetson</p>
+<p>nvidia暂未发布支持jetson的triton容器，所以只能源码安装。</p>
+<p>参考地址：<a target="_blank" rel="noopener" href="https://github.com/triton-inference-server/server/blob/main/docs/jetson.md">https://github.com/triton-inference-server/server/blob/main/docs/jetson.md</a></p>
+<ol>
+<li><p>按照jetpack版本下载相应的release版本包并解压至: /opt/tritonserver</p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/triton-inference-server/server/releases">https://github.com/triton-inference-server/server/releases</a></p>
+<p>备注：如下解压到其他目录，启动会报错动态库文件找不到，当然也可以把所需的动态库文件添加到搜索空间，但解压到/opt/tritonserver最为简单</p>
+</li>
+<li><p>安装依赖包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">apt-get update &amp;&amp; \</span><br><span class="line">    apt-get install -y --no-install-recommends \</span><br><span class="line">        software-properties-common \</span><br><span class="line">        autoconf \</span><br><span class="line">        automake \</span><br><span class="line">        build-essential \</span><br><span class="line">        cmake \</span><br><span class="line">        git \</span><br><span class="line">        libb64-dev \</span><br><span class="line">        libre2-dev \</span><br><span class="line">        libssl-dev \</span><br><span class="line">        libtool \</span><br><span class="line">        libboost-dev \</span><br><span class="line">        libcurl4-openssl-dev \</span><br><span class="line">        libopenblas-dev \</span><br><span class="line">        rapidjson-dev \</span><br><span class="line">        patchelf \</span><br><span class="line">        zlib1g-dev</span><br></pre></td></tr></table></figure></li>
+<li><p>启动服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/tritonserver --model-repository=/sdk/python/triton/models</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>创建模型仓库库</p>
+<p>模型仓库布局如下：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;model-repository-path&gt;/</span><br><span class="line">    &lt;model-name&gt;/</span><br><span class="line">      <span class="section">[config.pbtxt]</span>  <span class="comment"># 非必须，若模型为 TensorRT, TensorFlow saved-model, ONNX 则可以不配置，其他模型必须配置</span></span><br><span class="line">      <span class="section">[&lt;output-labels-file&gt; ...]</span></span><br><span class="line">      &lt;version&gt;/  <span class="comment"># 1， 2，3...</span></span><br><span class="line">        &lt;model-definition-file&gt;  <span class="comment"># model.onnx, model.pb,...</span></span><br><span class="line">      &lt;version&gt;/</span><br><span class="line">        &lt;model-definition-file&gt;</span><br><span class="line">      ...</span><br><span class="line">    &lt;model-name&gt;/</span><br><span class="line">      <span class="section">[config.pbtxt]</span></span><br><span class="line">      <span class="section">[&lt;output-labels-file&gt; ...]</span></span><br><span class="line">      &lt;version&gt;/</span><br><span class="line">        &lt;model-definition-file&gt;</span><br><span class="line">      &lt;version&gt;/</span><br><span class="line">        &lt;model-definition-file&gt;</span><br><span class="line">      ...</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>更多模型配置见官网： <a target="_blank" rel="noopener" href="https://github.com/triton-inference-server/server/blob/main/docs/model_configuration.md#model-configuration">https://github.com/triton-inference-server/server/blob/main/docs/model_configuration.md#model-configuration</a></p>
+<p>以文本分类为例，模型仓库布局如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@bg1 sunshine]# tree infer/</span><br><span class="line">infer/</span><br><span class="line">├── densenet_onnx  # 模型名</span><br><span class="line">│   ├── 1  # 版本</span><br><span class="line">│   │   └── model.onnx  # 模型文件，默认为model.xxx</span><br><span class="line">│   ├── config.pbtxt  # 配置文件</span><br><span class="line">│   └── densenet_labels.txt  # 分类类别，根据配置文件选择是否添加</span><br><span class="line">└── text_class</span><br><span class="line">    ├── 1</span><br><span class="line">    │   └── model.onnx</span><br><span class="line">    └── config.pbtxt</span><br><span class="line"></span><br><span class="line">4 directories, 5 files</span><br></pre></td></tr></table></figure></li>
+<li><p>添加配置文件</p>
+<p>配置文件默认为模型目录下的config.pbtxt，其格式不同于json，要严格按照官网给的格式来配置，否则加载报错</p>
+<p>同样以文本分类为例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">platform: &quot;onnxruntime_onnx&quot;</span><br><span class="line">max_batch_size : 0  </span><br><span class="line">input [</span><br><span class="line">  &#123;</span><br><span class="line">    name: &quot;token_type_ids&quot;</span><br><span class="line">    data_type: TYPE_INT64</span><br><span class="line">    format: FORMAT_NONE</span><br><span class="line">    dims: [-1,-1]</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: &quot;attention_mask&quot;</span><br><span class="line">    data_type: TYPE_INT64</span><br><span class="line">    format: FORMAT_NONE</span><br><span class="line">    dims: [-1,-1]</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: &quot;input_ids&quot;</span><br><span class="line">    data_type: TYPE_INT64</span><br><span class="line">    format: FORMAT_NONE</span><br><span class="line">    dims: [-1,-1]</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line">output: [</span><br><span class="line">  &#123;</span><br><span class="line">    name: &quot;logits&quot;</span><br><span class="line">    data_type: TYPE_FP32</span><br><span class="line">    dims: [-1,2]</span><br><span class="line">    label_filename: &quot;&quot;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>若模型为TensorRT, TensorFlow saved-model, ONNX，则可以不配置config.pbtxt配置文件，在启动服务的时候指定参数$–strict-model-config=false$ 即可。</p>
+<p>使用如下调用获取配置文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl 192.168.0.15:8000/v2/models/text_class/config</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;text_class&quot;,</span><br><span class="line">    &quot;platform&quot;: &quot;onnxruntime_onnx&quot;,</span><br><span class="line">    &quot;backend&quot;: &quot;onnxruntime&quot;,</span><br><span class="line">    &quot;version_policy&quot;: &#123;</span><br><span class="line">        &quot;latest&quot;: &#123;</span><br><span class="line">            &quot;num_versions&quot;: 1</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;max_batch_size&quot;: 1,</span><br><span class="line">    &quot;input&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;name&quot;: &quot;token_type_ids&quot;,</span><br><span class="line">            &quot;data_type&quot;: &quot;TYPE_INT64&quot;,</span><br><span class="line">            &quot;format&quot;: &quot;FORMAT_NONE&quot;,</span><br><span class="line">            &quot;dims&quot;: [</span><br><span class="line">                -1</span><br><span class="line">            ],</span><br><span class="line">            &quot;is_shape_tensor&quot;: false,</span><br><span class="line">            &quot;allow_ragged_batch&quot;: false</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;name&quot;: &quot;attention_mask&quot;,</span><br><span class="line">            &quot;data_type&quot;: &quot;TYPE_INT64&quot;,</span><br><span class="line">            &quot;format&quot;: &quot;FORMAT_NONE&quot;,</span><br><span class="line">            &quot;dims&quot;: [</span><br><span class="line">                -1</span><br><span class="line">            ],</span><br><span class="line">            &quot;is_shape_tensor&quot;: false,</span><br><span class="line">            &quot;allow_ragged_batch&quot;: false</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;name&quot;: &quot;input_ids&quot;,</span><br><span class="line">            &quot;data_type&quot;: &quot;TYPE_INT64&quot;,</span><br><span class="line">            &quot;format&quot;: &quot;FORMAT_NONE&quot;,</span><br><span class="line">            &quot;dims&quot;: [</span><br><span class="line">                -1</span><br><span class="line">            ],</span><br><span class="line">            &quot;is_shape_tensor&quot;: false,</span><br><span class="line">            &quot;allow_ragged_batch&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;output&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;name&quot;: &quot;logits&quot;,</span><br><span class="line">            &quot;data_type&quot;: &quot;TYPE_FP32&quot;,</span><br><span class="line">            &quot;dims&quot;: [</span><br><span class="line">                2</span><br><span class="line">            ],</span><br><span class="line">            &quot;label_filename&quot;: &quot;&quot;,</span><br><span class="line">            &quot;is_shape_tensor&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;batch_input&quot;: [],</span><br><span class="line">    &quot;batch_output&quot;: [],</span><br><span class="line">    &quot;optimization&quot;: &#123;</span><br><span class="line">        &quot;priority&quot;: &quot;PRIORITY_DEFAULT&quot;,</span><br><span class="line">        &quot;input_pinned_memory&quot;: &#123;</span><br><span class="line">            &quot;enable&quot;: true</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;output_pinned_memory&quot;: &#123;</span><br><span class="line">            &quot;enable&quot;: true</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;gather_kernel_buffer_threshold&quot;: 0,</span><br><span class="line">        &quot;eager_batching&quot;: false</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;instance_group&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;name&quot;: &quot;text_class&quot;,</span><br><span class="line">            &quot;kind&quot;: &quot;KIND_CPU&quot;,</span><br><span class="line">            &quot;count&quot;: 1,</span><br><span class="line">            &quot;gpus&quot;: [],</span><br><span class="line">            &quot;secondary_devices&quot;: [],</span><br><span class="line">            &quot;profile&quot;: [],</span><br><span class="line">            &quot;passive&quot;: false,</span><br><span class="line">            &quot;host_policy&quot;: &quot;&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;default_model_filename&quot;: &quot;model.onnx&quot;,</span><br><span class="line">    &quot;cc_model_filenames&quot;: &#123;&#125;,</span><br><span class="line">    &quot;metric_tags&quot;: &#123;&#125;,</span><br><span class="line">    &quot;parameters&quot;: &#123;&#125;,</span><br><span class="line">    &quot;model_warmup&quot;: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>服务启动</p>
+<ul>
+<li><p>命令启动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tritonserver --model-repository=/models --strict-model-config=false</span><br></pre></td></tr></table></figure></li>
+<li><p>docker容器启动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --rm -p8000:8000 -p8001:8001 -p8002:8002 -v /home/sunshine/infer/:/models nvcr.io/nvidia/tritonserver:21.07-py3 tritonserver --model-repository=/models --strict-model-config=false</span><br></pre></td></tr></table></figure>
+
+<p>服务启动后，返回如下信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">=============================</span><br><span class="line">== Triton Inference Server ==</span><br><span class="line">=============================</span><br><span class="line"></span><br><span class="line">NVIDIA Release 21.07 (build 24810355)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2018-2021, NVIDIA CORPORATION &amp; AFFILIATES.  All rights reserved.</span><br><span class="line"></span><br><span class="line">Various files include modifications (c) NVIDIA CORPORATION.  All rights reserved.</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">I0819 02:54:33.978409 1 onnxruntime.cc:2072] TRITONBACKEND_ModelInstanceInitialize: text_class (CPU device 0)</span><br><span class="line">I0819 02:54:36.500230 1 onnxruntime.cc:2072] TRITONBACKEND_ModelInstanceInitialize: densenet_onnx (CPU device 0)</span><br><span class="line">I0819 02:54:36.501075 1 model_repository_manager.cc:1212] successfully loaded &#x27;text_class&#x27; version 1</span><br><span class="line">I0819 02:54:37.042157 1 model_repository_manager.cc:1212] successfully loaded &#x27;densenet_onnx&#x27; version 1</span><br><span class="line">I0819 02:54:37.042560 1 server.cc:504] </span><br><span class="line">+------------------+------+</span><br><span class="line">| Repository Agent | Path |</span><br><span class="line">+------------------+------+</span><br><span class="line">+------------------+------+</span><br><span class="line"></span><br><span class="line">I0819 02:54:37.042936 1 server.cc:543] </span><br><span class="line">+-------------+-----------------------------------------------------------------+--------+</span><br><span class="line">| Backend     | Path                                                            | Config |</span><br><span class="line">+-------------+-----------------------------------------------------------------+--------+</span><br><span class="line">| tensorrt    | &lt;built-in&gt;                                                      | &#123;&#125;     |</span><br><span class="line">| pytorch     | /opt/tritonserver/backends/pytorch/libtriton_pytorch.so         | &#123;&#125;     |</span><br><span class="line">| tensorflow  | /opt/tritonserver/backends/tensorflow1/libtriton_tensorflow1.so | &#123;&#125;     |</span><br><span class="line">| onnxruntime | /opt/tritonserver/backends/onnxruntime/libtriton_onnxruntime.so | &#123;&#125;     |</span><br><span class="line">| openvino    | /opt/tritonserver/backends/openvino/libtriton_openvino.so       | &#123;&#125;     |</span><br><span class="line">+-------------+-----------------------------------------------------------------+--------+</span><br><span class="line"></span><br><span class="line">I0819 02:54:37.043287 1 server.cc:586] </span><br><span class="line">+---------------+---------+--------+</span><br><span class="line">| Model         | Version | Status |</span><br><span class="line">+---------------+---------+--------+</span><br><span class="line">| densenet_onnx | 1       | READY  |</span><br><span class="line">| text_class    | 1       | READY  |</span><br><span class="line">+---------------+---------+--------+</span><br><span class="line"></span><br><span class="line">I0819 02:54:37.043677 1 tritonserver.cc:1718] </span><br><span class="line">+----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Option                           | Value                                                                                                                                                                        |</span><br><span class="line">+----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| server_id                        | triton                                                                                                                                                                       |</span><br><span class="line">| server_version                   | 2.12.0                                                                                                                                                                       |</span><br><span class="line">| server_extensions                | classification sequence model_repository model_repository(unload_dependents) schedule_policy model_configuration system_shared_memory cuda_shared_memory binary_tensor_data  |</span><br><span class="line">|                                  | statistics                                                                                                                                                                   |</span><br><span class="line">| model_repository_path[0]         | /models                                                                                                                                                                      |</span><br><span class="line">| model_control_mode               | MODE_NONE                                                                                                                                                                    |</span><br><span class="line">| strict_model_config              | 0                                                                                                                                                                            |</span><br><span class="line">| pinned_memory_pool_byte_size     | 268435456                                                                                                                                                                    |</span><br><span class="line">| min_supported_compute_capability | 6.0                                                                                                                                                                          |</span><br><span class="line">| strict_readiness                 | 1                                                                                                                                                                            |</span><br><span class="line">| exit_timeout                     | 30                                                                                                                                                                           |</span><br><span class="line">+----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line"></span><br><span class="line">I0819 02:54:37.046408 1 grpc_server.cc:4072] Started GRPCInferenceService at 0.0.0.0:8001</span><br><span class="line">I0819 02:54:37.046930 1 http_server.cc:2795] Started HTTPService at 0.0.0.0:8000</span><br><span class="line">I0819 02:54:37.090841 1 sagemaker_server.cc:134] Started Sagemaker HTTPService at 0.0.0.0:8080</span><br><span class="line">I0819 02:54:37.134294 1 http_server.cc:162] Started Metrics Service at 0.0.0.0:8002</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>验证</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@bg1 ~]# curl -v localhost:8000/v2/health/ready</span><br><span class="line"></span><br><span class="line">* About to connect() to localhost port 8000 (#0)</span><br><span class="line">*   Trying ::1...</span><br><span class="line">* Connected to localhost (::1) port 8000 (#0)</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> GET /v2/health/ready HTTP/1.1</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> User-Agent: curl/7.29.0</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Host: localhost:8000</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Accept: */*</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> </span></span><br><span class="line">&lt; HTTP/1.1 200 OK</span><br><span class="line">&lt; Content-Length: 0</span><br><span class="line">&lt; Content-Type: text/plain</span><br><span class="line">&lt; </span><br><span class="line">* Connection #0 to host localhost left intact</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>yolov4</p>
+</li>
+</ol>
+<p>​     </p>
+<h4 id="2-triton-client"><a href="#2-triton-client" class="headerlink" title="2. triton client"></a>2. triton client</h4><p>​    官网： <a target="_blank" rel="noopener" href="https://github.com/triton-inference-server/client">https://github.com/triton-inference-server/client</a></p>
+<ol>
+<li><p>本地安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install nvidia-pyindex</span><br><span class="line">pip install tritonclient[http]  # [all, http, grpc, utils]</span><br></pre></td></tr></table></figure>
+
+<p>http请求方式所需要的依赖：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">geventhttpclient&gt;=1.4.4</span><br><span class="line">numpy&gt;=1.19.1</span><br><span class="line">python-rapidjson&gt;=0.9.1</span><br></pre></td></tr></table></figure>
+
+<p>其他请求方式需要依赖：<a target="_blank" rel="noopener" href="https://github.com/triton-inference-server/client/tree/main/src/python/library/requirements">https://github.com/triton-inference-server/client/tree/main/src/python/library/requirements</a></p>
+</li>
+<li><p>容器</p>
+<ul>
+<li><p>拉取容器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull nvcr.io/nvidia/tritonserver:21.07-py3-sdk</span><br></pre></td></tr></table></figure></li>
+<li><p>启动容器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --rm --net=host nvcr.io/nvidia/tritonserver::21.07-py3-sdk</span><br></pre></td></tr></table></figure></li>
+<li><p>启动服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/workspace/install/bin/image_client -m densenet_onnx -c 3 -s INCEPTION /workspace/images/mug.jpg</span><br><span class="line">Request 0, batch size 1</span><br><span class="line">Image &#x27;/workspace/images/mug.jpg&#x27;:</span><br><span class="line">    15.346230 (504) = COFFEE MUG</span><br><span class="line">    13.224326 (968) = CUP</span><br><span class="line">    10.422965 (505) = COFFEEPOT</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>python客户端代码调用服务</p>
+<p>http请求文本分类示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># author: sunshine</span></span><br><span class="line"><span class="comment"># datetime:2021/8/19 上午11:01</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tritonclient.http <span class="keyword">as</span> httpclient</span><br><span class="line"><span class="keyword">from</span> attrdict <span class="keyword">import</span> AttrDict</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BertTokenizer</span><br><span class="line"><span class="keyword">from</span> tritonclient.utils <span class="keyword">import</span> triton_to_np_dtype</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert_http_metadata_config</span>(<span class="params">_metadata, _config</span>):</span></span><br><span class="line">    _model_metadata = AttrDict(_metadata)</span><br><span class="line">    _model_config = AttrDict(_config)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> _model_metadata, _model_config</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_model</span>(<span class="params">model_metadata, model_config</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    input_dtype,</span></span><br><span class="line"><span class="string">    :param model_metadata:</span></span><br><span class="line"><span class="string">    :param model_config:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    input_metadata = model_metadata.inputs</span><br><span class="line">    output_metadata = model_metadata.outputs</span><br><span class="line">    max_batch_size = model_config.max_batch_size</span><br><span class="line">    input_params = &#123;i.name: i.datatype <span class="keyword">for</span> i <span class="keyword">in</span> input_metadata&#125;</span><br><span class="line">    output_names = [o.name <span class="keyword">for</span> o <span class="keyword">in</span> output_metadata]</span><br><span class="line">    <span class="keyword">return</span> max_batch_size, input_params, output_names</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preprocess</span>(<span class="params">text, input_param, output_names, max_len=<span class="number">128</span></span>):</span></span><br><span class="line">    client = httpclient</span><br><span class="line"></span><br><span class="line">    inputs = tokenizer(text, padding=<span class="string">&#x27;longest&#x27;</span>, max_length=max_len, truncation=<span class="string">&#x27;longest_first&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    input_data = []</span><br><span class="line">    names = [<span class="string">&#x27;input_ids&#x27;</span>, <span class="string">&#x27;attention_mask&#x27;</span>, <span class="string">&#x27;token_type_ids&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> name <span class="keyword">in</span> names:</span><br><span class="line">        ndtype = triton_to_np_dtype(input_param[name])</span><br><span class="line">        data = np.array(inputs[name]).astype(ndtype)</span><br><span class="line"></span><br><span class="line">        data_t = client.InferInput(name, <span class="built_in">list</span>(data.shape), input_param[name])</span><br><span class="line">        data_t.set_data_from_numpy(data)</span><br><span class="line"></span><br><span class="line">        input_data.append(data_t)</span><br><span class="line"></span><br><span class="line">    outputs = [</span><br><span class="line">        client.InferRequestedOutput(out_name) <span class="keyword">for</span> out_name <span class="keyword">in</span> output_names</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> input_data, outputs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">postprocess</span>(<span class="params">results, output_names</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    response结果处理</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    logit_name = output_names[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    output = results.as_numpy(logit_name)</span><br><span class="line">    pred = np.argmax(output, axis=-<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> pred</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    model_name = <span class="string">&#x27;text_class&#x27;</span></span><br><span class="line">    model_version = <span class="string">&#x27;&#x27;</span>  <span class="comment"># 若为空，则选择最新版本</span></span><br><span class="line">    url = <span class="string">&quot;192.168.0.15:8000&quot;</span></span><br><span class="line">    bert_path = <span class="string">&#x27;/home/sunshine/pre_models/pytorch/bert-base-chinese&#x27;</span></span><br><span class="line">    tokenizer = BertTokenizer.from_pretrained(bert_path)</span><br><span class="line"></span><br><span class="line">    triton_client = httpclient.InferenceServerClient(url=url, verbose=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    model_metadata = triton_client.get_model_metadata(</span><br><span class="line">        model_name=model_name, model_version=model_version)</span><br><span class="line"></span><br><span class="line">    model_config = triton_client.get_model_config(</span><br><span class="line">        model_name=model_name, model_version=model_version)</span><br><span class="line"></span><br><span class="line">    model_metadata, model_config = convert_http_metadata_config(</span><br><span class="line">        model_metadata, model_config)</span><br><span class="line"></span><br><span class="line">    max_batch_size, input_params, output_names = parse_model(model_metadata, model_config)</span><br><span class="line"></span><br><span class="line">    texts = [<span class="string">&#x27;今天天气真好&#x27;</span>, <span class="string">&#x27;我讨厌你&#x27;</span>]</span><br><span class="line">    inputs, outputs = preprocess(texts, input_params, output_names)</span><br><span class="line"></span><br><span class="line">    results = triton_client.infer(model_name,</span><br><span class="line">                                  inputs,</span><br><span class="line">                                  request_id=<span class="built_in">str</span>(<span class="number">1</span>),</span><br><span class="line">                                  model_version=model_version,</span><br><span class="line">                                  outputs=outputs)</span><br><span class="line">    pred = postprocess(results, output_names)</span><br><span class="line">    <span class="built_in">print</span>(pred)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>output:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span> <span class="number">0</span>]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>​     </p>
+<p>​     </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%AF%B9%E6%AF%94%E6%B5%8B%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1352,180 +1517,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/20/rasa%E6%96%87%E6%A1%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="sunshine">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="浮生物语的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/20/rasa%E6%96%87%E6%A1%A3/" class="post-title-link" itemprop="url">rasa总结文档</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-20 00:00:00" itemprop="dateCreated datePublished" datetime="2021-07-20T00:00:00+08:00">2021-07-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-24 16:16:29" itemprop="dateModified" datetime="2022-05-24T16:16:29+08:00">2022-05-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="1-基本命令"><a href="#1-基本命令" class="headerlink" title="1. 基本命令"></a>1. 基本命令</h3><h4 id="1-1-训练模型"><a href="#1-1-训练模型" class="headerlink" title="1.1 训练模型"></a>1.1 训练模型</h4><p>无论是单独训练，还是2个模型一起训练，均可以使用rasa train命令实现（rasa nlu和rasa core合并为RASA），不同之处在于，提供的训练数据，若同时提供两份数据，则会同时训练nlu和core。</p>
-<ul>
-<li><p>训练nlu模型</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
-</li>
-<li><p>训练core模型</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
-</li>
-<li><p>一起训练两个模型</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa train --config configs/zh_jieba_supervised_embeddings_config.yml --domain configs/domain.yml --data data/nlu/number_nlu.md data/stories/number_story.md</span><br></pre></td></tr></table></figure></blockquote>
-</li>
-</ul>
-<h4 id="1-2-启动rasa"><a href="#1-2-启动rasa" class="headerlink" title="1.2 启动rasa"></a>1.2 启动rasa</h4><ul>
-<li><p>不额外独立nlu服务</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml </span><br></pre></td></tr></table></figure></blockquote>
-</li>
-<li><p>启动额外nlu服务</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run --port 5005 --endpoints configs/endpoints.yml --credentials configs/credentials.yml --enable-api -m models/nlu-20190515-144445.tar.gz </span><br></pre></td></tr></table></figure></blockquote>
-</li>
-<li><p>单独启动nlu服务</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa run --enable-api -m models/nlu-20190515-144445.tar.gz</span><br></pre></td></tr></table></figure></blockquote>
-</li>
-<li><p>调用第三方模型服务</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa run --enable-api --log-file out.log --endpoints my_endpoints.yml</span><br></pre></td></tr></table></figure>
-
-<p>在my_endpoints.yml中配置rasa模型的url</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">models:</span><br><span class="line">  url: http:<span class="comment">//my-server.com/models/2019-1222.tar.gz</span></span><br><span class="line">  wait_time_between_pulls: <span class="number">10</span>   # [optional](default: <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
-
-<p>rasa模型还可以存放在<a target="_blank" rel="noopener" href="https://aws.amazon.com/s3/">S3</a> , <a target="_blank" rel="noopener" href="https://cloud.google.com/storage/">GCS</a> and <a target="_blank" rel="noopener" href="https://azure.microsoft.com/services/storage/">Azure Storage</a> 云盘中，同样远程调用，这里不多赘述。</p>
-<p><a target="_blank" rel="noopener" href="https://rasa.com/docs/rasa/user-guide/configuring-http-api/">https://rasa.com/docs/rasa/user-guide/configuring-http-api/</a></p>
-</blockquote>
-</li>
-</ul>
-<p>nlu服务开启后，post方式调用</p>
-<p>post <a target="_blank" rel="noopener" href="http://localhost:5005/model/parse">http://localhost:5005/model/parse</a></p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">input:</span><br><span class="line">&#123;<span class="attr">&quot;text&quot;</span>: <span class="string">&quot;明天成都的天气如何&quot;</span>&#125;</span><br><span class="line">output:</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;intent&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;request_weather&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.5547698674</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;entities&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;entity&quot;</span>: <span class="string">&quot;date_time&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;明天&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;start&quot;</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">&quot;end&quot;</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">&quot;extractor&quot;</span>: <span class="string">&quot;MitieEntityExtractor&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;entity&quot;</span>: <span class="string">&quot;address&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;成都&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;start&quot;</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">&quot;end&quot;</span>: <span class="number">4</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">            <span class="attr">&quot;extractor&quot;</span>: <span class="string">&quot;MitieEntityExtractor&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;intent_ranking&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;request_weather&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.5547698674</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;affirm&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0898880708</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;deny&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.078563989</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;thanks&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.072717722</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;goodbye&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0726876305</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;greet&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0697155938</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;whattodo&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0443638481</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;whoareyou&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;confidence&quot;</span>: <span class="number">0.0172932785</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;text&quot;</span>: <span class="string">&quot;明天成都的天气如何&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="1-3-启动action"><a href="#1-3-启动action" class="headerlink" title="1.3 启动action"></a>1.3 启动action</h4><blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m rasa run actions --port 5055 --actions actions --debug</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h3 id="2-NLU"><a href="#2-NLU" class="headerlink" title="2. NLU"></a>2. NLU</h3><p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1590138247599.png" alt="1590138247599"></p>
-<p><img src="https://raw.githubusercontent.com/fushengwuyu/blog_images/main/img/1590138270872.png" alt="1590138270872"></p>
-<h4 id="2-1-数据格式"><a href="#2-1-数据格式" class="headerlink" title="2.1 数据格式"></a>2.1 数据格式</h4><p>rasa支持markdown和json两种数据格式，同时提供了相互转化的命令。</p>
-<p>nlu训练数据包含四个部分：</p>
-<ul>
-<li><p>Common Example</p>
-<p>唯一必须提供数据。由三部分组成：intent、text、entities。</p>
-<blockquote>
-<p>## intent: 你的意图名称</p>
-<p>- text</p>
-</blockquote>
-<p>text中可以不包括实体，如果有实体使用<code>[entityText](entityName)</code>来标记。</p>
-</li>
-<li><p>synonyms</p>
-</li>
-<li><p>Regular Expression Features</p>
-</li>
-<li><p>lookup tables</p>
-</li>
-</ul>
-<h4 id="2-2-数据转化"><a href="#2-2-数据转化" class="headerlink" title="2.2 数据转化"></a>2.2 数据转化</h4><p>rasa提供了json和markdown格式的转化命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">usage: rasa data convert nlu [-h] [-v] [-vv] [--quiet] --data DATA --out OUT</span><br><span class="line">                             [-l LANGUAGE] -f &#123;json,md&#125;</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --help            show this help message and exit</span><br><span class="line">  --data DATA           Path to the file or directory containing Rasa NLU</span><br><span class="line">                        data. (default: None)</span><br><span class="line">  --out OUT             File where to save training data in Rasa format.</span><br><span class="line">                        (default: None)</span><br><span class="line">  -l LANGUAGE, --language LANGUAGE</span><br><span class="line">                        Language of data. (default: en)</span><br><span class="line">  -f &#123;json,md&#125;, --format &#123;json,md&#125;</span><br><span class="line">                        Output format the training data should be converted</span><br><span class="line">                        into. (default: None)</span><br><span class="line"></span><br><span class="line">Python Logging Options:</span><br><span class="line">  -v, --verbose         Be verbose. Sets logging level to INFO. (default:</span><br><span class="line">                        None)</span><br><span class="line">  -vv, --debug          Print lots of debugging statements. Sets logging level</span><br><span class="line">                        to DEBUG. (default: None)</span><br><span class="line">  --quiet               Be quiet! Sets logging level to WARNING. (default:</span><br><span class="line">                        None)</span><br></pre></td></tr></table></figure>
-
-<p>example：</p>
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rasa data convert nlu --data M3-training_dataset_1564317234.json --out M3-training_dataset_1564317234.md -f md</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h3 id="3-core"><a href="#3-core" class="headerlink" title="3. core"></a>3. core</h3><p>备注1： core模型是一个分类分为，类别数为domain中定义的action数。action主要分为以下4类：</p>
-<ul>
-<li><p>custom action</p>
-</li>
-<li><p>utterance：response、template</p>
-</li>
-<li><p>default actions</p>
-<blockquote>
-<p>[‘action_listen’, ‘action_restart’, ‘action_session_start’, ‘action_default_fallback’, ‘action_deactivate_form’, ‘action_revert_fallback_events’, ‘action_default_ask_affirmation’, ‘action_default_ask_rephrase’, ‘action_back’]</p>
-</blockquote>
-</li>
-<li><p>forms（表单）</p>
-</li>
-</ul>
-<p>action类别为各类action取交集后的结果。</p>
-<p>备注2：用户可以直接像core发送请求，不经过nlu模块。参数格式：/intent{“entityName”: “entityValue”, …}</p>
-<blockquote>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;sender&quot;</span>: <span class="string">&quot;kkkkkkk&quot;</span>,</span><br><span class="line">	<span class="attr">&quot;message&quot;</span>: <span class="string">&quot;/search_treat&#123;\&quot;disease\&quot;:\&quot;丛集性头痛\&quot;, \&quot;sure\&quot;:\&quot;丛集性头痛\&quot;&#125;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;recipient_id&quot;: &quot;kkkkkkk&quot;,</span><br><span class="line">        &quot;text&quot;: &quot;丛集性头痛的简介：从集性头痛(clusterheadaches)亦称偏头痛性神经痛、组胺性头痛、岩神经痛、蝶腭神经痛、Horton头痛等，.病员在某个时期内突然出现一系列的剧烈头痛。一般无前兆，疼痛多见于一侧眼眶或(及)额颞部，可伴同侧眼结膜充血、流泪、眼睑水肿或鼻塞、流涕，有时出现瞳孔缩小、垂睑、脸红、颊肿等症状。头痛多为非搏动性剧痛。病人坐立不安或前俯后仰地摇动，部分病员用拳击头部以缓解疼痛。&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;recipient_id&quot;: &quot;kkkkkkk&quot;,</span><br><span class="line">        &quot;text&quot;: &quot;丛集性头痛的治疗方式有：药物治疗、支持性治疗&quot;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1591,7 +1586,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1604,7 +1599,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
